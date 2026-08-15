@@ -1,0 +1,158 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-main: #090A0F;
+  --bg-subtle: #0D0F17;
+  --bg-elevated: #12131A;
+  --bg-surface: #181A24;
+  --bg-card: #1A1C26;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-light: rgba(255, 255, 255, 0.12);
+  --border-focus: rgba(255, 255, 255, 0.24);
+  --emerald: #10B981;
+  --cyan: #06B6D4;
+  --amber: #F59E0B;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: #E2E8F0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+  letter-spacing: -0.012em;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(16, 185, 129, 0.04), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(6, 182, 212, 0.03), transparent);
+}
+
+/* Custom crisp dark scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #090A0F;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222533;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #33384D;
+}
+
+/* Tactile card styles */
+.tactile-card {
+  background: #12131A;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tactile-card:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: #161822;
+}
+
+.tactile-card-interactive {
+  background: #12131A;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tactile-card-interactive:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: #181A26;
+  transform: translateY(-1px);
+}
+
+.tactile-btn {
+  background: #181A24;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  color: #E2E8F0;
+  transition: all 0.15s ease;
+}
+
+.tactile-btn:hover {
+  background: #222533;
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #FFFFFF;
+}
+
+.tactile-btn:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.tactile-btn-primary {
+  background: #10B981;
+  border: 1px solid #34D399;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 20px -5px rgba(16, 185, 129, 0.4);
+  color: #042F2E;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.tactile-btn-primary:hover {
+  background: #34D399;
+  border-color: #6EE7B7;
+  color: #02201F;
+}
+
+.tactile-btn-primary:active {
+  transform: translateY(1px);
+}
+
+/* Glass panel */
+.glass-panel {
+  background: rgba(18, 19, 26, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Monospace code styling */
+.code-font {
+  font-family: "JetBrains Mono", "Geist Mono", "Fira Code", monospace;
+}
+
+/* Diff viewer line numbers */
+.diff-added {
+  background: rgba(16, 185, 129, 0.12);
+  color: #A7F3D0;
+  border-left: 2px solid #10B981;
+}
+
+.diff-deleted {
+  background: rgba(244, 63, 94, 0.12);
+  color: #FECDD3;
+  border-left: 2px solid #F43F5E;
+}
+
+.diff-normal {
+  color: #94A3B8;
+}
+
+/* Pulse radar dot */
+@keyframes ping-slow {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+.animate-ping-slow {
+  animation: ping-slow 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
