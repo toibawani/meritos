@@ -26,8 +26,8 @@ import { sound } from "@/lib/sound";
 import { verifyVerifiableReceipt, computeEvidenceMerkleRoot } from "@/lib/crypto";
 
 export function ProofSandboxModal() {
-  const { selectedSkill, setSelectedSkill } = useApp();
-  const [activeTab, setActiveTab] = useState<"diff" | "terminal" | "crypto" | "metrics">("diff");
+  const { selectedSkill, setSelectedSkill, startChaosRun, chaosRun } = useApp();
+  const [activeTab, setActiveTab] = useState<"diff" | "terminal" | "crypto" | "chaos">("diff");
   const [copiedReceipt, setCopiedReceipt] = useState(false);
   const [copiedCommit, setCopiedCommit] = useState(false);
 
@@ -267,6 +267,27 @@ export function ProofSandboxModal() {
             <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
             <span>Cryptographic Proof</span>
           </button>
+
+          {/* Chaos Test tab — only shown if skill has chaos scenarios */}
+          {selectedSkill.evidence.chaosScenarios && selectedSkill.evidence.chaosScenarios.length > 0 && (
+            <button
+              onClick={() => {
+                sound.playClick();
+                setActiveTab("chaos");
+              }}
+              className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                activeTab === "chaos"
+                  ? "bg-red-500/10 text-red-400 border border-red-500/20"
+                  : "text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]"
+              }`}
+            >
+              <AlertTriangle className="w-3.5 h-3.5 text-red-400" />
+              <span>Chaos Simulator</span>
+              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-red-500/10 text-red-400 border border-red-500/20">
+                {selectedSkill.evidence.chaosScenarios.length} tests
+              </span>
+            </button>
+          )}
         </div>
 
         {/* Tab Content Area */}
@@ -574,7 +595,129 @@ export function ProofSandboxModal() {
               </div>
             </div>
           )}
+
+          {/* TAB 4: CHAOS SIMULATOR */}
+          {activeTab === "chaos" && selectedSkill.evidence.chaosScenarios && (
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 mb-2">
+                <AlertTriangle className="w-4 h-4 text-red-400" />
+                <span className="text-xs font-semibold text-white">Interactive Chaos Test Simulator</span>
+                <span className="text-[10px] font-mono text-zinc-500 ml-auto">Replay failure injection & auto-healing</span>
+              </div>
+
+              {selectedSkill.evidence.chaosScenarios.map((scenario) => {
+                const isThisRunning = chaosRun.isRunning && chaosRun.skillId === selectedSkill.id && chaosRun.scenarioId === scenario.id;
+                const isThisDone = !chaosRun.isRunning && chaosRun.result === "pass" && chaosRun.skillId === selectedSkill.id && chaosRun.scenarioId === scenario.id;
+                return (
+                  <div key={scenario.id} className="rounded-xl border border-white/[0.07] overflow-hidden" style={{ background: "#0C0D14" }}>
+                    {/* Scenario Header */}
+                    <div className="px-4 py-3 border-b border-white/[0.05] flex items-start justify-between gap-4">
+                      <div className="flex flex-col gap-0.5">
+                        <span className="text-xs font-semibold text-white">{scenario.title}</span>
+                        <span className="text-[11px] text-zinc-500 leading-snug">{scenario.description}</span>
+                        <div className="flex items-center gap-1.5 mt-1">
+                          <span className="text-[10px] font-mono text-zinc-600">Expected:</span>
+                          <span className="text-[10px] font-mono text-emerald-400">{scenario.expectedResult}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[10px] font-mono text-zinc-600">Recovery:</span>
+                          <span className="text-[10px] font-mono text-cyan-400">{scenario.recoveryTimeMs}ms</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => startChaosRun(selectedSkill.id, scenario.id, 3500)}
+                        disabled={chaosRun.isRunning}
+                        className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                          isThisDone
+                            ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                            : isThisRunning
+                            ? "bg-red-500/10 text-red-400 border border-red-500/20 cursor-not-allowed"
+                            : "bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20"
+                        }`}
+                      >
+                        {isThisRunning ? (
+                          <><span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />Running…</>
+                        ) : isThisDone ? (
+                          <><ShieldCheck className="w-3.5 h-3.5" />Passed ✓</>
+                        ) : (
+                          <><AlertTriangle className="w-3.5 h-3.5" />Inject Chaos</>
+                        )}
+                      </button>
+                    </div>
+
+                    {/* Command line */}
+                    <div className="px-4 py-2 border-b border-white/[0.04]" style={{ background: "#080910" }}>
+                      <span className="text-[11px] font-mono text-zinc-500">{scenario.command}</span>
+                    </div>
+
+                    {/* Progress bar (if running this scenario) */}
+                    {isThisRunning && (
+                      <div className="px-4 py-2 border-b border-white/[0.04]" style={{ background: "#080910" }}>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-[10px] font-mono text-red-400">Executing chaos injection…</span>
+                          <span className="text-[10px] font-mono text-zinc-500">{chaosRun.progress}%</span>
+                        </div>
+                        <div className="h-1 w-full rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                          <div
+                            className="h-full rounded-full transition-all duration-300"
+                            style={{ width: `${chaosRun.progress}%`, background: "linear-gradient(90deg, #ef4444, #f97316)" }}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Terminal live output */}
+                    {(isThisRunning || isThisDone) && chaosRun.logBuffer.length > 0 && (
+                      <div className="p-4 space-y-1 font-mono text-[11px] max-h-48 overflow-y-auto" style={{ background: "#06070D" }}>
+                        {chaosRun.logBuffer.map((log, idx) => (
+                          <div
+                            key={idx}
+                            className={`leading-snug ${
+                              log.startsWith("✔") || log.includes("PASS") ? "text-emerald-400" :
+                              log.startsWith("[CHAOS") || log.startsWith("[ATTACK") ? "text-red-400" :
+                              log.startsWith("[HEALED]") || log.startsWith("[Worker") ? "text-cyan-400" :
+                              log.startsWith("$") ? "text-zinc-300" :
+                              "text-zinc-500"
+                            }`}
+                          >
+                            {log}
+                          </div>
+                        ))}
+                        {isThisDone && (
+                          <div className="pt-2 flex items-center gap-2 text-emerald-400 border-t border-white/[0.05] mt-2">
+                            <ShieldCheck className="w-3.5 h-3.5" />
+                            <span className="font-semibold">Chaos resilience verified. System recovered successfully.</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Static log preview (not running) */}
+                    {!isThisRunning && !isThisDone && (
+                      <div className="p-4 space-y-1 font-mono text-[11px]" style={{ background: "#06070D" }}>
+                        {scenario.terminalLogs.map((log, idx) => (
+                          <div
+                            key={idx}
+                            className={`leading-snug opacity-40 ${
+                              log.type === "success" ? "text-emerald-400" :
+                              log.type === "warn" ? "text-amber-400" :
+                              log.type === "cmd" ? "text-zinc-200" :
+                              "text-zinc-500"
+                            }`}
+                          >
+                            {log.text}
+                          </div>
+                        ))}
+                        <div className="pt-2 text-zinc-600 italic">↑ Click "Inject Chaos" to run live simulation</div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
+
 
         {/* Drawer Footer */}
         <div className="p-4 border-t border-white/[0.06] bg-[#12131A] flex items-center justify-between">

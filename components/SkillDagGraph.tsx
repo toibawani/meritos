@@ -5,10 +5,7 @@ import {
   ZoomIn, 
   ZoomOut, 
   RotateCcw, 
-  Maximize2, 
   ShieldCheck, 
-  CheckCircle2, 
-  Lock, 
   Cpu, 
   Zap, 
   Database, 
@@ -19,9 +16,11 @@ import {
   Layout, 
   Share2, 
   GitMerge, 
-  Clock,
-  ArrowRight,
-  Info
+  Info,
+  Star,
+  TrendingUp,
+  Award,
+  Lock
 } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { SkillNode, DomainType } from "@/lib/types";
@@ -80,8 +79,18 @@ export function SkillDagGraph() {
     selectedSkill, 
     setSelectedSkill, 
     domainFilter, 
-    searchQuery 
+    searchQuery,
+    claimMastery
   } = useApp();
+  const [masteryClaimedId, setMasteryClaimedId] = useState<string | null>(null);
+
+  const handleClaimMastery = (e: React.MouseEvent, skillId: string) => {
+    e.stopPropagation();
+    sound.playVerifiedChime();
+    claimMastery(skillId);
+    setMasteryClaimedId(skillId);
+    setTimeout(() => setMasteryClaimedId(null), 1800);
+  };
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [pan, setPan] = useState<Position>({ x: 60, y: 40 });
@@ -368,86 +377,105 @@ export function SkillDagGraph() {
           {filteredSkills.map((skill) => {
             const isSelected = selectedSkill?.id === skill.id;
             const isHovered = hoveredNodeId === skill.id;
+            const isMasteryClaimed = masteryClaimedId === skill.id;
             const domainStyle = DOMAIN_CONFIG[skill.domain];
             const IconComponent = ICON_MAP[skill.iconName] || Cpu;
+            const masteryCount = skill.masteryCount || 0;
 
             return (
               <div
                 key={skill.id}
-                style={{
-                  left: `${skill.x}px`,
-                  top: `${skill.y}px`,
-                }}
                 onClick={() => setSelectedSkill(skill)}
                 onMouseEnter={() => setHoveredNodeId(skill.id)}
                 onMouseLeave={() => setHoveredNodeId(null)}
-                className={`node-element absolute w-[145px] p-2.5 rounded-xl tactile-card-interactive z-10 transition-all duration-200 group ${
+                className={`node-element absolute w-[155px] p-2.5 rounded-xl z-10 transition-all duration-200 cursor-pointer ${
                   isSelected
-                    ? "ring-2 ring-emerald-400 shadow-glowVerified bg-[#1C1F2E]"
+                    ? "bg-[#1A1D2B] shadow-2xl"
                     : isHovered
-                    ? "border-white/20 bg-[#161824] shadow-lg"
-                    : "bg-[#12131A]"
+                    ? "bg-[#141720]"
+                    : "bg-[#10121A]"
                 }`}
+                style={{
+                  left: `${skill.x}px`, top: `${skill.y}px`,
+                  border: isSelected
+                    ? `1.5px solid ${domainStyle.color}55`
+                    : `1px solid rgba(255,255,255,${isHovered ? '0.12' : '0.07'})`,
+                  boxShadow: isSelected
+                    ? `0 0 24px -4px ${domainStyle.color}30, 0 8px 24px -4px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.06)`
+                    : isHovered
+                    ? '0 6px 20px -4px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05)'
+                    : '0 2px 8px -2px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.04)',
+                }}
               >
-                {/* Top Node Bar: Code & Level */}
+                {/* Top Row: code + status */}
                 <div className="flex items-center justify-between mb-1.5">
-                  <div className="flex items-center space-x-1">
-                    <span 
-                      className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded"
-                      style={{
-                        backgroundColor: domainStyle.bg,
-                        color: domainStyle.color,
-                      }}
-                    >
-                      {skill.shortCode}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center space-x-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-sm" />
-                    <span className="text-[9px] font-mono text-emerald-400 font-medium">
-                      VERIFIED
-                    </span>
-                  </div>
-                </div>
-
-                {/* Node Title & Icon */}
-                <div className="flex items-start space-x-2 my-1">
-                  <div 
-                    className="p-1 rounded-lg shrink-0 mt-0.5"
-                    style={{ backgroundColor: domainStyle.bg }}
+                  <span
+                    className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded"
+                    style={{ backgroundColor: domainStyle.bg, color: domainStyle.color }}
                   >
-                    <IconComponent 
-                      className="w-3.5 h-3.5" 
-                      style={{ color: domainStyle.color }} 
-                    />
+                    {skill.shortCode}
+                  </span>
+                  <div className="flex items-center gap-1">
+                    {masteryCount > 0 && (
+                      <div className="flex items-center gap-0.5">
+                        {Array.from({ length: Math.min(masteryCount, 3) }).map((_, i) => (
+                          <Star key={i} className="w-2 h-2 text-amber-400" fill="#FBBF24" />
+                        ))}
+                      </div>
+                    )}
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                   </div>
+                </div>
 
-                  <span className="text-[11px] font-semibold text-white leading-tight font-sans line-clamp-2">
-                    {skill.label}
+                {/* Icon + Title */}
+                <div className="flex items-start gap-2 my-1">
+                  <div className="p-1 rounded-lg shrink-0 mt-0.5" style={{ backgroundColor: domainStyle.bg }}>
+                    <IconComponent className="w-3.5 h-3.5" style={{ color: domainStyle.color }} />
+                  </div>
+                  <span className="text-[11px] font-semibold text-white leading-tight line-clamp-2">{skill.label}</span>
+                </div>
+
+                {/* XP mini-bar */}
+                <div className="mt-1.5 h-0.5 w-full rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                  <div
+                    className="h-full rounded-full transition-all duration-700"
+                    style={{ width: `${Math.min(100, (skill.xp / 1500) * 100)}%`, background: domainStyle.color, opacity: 0.7 }}
+                  />
+                </div>
+
+                {/* Bottom stats */}
+                <div className="mt-1.5 flex items-center justify-between text-[10px] font-mono">
+                  <span className="text-zinc-500">+{skill.xp} XP</span>
+                  <span className="font-medium" style={{ color: domainStyle.color }}>
+                    {skill.level === 'master' ? 'MASTER' : skill.level === 'expert' ? 'EXPERT' : 'PRO'}
                   </span>
                 </div>
 
-                {/* Bottom Node Stats Strip */}
-                <div className="mt-2 pt-1.5 border-t border-white/[0.04] flex items-center justify-between text-[10px] font-mono">
-                  <span className="text-zinc-500">
-                    +{skill.xp} XP
-                  </span>
+                {/* Claim Mastery overlay (on hover) */}
+                {isHovered && (
+                  <button
+                    onClick={(e) => handleClaimMastery(e, skill.id)}
+                    className="absolute inset-x-0 -bottom-8 mx-auto flex items-center justify-center gap-1 px-2 py-1 rounded-lg text-[10px] font-semibold transition-all z-20"
+                    style={{
+                      background: isMasteryClaimed ? '#10B981' : domainStyle.bg,
+                      border: `1px solid ${domainStyle.color}50`,
+                      color: isMasteryClaimed ? '#042F2E' : domainStyle.color,
+                      width: 'fit-content',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    <Award className="w-3 h-3" />
+                    {isMasteryClaimed ? 'Claimed!' : 'Claim Mastery'}
+                  </button>
+                )}
 
-                  <span className="text-emerald-400/90 font-medium">
-                    {skill.evidence.metrics.throughput || skill.evidence.metrics.latency || "100% Pass"}
-                  </span>
-                </div>
-
-                {/* Prerequisite Indicator Dot */}
+                {/* Edge connector dots */}
                 {skill.prerequisites.length > 0 && (
-                  <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#12131A] border-2 border-cyan-500/60 flex items-center justify-center shadow">
+                  <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2 border-cyan-500/60 flex items-center justify-center" style={{ background: '#0E1015' }}>
                     <div className="w-1 h-1 rounded-full bg-cyan-400" />
                   </div>
                 )}
-
-                {/* Output Target Dot */}
-                <div className="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#12131A] border-2 border-emerald-500/60 flex items-center justify-center shadow">
+                <div className="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2 border-emerald-500/60 flex items-center justify-center" style={{ background: '#0E1015' }}>
                   <div className="w-1 h-1 rounded-full bg-emerald-400" />
                 </div>
               </div>

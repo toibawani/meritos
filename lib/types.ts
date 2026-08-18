@@ -8,6 +8,16 @@ export interface TerminalTraceStep {
   delayMs?: number;
 }
 
+export interface ChaosScenario {
+  id: string;
+  title: string;
+  description: string;
+  command: string;
+  expectedResult: string;
+  recoveryTimeMs: number;
+  terminalLogs: TerminalTraceStep[];
+}
+
 export interface AttestationEvidence {
   type: "github_commit" | "pull_request" | "benchmark_suite" | "test_run" | "live_demo";
   title: string;
@@ -15,7 +25,12 @@ export interface AttestationEvidence {
   commitHash: string;
   branch?: string;
   diffContent: string;
+  splitDiff?: {
+    originalLines: string[];
+    modifiedLines: string[];
+  };
   terminalTrace: TerminalTraceStep[];
+  chaosScenarios?: ChaosScenario[];
   metrics: {
     latency?: string;
     throughput?: string;
@@ -69,19 +84,21 @@ export interface SkillNode {
   status: NodeStatus;
   description: string;
   xp: number;
+  masteryCount?: number;
   iconName: string;
   x: number;
   y: number;
-  prerequisites: string[]; // array of skill node ids
+  prerequisites: string[];
   evidence: AttestationEvidence;
   proofReceipt?: VerifiableReceipt;
   lastAttestedAt?: string;
+  freshnessPercentage?: number;
 }
 
 export interface ActivityEntry {
   id: string;
   timestamp: string;
-  type: "attestation_signed" | "node_unlocked" | "score_updated" | "verification_audited";
+  type: "attestation_signed" | "node_unlocked" | "score_updated" | "verification_audited" | "chaos_simulated" | "mastery_claimed";
   skillId: string;
   skillName: string;
   domain: DomainType;
@@ -103,13 +120,19 @@ export interface UserProfile {
   displayName: string;
   bio: string;
   title: string;
+  level: number;
+  rankTitle: string; // e.g. "Grandmaster Architect"
+  xp: number;
+  nextLevelXp: number;
+  streakDays: number;
+  freshnessPercentage: number;
   avatarUrl: string;
   githubUrl: string;
   did: string;
   publicKey: string;
-  verificationScore: number; // e.g. 96.4
+  verificationScore: number;
   totalVerifiedSkills: number;
-  globalRank: string; // e.g. "Top 0.5%"
+  globalRank: string;
   domainBreakdown: Record<DomainType, number>;
   radarScores: RadarCapabilityScores;
   activityLedger: ActivityEntry[];

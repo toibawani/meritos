@@ -2,35 +2,21 @@
 
 import React, { useState } from "react";
 import { 
-  ShieldCheck, 
-  Copy, 
-  Check, 
-  ExternalLink, 
-  Search, 
-  Award, 
-  Activity, 
-  Cpu, 
-  Layers, 
-  Zap, 
-  Database, 
-  Sparkles,
-  Share2
+  ShieldCheck, Copy, Check, ExternalLink, Search, 
+  Award, Cpu, Layers, Zap, Database, Sparkles, Flame, Star
 } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { DomainType } from "@/lib/types";
 import { sound } from "@/lib/sound";
 
-export function ProfileHero() {
-  const { 
-    profile, 
-    domainFilter, 
-    setDomainFilter, 
-    searchQuery, 
-    setSearchQuery,
-    setIsBadgeModalOpen,
-    setIsDossierOpen
-  } = useApp();
+const RANK_COLORS: Record<string, string> = {
+  "Grandmaster Systems Architect": "from-amber-400 to-amber-600",
+  "Kernel Specialist": "from-cyan-400 to-cyan-600",
+  "Tensor Inference Master": "from-violet-400 to-violet-600",
+};
 
+export function ProfileHero() {
+  const { profile, domainFilter, setDomainFilter, searchQuery, setSearchQuery } = useApp();
   const [copiedKey, setCopiedKey] = useState(false);
 
   const handleCopyDid = () => {
@@ -40,205 +26,147 @@ export function ProfileHero() {
     setTimeout(() => setCopiedKey(false), 2000);
   };
 
-  const domainTabs: { id: DomainType | "all"; label: string; count: number; icon: any }[] = [
-    { 
-      id: "all", 
-      label: "All Nodes", 
-      count: profile.skills.length, 
-      icon: Layers 
-    },
-    { 
-      id: "systems", 
-      label: "Systems & Low-Level", 
-      count: profile.skills.filter(s => s.domain === "systems").length, 
-      icon: Cpu 
-    },
-    { 
-      id: "frontend", 
-      label: "Frontend Architecture", 
-      count: profile.skills.filter(s => s.domain === "frontend").length, 
-      icon: Zap 
-    },
-    { 
-      id: "cloud", 
-      label: "Cloud & Distributed", 
-      count: profile.skills.filter(s => s.domain === "cloud").length, 
-      icon: Database 
-    },
-    { 
-      id: "ai", 
-      label: "AI & Applied ML", 
-      count: profile.skills.filter(s => s.domain === "ai").length, 
-      icon: Sparkles 
-    },
+  const xpPercent = Math.min(100, Math.round((profile.xp / profile.nextLevelXp) * 100));
+  const rankGradient = RANK_COLORS[profile.rankTitle] || "from-emerald-400 to-teal-600";
+
+  const domainTabs: { id: DomainType | "all"; label: string; count: number; icon: any; color: string }[] = [
+    { id: "all",      label: "All Domains",           count: profile.skills.length,                                  icon: Layers,   color: "text-zinc-400" },
+    { id: "systems",  label: "Systems",               count: profile.skills.filter(s => s.domain === "systems").length, icon: Cpu,      color: "text-cyan-400" },
+    { id: "frontend", label: "Frontend",              count: profile.skills.filter(s => s.domain === "frontend").length, icon: Zap,      color: "text-violet-400" },
+    { id: "cloud",    label: "Cloud & Infra",         count: profile.skills.filter(s => s.domain === "cloud").length,   icon: Database,  color: "text-amber-400" },
+    { id: "ai",       label: "AI & ML",               count: profile.skills.filter(s => s.domain === "ai").length,      icon: Sparkles,  color: "text-emerald-400" },
   ];
 
-  const totalXp = profile.skills.reduce((acc, s) => acc + s.xp, 0);
-
   return (
-    <section className="w-full pt-8 pb-6 border-b border-white/[0.06] bg-[#090A0F]">
+    <section className="w-full pt-8 pb-6 border-b border-white/[0.05]" style={{ background: "linear-gradient(180deg, #0A0C13 0%, #090A0F 100%)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Top Profile Strip */}
+
+        {/* Identity Strip */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6">
-          {/* Identity Info */}
-          <div className="flex items-start space-x-4">
-            <div className="relative">
+          
+          {/* Left: Avatar + Info */}
+          <div className="flex items-start gap-5">
+            {/* Avatar with XP ring */}
+            <div className="relative shrink-0">
+              <svg className="absolute -inset-1.5 w-[calc(100%+12px)] h-[calc(100%+12px)]" viewBox="0 0 88 88" fill="none">
+                <circle cx="44" cy="44" r="40" stroke="rgba(255,255,255,0.06)" strokeWidth="2.5" />
+                <circle 
+                  cx="44" cy="44" r="40" 
+                  stroke="url(#xpGrad)" 
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeDasharray={`${2 * Math.PI * 40}`}
+                  strokeDashoffset={`${2 * Math.PI * 40 * (1 - xpPercent / 100)}`}
+                  transform="rotate(-90 44 44)"
+                  style={{ transition: "stroke-dashoffset 1s cubic-bezier(0.16,1,0.3,1)" }}
+                />
+                <defs>
+                  <linearGradient id="xpGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#F59E0B" />
+                    <stop offset="100%" stopColor="#FBBF24" />
+                  </linearGradient>
+                </defs>
+              </svg>
               <img
                 src={profile.avatarUrl}
                 alt={profile.displayName}
-                className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover border-2 border-emerald-500/40 shadow-xl shadow-black/80"
+                className="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl object-cover border border-white/[0.10] shadow-xl shadow-black/80"
+                style={{ width: 76, height: 76 }}
               />
-              <div 
-                title="Cryptographically Verified Identity"
-                className="absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-full bg-emerald-500 border-2 border-[#090A0F] flex items-center justify-center shadow-md"
-              >
-                <ShieldCheck className="w-3.5 h-3.5 text-[#042F2E]" />
+              {/* Level Badge */}
+              <div className={`absolute -bottom-2 -right-2 min-w-[28px] h-7 px-1.5 rounded-lg bg-gradient-to-br ${rankGradient} flex items-center justify-center shadow-lg border border-black/30`}>
+                <span className="text-[11px] font-mono font-black text-[#1a0a00]">{profile.level}</span>
               </div>
             </div>
 
-            <div className="flex flex-col">
-              <div className="flex flex-wrap items-center gap-2.5">
+            {/* Info */}
+            <div className="flex flex-col gap-1">
+              <div className="flex flex-wrap items-center gap-2">
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white font-sans">
                   {profile.displayName}
                 </h1>
-                <span className="text-xs font-mono text-zinc-400">
-                  @{profile.username}
-                </span>
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse mr-1.5" />
-                  VERIFIED PASSPORT
+                <span className="text-xs font-mono text-zinc-500">@{profile.username}</span>
+                <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-gradient-to-r ${rankGradient} text-[#1a0a00]`}>
+                  <Award className="w-3 h-3" />
+                  {profile.rankTitle}
                 </span>
               </div>
 
-              <p className="text-xs sm:text-sm text-zinc-300 font-normal mt-1 max-w-2xl leading-relaxed">
-                {profile.bio}
-              </p>
+              <p className="text-xs sm:text-sm text-zinc-400 font-normal leading-relaxed max-w-xl">{profile.bio}</p>
 
-              {/* Cryptographic DID Pill */}
-              <div className="flex items-center space-x-2 mt-2.5">
-                <div 
-                  onClick={handleCopyDid}
-                  className="group flex items-center space-x-2 px-2.5 py-1 rounded-md bg-[#12131A] border border-white/[0.08] hover:border-white/[0.18] cursor-pointer transition-all"
-                  title="Click to copy Decentralized Identifier (DID)"
-                >
-                  <span className="text-[11px] text-zinc-500 font-mono">DID:</span>
-                  <span className="text-[11px] text-zinc-300 font-mono tracking-tight group-hover:text-emerald-400 transition-colors">
-                    {profile.did.substring(0, 24)}...
-                  </span>
-                  {copiedKey ? (
-                    <Check className="w-3 h-3 text-emerald-400" />
-                  ) : (
-                    <Copy className="w-3 h-3 text-zinc-500 group-hover:text-zinc-300" />
-                  )}
+              {/* Stat pills */}
+              <div className="flex flex-wrap items-center gap-2 mt-1">
+                <div className="flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono text-emerald-400 border border-emerald-500/20" style={{ background: "rgba(16,185,129,0.06)" }}>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  VERIFIED PASSPORT
                 </div>
-
+                <div className="flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono text-amber-400 border border-amber-500/20" style={{ background: "rgba(245,158,11,0.06)" }}>
+                  <Flame className="w-3 h-3" />
+                  {profile.streakDays}d Streak
+                </div>
+                <div className="flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono text-zinc-400 border border-white/[0.08]" style={{ background: "rgba(255,255,255,0.03)" }}>
+                  <Star className="w-3 h-3 text-zinc-500" />
+                  {profile.globalRank}
+                </div>
+                <div
+                  onClick={handleCopyDid}
+                  className="group flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-mono text-zinc-500 hover:text-emerald-400 border border-white/[0.06] hover:border-white/[0.15] cursor-pointer transition-all"
+                  style={{ background: "rgba(255,255,255,0.02)" }}
+                  title="Click to copy DID"
+                >
+                  <span className="text-zinc-600">DID:</span>
+                  <span className="group-hover:text-emerald-400 transition-colors">{profile.did.substring(0, 22)}…</span>
+                  {copiedKey ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                </div>
                 <a
                   href={profile.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center space-x-1 px-2.5 py-1 rounded-md bg-[#12131A] border border-white/[0.08] text-[11px] text-zinc-400 hover:text-white hover:border-white/[0.18] transition-all"
+                  className="flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono text-zinc-500 hover:text-white border border-white/[0.06] hover:border-white/[0.15] transition-all"
+                  style={{ background: "rgba(255,255,255,0.02)" }}
                 >
-                  <span>GitHub</span>
-                  <ExternalLink className="w-2.5 h-2.5" />
+                  GitHub <ExternalLink className="w-2.5 h-2.5" />
                 </a>
               </div>
             </div>
           </div>
 
-          {/* Quick Metrics Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {/* Verification Index */}
-            <div className="tactile-card p-3 rounded-xl flex flex-col justify-between min-w-[120px]">
-              <span className="text-[10px] uppercase font-mono text-zinc-400 font-medium">
-                Competence Index
-              </span>
-              <div className="flex items-baseline space-x-1.5 mt-1">
-                <span className="text-2xl font-bold font-mono text-emerald-400">
-                  {profile.verificationScore}%
-                </span>
+          {/* Right: Metrics */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 shrink-0">
+            {[
+              { label: "Competence Index", value: `${profile.verificationScore}%`, sub: "Top 0.1% Global", color: "text-emerald-400" },
+              { label: "Verified Nodes", value: `${profile.totalVerifiedSkills}/${profile.skills.length}`, sub: "All Attested", color: "text-cyan-400" },
+              { label: "Total XP", value: profile.xp.toLocaleString(), sub: `→ ${profile.nextLevelXp.toLocaleString()} next`, color: "text-amber-400" },
+              { label: "Domain Depth", value: `${Math.max(...Object.values(profile.domainBreakdown)).toFixed(1)}%`, sub: "Peak Score", color: "text-white" },
+            ].map(({ label, value, sub, color }) => (
+              <div key={label} className="tactile-card p-3 rounded-xl flex flex-col gap-0.5 min-w-[110px]">
+                <span className="text-[9px] uppercase font-mono text-zinc-500 tracking-wider">{label}</span>
+                <span className={`text-xl font-bold font-mono ${color} leading-none mt-1`}>{value}</span>
+                <span className="text-[9px] text-zinc-600 font-mono mt-0.5">{sub}</span>
               </div>
-              <span className="text-[10px] text-zinc-500 font-mono mt-0.5">
-                Top 0.1% Global Tier
-              </span>
-            </div>
-
-            {/* Total Attested Nodes */}
-            <div className="tactile-card p-3 rounded-xl flex flex-col justify-between min-w-[120px]">
-              <span className="text-[10px] uppercase font-mono text-zinc-400 font-medium">
-                Verified Nodes
-              </span>
-              <div className="flex items-baseline space-x-1.5 mt-1">
-                <span className="text-2xl font-bold font-mono text-cyan-400">
-                  {profile.totalVerifiedSkills}
-                </span>
-                <span className="text-xs text-zinc-500 font-mono">
-                  / {profile.skills.length}
-                </span>
-              </div>
-              <span className="text-[10px] text-zinc-500 font-mono mt-0.5">
-                100% Attested
-              </span>
-            </div>
-
-            {/* Total Skill XP */}
-            <div className="tactile-card p-3 rounded-xl flex flex-col justify-between min-w-[120px]">
-              <span className="text-[10px] uppercase font-mono text-zinc-400 font-medium">
-                Attested XP
-              </span>
-              <div className="flex items-baseline space-x-1.5 mt-1">
-                <span className="text-2xl font-bold font-mono text-white">
-                  {totalXp.toLocaleString()}
-                </span>
-              </div>
-              <span className="text-[10px] text-zinc-500 font-mono mt-0.5">
-                Proof Units
-              </span>
-            </div>
-
-            {/* Global Rank */}
-            <div className="tactile-card p-3 rounded-xl flex flex-col justify-between min-w-[120px]">
-              <span className="text-[10px] uppercase font-mono text-zinc-400 font-medium">
-                Global Standing
-              </span>
-              <div className="flex items-baseline space-x-1.5 mt-1">
-                <span className="text-2xl font-bold font-mono text-amber-400">
-                  {profile.globalRank}
-                </span>
-              </div>
-              <span className="text-[10px] text-zinc-500 font-mono mt-0.5">
-                Zero Self-Reported
-              </span>
-            </div>
+            ))}
           </div>
         </div>
 
-        {/* Filter Bar & Search */}
-        <div className="pt-4 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between gap-4">
-          {/* Domain Tabs */}
-          <div className="flex items-center overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 space-x-1.5 scrollbar-none">
-            {domainTabs.map((tab) => {
+        {/* Domain Filter Tabs + Search */}
+        <div className="pt-4 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-1 overflow-x-auto w-full sm:w-auto pb-0.5 scrollbar-none">
+            {domainTabs.map(tab => {
               const Icon = tab.icon;
               const isActive = domainFilter === tab.id;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setDomainFilter(tab.id)}
-                  className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all border ${
                     isActive
-                      ? "bg-white/[0.12] text-white border border-white/[0.18] shadow-sm"
-                      : "text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04] border border-transparent"
+                      ? "bg-white/[0.10] text-white border-white/[0.16] shadow-sm"
+                      : "text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04] border-transparent"
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 ${
-                    tab.id === "systems" ? "text-cyan-400" :
-                    tab.id === "frontend" ? "text-purple-400" :
-                    tab.id === "cloud" ? "text-amber-400" :
-                    tab.id === "ai" ? "text-emerald-400" : "text-zinc-400"
-                  }`} />
+                  <Icon className={`w-3.5 h-3.5 ${isActive ? "text-white" : tab.color}`} />
                   <span>{tab.label}</span>
-                  <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${
-                    isActive ? "bg-white/20 text-white" : "bg-white/[0.06] text-zinc-500"
-                  }`}>
+                  <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${isActive ? "bg-white/20 text-white" : "bg-white/[0.05] text-zinc-500"}`}>
                     {tab.count}
                   </span>
                 </button>
@@ -246,23 +174,20 @@ export function ProfileHero() {
             })}
           </div>
 
-          {/* Search Box */}
-          <div className="relative w-full sm:w-64">
-            <Search className="w-3.5 h-3.5 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
+          <div className="relative w-full sm:w-60 shrink-0">
+            <Search className="w-3.5 h-3.5 text-zinc-600 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search proof nodes..."
-              className="w-full pl-9 pr-3 py-1.5 bg-[#12131A] border border-white/[0.08] rounded-lg text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 font-mono transition-all"
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="Search proof nodes…"
+              className="w-full pl-9 pr-3 py-1.5 rounded-lg text-xs text-white placeholder-zinc-600 focus:outline-none transition-all font-mono"
+              style={{ background: "#0E1015", border: "1px solid rgba(255,255,255,0.08)" }}
+              onFocus={e => (e.target.style.borderColor = "rgba(16,185,129,0.4)")}
+              onBlur={e => (e.target.style.borderColor = "rgba(255,255,255,0.08)")}
             />
             {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-zinc-500 hover:text-white"
-              >
-                ✕
-              </button>
+              <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-zinc-500 hover:text-white">✕</button>
             )}
           </div>
         </div>

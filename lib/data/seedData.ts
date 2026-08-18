@@ -1,6 +1,6 @@
 import { UserProfile, SkillNode, ActivityEntry } from "../types";
 
-export const INITIAL_SKILLS: SkillNode[] = [
+export const TOIBA_SKILLS: SkillNode[] = [
   // SYSTEMS & LOW LEVEL
   {
     id: "ts-compiler-ast",
@@ -11,6 +11,8 @@ export const INITIAL_SKILLS: SkillNode[] = [
     status: "verified",
     description: "Custom abstract syntax tree transformation passes, type-checker hooks, and zero-allocation token streaming for high-throughput transpilation.",
     xp: 850,
+    masteryCount: 4,
+    freshnessPercentage: 100,
     iconName: "Binary",
     x: 180,
     y: 120,
@@ -62,12 +64,27 @@ export const INITIAL_SKILLS: SkillNode[] = [
         { type: "success", text: "test result: ok. 48 passed; 0 failed; 0 ignored; finished in 1.84ms" },
         { type: "info", text: "Benchmark [100,000 AST nodes]: 450,210 nodes/sec | Peak Memory: 3.2MB" },
       ],
+      chaosScenarios: [
+        {
+          id: "chaos-ast-fuzz",
+          title: "Fuzz 100,000 Corrupted TypeScript Tokens",
+          description: "Injects malformed syntax tokens, deep cyclic closures, and unterminated template strings to test parser fault-tolerance.",
+          command: "$ cargo run --bin ast-fuzzer -- --iterations 100000 --threads 8",
+          expectedResult: "0 panics, 100% recovered with precise diagnostic line coordinates.",
+          recoveryTimeMs: 42,
+          terminalLogs: [
+            { type: "cmd", text: "$ cargo run --bin ast-fuzzer -- --iterations 100000 --threads 8" },
+            { type: "info", text: "Spawning 8 parallel libFuzzer workers against AST token stream..." },
+            { type: "stdout", text: "[Worker 0] 12,500 malformed syntax permutations processed (0 panics)" },
+            { type: "stdout", text: "[Worker 3] Deep recursion [depth=10,000] cleanly unwound via stack guard" },
+            { type: "stdout", text: "[Worker 7] Unterminated Unicode surrogate pairs gracefully flagged" },
+            { type: "success", text: "✔ 100,000 fuzz cases survived in 42ms with 0 memory leaks." },
+          ],
+        },
+      ],
     },
     proofReceipt: {
-      "@context": [
-        "https://www.w3.org/2018/credentials/v1",
-        "https://meritos.id/contexts/v1.jsonld"
-      ],
+      "@context": ["https://www.w3.org/2018/credentials/v1"],
       id: "urn:meritos:receipt:toibawani:ts-compiler-ast:1753712520",
       type: ["VerifiableCredential", "MeritOSCompetenceAttestation"],
       issuer: {
@@ -106,6 +123,8 @@ export const INITIAL_SKILLS: SkillNode[] = [
     status: "verified",
     description: "High-performance no_std memory allocator in Rust targeting WebAssembly with zero allocation overhead and deterministic cacheline alignment.",
     xp: 1200,
+    masteryCount: 5,
+    freshnessPercentage: 100,
     iconName: "Cpu",
     x: 360,
     y: 120,
@@ -150,6 +169,23 @@ export const INITIAL_SKILLS: SkillNode[] = [
         { type: "stdout", text: "✔ test_zero_copy_js_typed_array_mutation ... PASS (0.03ms)" },
         { type: "success", text: "32/32 tests passed without leaks. Allocation rate: 1.82 GB/s" },
       ],
+      chaosScenarios: [
+        {
+          id: "chaos-wasm-concurrency",
+          title: "Simulate 10,000 Thread Lock-Free Allocations",
+          description: "Stresses atomic cursor increments across 16 parallel Web Workers to test memory safety under contention.",
+          command: "$ node test/stress_concurrency.mjs --workers 16 --ops 10000",
+          expectedResult: "Zero memory fragmentation, 0 data races, 100% deterministic layout.",
+          recoveryTimeMs: 14,
+          terminalLogs: [
+            { type: "cmd", text: "$ node test/stress_concurrency.mjs --workers 16 --ops 10000" },
+            { type: "stdout", text: "Broadcasting SharedArrayBuffer to 16 Web Workers..." },
+            { type: "stdout", text: "Executing 10,000 concurrent zero-copy slice allocations..." },
+            { type: "stdout", text: "Peak throughput: 2,140,000 allocs/sec (Atomic CAS zero retries)" },
+            { type: "success", text: "✔ Memory audit clean: 0 bytes leaked, 0 memory boundaries breached." },
+          ],
+        },
+      ],
     },
     proofReceipt: {
       "@context": ["https://www.w3.org/2018/credentials/v1"],
@@ -191,6 +227,8 @@ export const INITIAL_SKILLS: SkillNode[] = [
     status: "verified",
     description: "Production Raft implementation with dynamic cluster membership changes, log compaction, and sub-5ms split-brain recovery.",
     xp: 950,
+    masteryCount: 3,
+    freshnessPercentage: 100,
     iconName: "Layers",
     x: 540,
     y: 120,
@@ -233,6 +271,24 @@ export const INITIAL_SKILLS: SkillNode[] = [
         { type: "stdout", text: "--- PASS: TestRaftElectionPartitionAndHealing (0.42s)" },
         { type: "success", text: "PASS: 64/64 tests passed with -race detection clean." },
       ],
+      chaosScenarios: [
+        {
+          id: "chaos-raft-split-brain",
+          title: "Inject 3-Node Split-Brain Partition",
+          description: "Isolates active leader and tests minority drop, majority re-election, and state reconciliation upon partition healing.",
+          command: "$ go test -v -run TestSplitBrainChaos ./raft/...",
+          expectedResult: "Zero data loss. Quorum elected new leader in 18ms. Re-joined nodes caught up seamlessly.",
+          recoveryTimeMs: 18,
+          terminalLogs: [
+            { type: "cmd", text: "$ go test -v -run TestSplitBrainChaos ./raft/..." },
+            { type: "warn", text: "[CHAOS INJECTION] Network partition dropping all packets between [Node 1,2] and [Node 3,4,5]" },
+            { type: "stdout", text: "[Node 3] Election timer triggered (150ms). Term incremented: 4" },
+            { type: "stdout", text: "[Node 3] Received votes from Node 4, 5. Quorum confirmed. NEW LEADER elected." },
+            { type: "stdout", text: "[HEALED] Network partition restored. Node 1, 2 synchronized via AppendEntries snapshot." },
+            { type: "success", text: "✔ Quorum maintained across 50,000 continuous writes with 0 transaction loss." },
+          ],
+        },
+      ],
     },
     proofReceipt: {
       "@context": ["https://www.w3.org/2018/credentials/v1"],
@@ -274,6 +330,8 @@ export const INITIAL_SKILLS: SkillNode[] = [
     status: "verified",
     description: "Linux kernel XDP / TC eBPF programs for wire-speed L4 DDoS mitigation and kernel-space metric telemetry.",
     xp: 1400,
+    masteryCount: 6,
+    freshnessPercentage: 100,
     iconName: "Shield",
     x: 720,
     y: 120,
@@ -318,6 +376,23 @@ int xdp_flow_filter(struct xdp_md *ctx) {
         { type: "stdout", text: "Attached XDP program to eth0 (Driver Native Mode)" },
         { type: "success", text: "Benchmarked ingress: 14,210,000 packets/sec processed | CPU load: 1.4%" },
       ],
+      chaosScenarios: [
+        {
+          id: "chaos-ebpf-syn-flood",
+          title: "Simulate 14,000,000 PPS SYN Flood Attack",
+          description: "Injects wire-speed spoofed TCP SYN flood to test XDP zero-copy drop efficiency and host CPU resistance.",
+          command: "$ sudo pktgen -i eth0 -s 64 -p 80 -r 14000000",
+          expectedResult: "14.2 Mpps dropped at NIC driver ring buffer with <2% host CPU impact.",
+          recoveryTimeMs: 8,
+          terminalLogs: [
+            { type: "cmd", text: "$ sudo pktgen -i eth0 -s 64 -p 80 -r 14000000" },
+            { type: "warn", text: "[ATTACK SIMULATION] 14,000,000 packets/sec ingress detected on eth0" },
+            { type: "stdout", text: "XDP Bloom Filter Matched: 13,998,240 packets dropped before sk_buff allocation" },
+            { type: "stdout", text: "Legitimate HTTP Traffic Latency: 0.12ms (Zero disruption)" },
+            { type: "success", text: "✔ Wire-speed mitigation sustained. Linux kernel network stack protected." },
+          ],
+        },
+      ],
     },
     proofReceipt: {
       "@context": ["https://www.w3.org/2018/credentials/v1"],
@@ -361,6 +436,8 @@ int xdp_flow_filter(struct xdp_md *ctx) {
     status: "verified",
     description: "Fiber-based time-sliced virtual DOM reconciliation engine with priority lanes and interruptible work units.",
     xp: 900,
+    masteryCount: 4,
+    freshnessPercentage: 100,
     iconName: "Layout",
     x: 180,
     y: 280,
@@ -439,6 +516,8 @@ int xdp_flow_filter(struct xdp_md *ctx) {
     status: "verified",
     description: "Hardware-accelerated compute shaders in WGSL with workgroup shared memory reduction for in-browser high-throughput vector transformations.",
     xp: 1100,
+    masteryCount: 4,
+    freshnessPercentage: 100,
     iconName: "Zap",
     x: 360,
     y: 280,
@@ -519,6 +598,8 @@ fn main(@builtin(global_invocation_id) global_id : vec3<u32>,
     status: "verified",
     description: "Bespoke Barnes-Hut spatial quadtree node layout engine rendering 10,000+ nodes at 120 FPS with inertia panning and dynamic edge collision avoidance.",
     xp: 1350,
+    masteryCount: 5,
+    freshnessPercentage: 100,
     iconName: "Share2",
     x: 540,
     y: 280,
@@ -610,6 +691,8 @@ fn main(@builtin(global_invocation_id) global_id : vec3<u32>,
     status: "verified",
     description: "Append-only immutable event store with optimistic lock concurrency, deterministic aggregate rehydration, and sub-millisecond projection streaming.",
     xp: 950,
+    masteryCount: 3,
+    freshnessPercentage: 100,
     iconName: "Database",
     x: 180,
     y: 440,
@@ -696,6 +779,8 @@ fn main(@builtin(global_invocation_id) global_id : vec3<u32>,
     status: "verified",
     description: "Custom Go controller using controller-runtime with rate-limited exponential backoff, leader lease election, and multi-cluster state reconciliation.",
     xp: 1250,
+    masteryCount: 4,
+    freshnessPercentage: 100,
     iconName: "Cloud",
     x: 360,
     y: 440,
@@ -718,17 +803,13 @@ fn main(@builtin(global_invocation_id) global_id : vec3<u32>,
     if err := r.Get(ctx, req.NamespacedName, &cluster); err != nil {
         return ctrl.Result{}, client.IgnoreNotFound(err)
     }
-    
-    // Status lock check and progressive canary rolling step
     if cluster.Spec.Paused {
         return ctrl.Result{}, nil
     }
-    
     if err := r.reconcileStatefulSetCanary(ctx, &cluster); err != nil {
         r.Recorder.Event(&cluster, "Warning", "ReconcileFailed", err.Error())
         return ctrl.Result{RequeueAfter: time.Second * 5}, err
     }
-    
     return ctrl.Result{RequeueAfter: time.Minute * 10}, nil
 }`,
       terminalTrace: [
@@ -779,6 +860,8 @@ fn main(@builtin(global_invocation_id) global_id : vec3<u32>,
     status: "verified",
     description: "NAT-traversing peer-to-peer overlay network with Noise Protocol handshake, dynamic ephemeral key rotation, and MTU auto-probing.",
     xp: 1150,
+    masteryCount: 4,
+    freshnessPercentage: 100,
     iconName: "Lock",
     x: 540,
     y: 440,
@@ -803,13 +886,10 @@ fn main(@builtin(global_invocation_id) global_id : vec3<u32>,
 ) -> Result<TunnelInterface, MeshError> {
     let socket = UdpSocket::bind("0.0.0.0:0").await?;
     let discovered_addr = self.stun_probe(&socket, stun_endpoints).await?;
-    
-    // Concurrent symmetric hole punch packets
     for attempt in 0..5 {
         socket.send_to(PUNCH_HEADER, discovered_addr).await?;
         tokio::time::sleep(Duration::from_millis(15)).await;
     }
-    
     self.initialize_noise_session(socket, peer_pubkey).await
 }`,
       terminalTrace: [
@@ -848,7 +928,7 @@ fn main(@builtin(global_invocation_id) global_id : vec3<u32>,
         created: "2026-08-08T19:20:18Z",
         verificationMethod: "did:merit:ed25519:9f8a3c2e1184bc23#key-1",
         proofPurpose: "assertionMethod",
-        signatureValue: "a2b1c0d9e8f7a6b5c4d3e2f1a0b93c84f295e4f35c4d3e2f1a0b93c84f295e4f",
+        signatureValue: "a2b1c0d9e8f7a6b5c4d3e2f1a0b93c84f295e4f35c4d3e2f1a0b93c84f295e4",
       },
     },
   },
@@ -863,6 +943,8 @@ fn main(@builtin(global_invocation_id) global_id : vec3<u32>,
     status: "verified",
     description: "Ultra-fast int4 matrix-vector multiplication kernel in C++/WASM with SIMD packed unpacking for real-time edge LLM generation.",
     xp: 1500,
+    masteryCount: 7,
+    freshnessPercentage: 100,
     iconName: "Sparkles",
     x: 360,
     y: 600,
@@ -886,7 +968,6 @@ fn main(@builtin(global_invocation_id) global_id : vec3<u32>,
     for (int i = 0; i < nb; i++) {
         const float d = x[i].d;
         const uint8_t * restrict pp = x[i].qs;
-        
         #pragma unroll(8)
         for (int l = 0; l < QK4_0/2; ++l) {
             const uint8_t vi = pp[l];
@@ -904,6 +985,23 @@ fn main(@builtin(global_invocation_id) global_id : vec3<u32>,
         { type: "stdout", text: "Prompt Processing: 480 tokens/sec" },
         { type: "stdout", text: "Token Generation: 42.5 tokens/sec (P99: 24.1ms/token)" },
         { type: "success", text: "Perplexity delta vs FP16 baseline: +0.038 (within acceptable threshold)." },
+      ],
+      chaosScenarios: [
+        {
+          id: "chaos-llm-oom-pressure",
+          title: "Simulate 8,192 Token Context under 95% RAM Pressure",
+          description: "Saturates OS unified memory cache to test paging and fallback dequantization stability.",
+          command: "$ python3 test/stress_memory_oom.py --model mistral-7b --tokens 8192",
+          expectedResult: "Zero memory page faults, continuous 42.1 tokens/sec inference sustained.",
+          recoveryTimeMs: 22,
+          terminalLogs: [
+            { type: "cmd", text: "$ python3 test/stress_memory_oom.py --model mistral-7b --tokens 8192" },
+            { type: "info", text: "Simulating 95% host memory allocation pressure..." },
+            { type: "stdout", text: "KV-cache eviction policy engaged: Sliding window retention active" },
+            { type: "stdout", text: "Generating 8,192 token prompt attention mask (23.4ms TTFT)" },
+            { type: "success", text: "✔ 42.5 tokens/sec sustained with zero OOM kernel SIGKILL events." },
+          ],
+        },
       ],
     },
     proofReceipt: {
@@ -946,6 +1044,8 @@ fn main(@builtin(global_invocation_id) global_id : vec3<u32>,
     status: "verified",
     description: "Hierarchical Navigable Small World graph for million-scale high-dimensional embedding similarity search with heuristic entrypoint pruning.",
     xp: 1100,
+    masteryCount: 5,
+    freshnessPercentage: 100,
     iconName: "GitMerge",
     x: 540,
     y: 600,
@@ -974,14 +1074,12 @@ fn main(@builtin(global_invocation_id) global_id : vec3<u32>,
     let mut visited = VisitedSet::new(self.max_nodes);
     let mut candidates = MinHeap::with_capacity(ef);
     let mut w = MaxHeap::with_capacity(ef);
-    
     for &ep in entry_points {
         let dist = self.simd_cosine_dist(query, self.get_vector(ep));
         visited.insert(ep);
         candidates.push(Candidate { id: ep, dist });
         w.push(Candidate { id: ep, dist });
     }
-    // Greedy heuristic neighbor search
     self.traverse_neighbors_at_level(&mut candidates, &mut w, &mut visited, query, ef, level);
     w.into_sorted_vec()
 }`,
@@ -1027,69 +1125,17 @@ fn main(@builtin(global_invocation_id) global_id : vec3<u32>,
   },
 ];
 
-export const INITIAL_ACTIVITY_LEDGER: ActivityEntry[] = [
-  {
-    id: "act-01",
-    timestamp: "2026-08-14T08:30:20Z",
-    type: "attestation_signed",
-    skillId: "hnsw-vector-indexer",
-    skillName: "HNSW Multi-Layer Vector Graph Indexer",
-    domain: "ai",
-    status: "verified",
-    receiptHash: "0xb5c4d3e2f1a0...95e4",
-    blockHeight: 894120,
-  },
-  {
-    id: "act-02",
-    timestamp: "2026-08-12T14:10:45Z",
-    type: "node_unlocked",
-    skillId: "quantized-llm-runtime",
-    skillName: "4-Bit (AWQ/GPTQ) Quantized LLM Inference Runtime",
-    domain: "ai",
-    status: "verified",
-    receiptHash: "0xe8f7a6b5c4d3...3c84",
-    blockHeight: 893540,
-  },
-  {
-    id: "act-03",
-    timestamp: "2026-08-10T16:15:30Z",
-    type: "verification_audited",
-    skillId: "ebpf-packet-filter",
-    skillName: "eBPF Kernel Network Packet Filter & Flow Tracer",
-    domain: "systems",
-    status: "verified",
-    receiptHash: "0xa1b2c3d4e5f6...ef0",
-    blockHeight: 892810,
-  },
-  {
-    id: "act-04",
-    timestamp: "2026-08-08T19:20:18Z",
-    type: "attestation_signed",
-    skillId: "wireguard-mesh",
-    skillName: "Zero-Trust WireGuard P2P Mesh Tunneling",
-    domain: "cloud",
-    status: "verified",
-    receiptHash: "0x5c4d3e2f1a0b...5e4f",
-    blockHeight: 891940,
-  },
-  {
-    id: "act-05",
-    timestamp: "2026-08-06T09:40:12Z",
-    type: "score_updated",
-    skillId: "raft-consensus-engine",
-    skillName: "Distributed Raft Consensus & Log Compaction",
-    domain: "systems",
-    status: "verified",
-    receiptHash: "0x9f8a3c2e1184...8374",
-    blockHeight: 890450,
-  },
-];
-
-export const MOCK_USER_PROFILE: UserProfile = {
+export const TOIBA_PROFILE: UserProfile = {
   username: "toibawani",
   displayName: "Toiba Wani",
   bio: "Systems Architect & Compilers Researcher. Building high-throughput distributed primitives, zero-copy WASM allocators, and deterministic verifiable software.",
   title: "Principal Systems & Distributed Infrastructure Engineer",
+  level: 42,
+  rankTitle: "Grandmaster Systems Architect",
+  xp: 12850,
+  nextLevelXp: 15000,
+  streakDays: 48,
+  freshnessPercentage: 100,
   avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80",
   githubUrl: "https://github.com/toibawani",
   did: "did:merit:ed25519:9f8a3c2e1184bc23",
@@ -1110,6 +1156,137 @@ export const MOCK_USER_PROFILE: UserProfile = {
     speed: 99,
     cryptographicDepth: 100,
   },
-  activityLedger: INITIAL_ACTIVITY_LEDGER,
-  skills: INITIAL_SKILLS,
+  activityLedger: [
+    {
+      id: "act-01",
+      timestamp: "2026-08-14T08:30:20Z",
+      type: "attestation_signed",
+      skillId: "hnsw-vector-indexer",
+      skillName: "HNSW Multi-Layer Vector Graph Indexer",
+      domain: "ai",
+      status: "verified",
+      receiptHash: "0xb5c4d3e2f1a0...95e4",
+      blockHeight: 894120,
+    },
+    {
+      id: "act-02",
+      timestamp: "2026-08-12T14:10:45Z",
+      type: "node_unlocked",
+      skillId: "quantized-llm-runtime",
+      skillName: "4-Bit (AWQ/GPTQ) Quantized LLM Inference Runtime",
+      domain: "ai",
+      status: "verified",
+      receiptHash: "0xe8f7a6b5c4d3...3c84",
+      blockHeight: 893540,
+    },
+    {
+      id: "act-03",
+      timestamp: "2026-08-10T16:15:30Z",
+      type: "verification_audited",
+      skillId: "ebpf-packet-filter",
+      skillName: "eBPF Kernel Network Packet Filter & Flow Tracer",
+      domain: "systems",
+      status: "verified",
+      receiptHash: "0xa1b2c3d4e5f6...ef0",
+      blockHeight: 892810,
+    },
+  ],
+  skills: TOIBA_SKILLS,
 };
+
+export const ALEX_PROFILE: UserProfile = {
+  username: "alex_rivera",
+  displayName: "Alex Rivera",
+  bio: "Kernel Hacker & Zero-Trust Infrastructure Engineer. Specialized in eBPF flow filters, Linux memory internals, and WireGuard mesh routing.",
+  title: "Staff Kernel & Distributed Security Engineer",
+  level: 38,
+  rankTitle: "Kernel Specialist",
+  xp: 9400,
+  nextLevelXp: 12000,
+  streakDays: 32,
+  freshnessPercentage: 96,
+  avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80",
+  githubUrl: "https://github.com/alexrivera-kernel",
+  did: "did:merit:ed25519:7a8b9c0d1e2f3a4b",
+  publicKey: "047a8b9c0d1e2f3a4b5c6d7e8f90123456789abcdef0123456789abcdef0123456",
+  verificationScore: 97.4,
+  totalVerifiedSkills: 8,
+  globalRank: "Top 0.5%",
+  domainBreakdown: {
+    systems: 99.4,
+    frontend: 88.2,
+    cloud: 98.1,
+    ai: 91.0,
+  },
+  radarScores: {
+    quality: 96,
+    architecture: 98,
+    reliability: 99,
+    speed: 98,
+    cryptographicDepth: 97,
+  },
+  activityLedger: [
+    {
+      id: "act-alex-01",
+      timestamp: "2026-08-11T12:00:00Z",
+      type: "attestation_signed",
+      skillId: "ebpf-packet-filter",
+      skillName: "eBPF Kernel Network Packet Filter",
+      domain: "systems",
+      status: "verified",
+      receiptHash: "0x7a8b9c0d...1e2f",
+      blockHeight: 893100,
+    },
+  ],
+  skills: TOIBA_SKILLS.filter(s => s.domain === "systems" || s.domain === "cloud"),
+};
+
+export const ELENA_PROFILE: UserProfile = {
+  username: "elena_rostova",
+  displayName: "Elena Rostova",
+  bio: "Applied ML Researcher & Tensor Compiler Engineer. Quantizing large generative models for real-time edge execution.",
+  title: "Lead AI Inference & Tensor Architect",
+  level: 40,
+  rankTitle: "Tensor Inference Master",
+  xp: 11200,
+  nextLevelXp: 14000,
+  streakDays: 41,
+  freshnessPercentage: 99,
+  avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&auto=format&fit=crop&q=80",
+  githubUrl: "https://github.com/elena-ai-core",
+  did: "did:merit:ed25519:3c4d5e6f7a8b9c0d",
+  publicKey: "043c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f90123456789abcdef0123456789abcdef",
+  verificationScore: 98.2,
+  totalVerifiedSkills: 9,
+  globalRank: "Top 0.2%",
+  domainBreakdown: {
+    systems: 94.0,
+    frontend: 92.5,
+    cloud: 95.0,
+    ai: 99.8,
+  },
+  radarScores: {
+    quality: 98,
+    architecture: 97,
+    reliability: 96,
+    speed: 99,
+    cryptographicDepth: 98,
+  },
+  activityLedger: [
+    {
+      id: "act-elena-01",
+      timestamp: "2026-08-13T10:00:00Z",
+      type: "attestation_signed",
+      skillId: "quantized-llm-runtime",
+      skillName: "4-Bit (AWQ/GPTQ) Quantized LLM Inference Runtime",
+      domain: "ai",
+      status: "verified",
+      receiptHash: "0x3c4d5e6f...7a8b",
+      blockHeight: 893900,
+    },
+  ],
+  skills: TOIBA_SKILLS.filter(s => s.domain === "ai" || s.domain === "systems"),
+};
+
+export const MOCK_USER_PROFILE = TOIBA_PROFILE;
+export const INITIAL_SKILLS = TOIBA_SKILLS;
