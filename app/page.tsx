@@ -7,6 +7,8 @@ import { RadarMatrix } from "@/components/RadarMatrix";
 import { ActivityLedger } from "@/components/ActivityLedger";
 import { HumaneLedgerModal } from "@/components/HumaneLedgerModal";
 import { HumaneRecruiterFastTrack } from "@/components/HumaneRecruiterFastTrack";
+import { CareerTimeline } from "@/components/CareerTimeline";
+import { LivePulse } from "@/components/LivePulse";
 import { 
   ShieldCheck, ArrowRight, Plus, Share2, Sparkles, Terminal, 
   FileText, CheckCircle2, HeartHandshake, Zap, Compass, Clock 
