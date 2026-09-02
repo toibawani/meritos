@@ -2,6 +2,13 @@ export type DomainType = "systems" | "frontend" | "cloud" | "ai";
 export type SkillLevel = "novice" | "proficient" | "expert" | "master";
 export type NodeStatus = "verified" | "in_progress" | "locked";
 
+export type HumanePillar = 
+  | "mentorship" 
+  | "review_empathy" 
+  | "blameless_culture" 
+  | "async_clarity" 
+  | "sustainable_cadence";
+
 export interface TerminalTraceStep {
   type: "cmd" | "stdout" | "stderr" | "success" | "warn" | "info" | "diff";
   text: string;
@@ -18,6 +25,38 @@ export interface ChaosScenario {
   terminalLogs: TerminalTraceStep[];
 }
 
+export interface HumaneReviewComment {
+  id: string;
+  author: string;
+  avatarUrl: string;
+  role: "author" | "reviewer" | "mentee";
+  commentType: "praise" | "suggestion" | "inquiry" | "empathy_guidance";
+  lineNumber?: number;
+  text: string;
+  codeSnippet?: string;
+  empathyBadge: string;
+}
+
+export interface HumaneIncidentPostmortem {
+  title: string;
+  blamelessSummary: string;
+  humanImpact: string;
+  preventionAction: string;
+  peerGratitude: string;
+}
+
+export interface HumaneSkillCraft {
+  empathyIndex: number; // e.g. 99.4%
+  mentorshipNotes: string;
+  reviewThread?: HumaneReviewComment[];
+  postmortem?: HumaneIncidentPostmortem;
+  asyncRfcExcerpt?: {
+    title: string;
+    decisionReason: string;
+    tradeoffsRespected: string;
+  };
+}
+
 export interface AttestationEvidence {
   type: "github_commit" | "pull_request" | "benchmark_suite" | "test_run" | "live_demo";
   title: string;
@@ -31,6 +70,7 @@ export interface AttestationEvidence {
   };
   terminalTrace: TerminalTraceStep[];
   chaosScenarios?: ChaosScenario[];
+  humaneCraft?: HumaneSkillCraft;
   metrics: {
     latency?: string;
     throughput?: string;
@@ -98,7 +138,7 @@ export interface SkillNode {
 export interface ActivityEntry {
   id: string;
   timestamp: string;
-  type: "attestation_signed" | "node_unlocked" | "score_updated" | "verification_audited" | "chaos_simulated" | "mastery_claimed";
+  type: "attestation_signed" | "node_unlocked" | "score_updated" | "verification_audited" | "chaos_simulated" | "mastery_claimed" | "peer_voucher_signed";
   skillId: string;
   skillName: string;
   domain: DomainType;
@@ -113,6 +153,38 @@ export interface RadarCapabilityScores {
   reliability: number;
   speed: number;
   cryptographicDepth: number;
+}
+
+export interface HumaneCapabilityScores {
+  reviewEmpathy: number;
+  mentorshipGrowth: number;
+  blamelessCulture: number;
+  asyncRfcClarity: number;
+  sustainableCadence: number;
+}
+
+export interface PeerAttestation {
+  id: string;
+  voucherName: string;
+  voucherTitle: string;
+  voucherCompany: string;
+  voucherAvatarUrl: string;
+  voucherDid: string;
+  pillar: HumanePillar;
+  relationship: "Mentee" | "Teammate" | "Engineering Lead" | "Cross-Functional Peer";
+  testimony: string;
+  dateAttested: string;
+  verifiedBadge: string;
+  signature: string;
+  merkleLeaf: string;
+}
+
+export interface SustainableRhythm {
+  deepWorkRatio: number; // percentage, e.g. 94
+  weekendBoundaries: string; // e.g. "100% Protected"
+  avgReviewTurnaround: string; // e.g. "< 3.5h"
+  meetingFreeDays: number; // e.g. 2
+  humaneImpactIndex: number; // e.g. 98.8
 }
 
 export interface UserProfile {
@@ -135,6 +207,9 @@ export interface UserProfile {
   globalRank: string;
   domainBreakdown: Record<DomainType, number>;
   radarScores: RadarCapabilityScores;
+  humaneScores: HumaneCapabilityScores;
+  sustainableRhythm: SustainableRhythm;
+  peerAttestations: PeerAttestation[];
   activityLedger: ActivityEntry[];
   skills: SkillNode[];
 }
