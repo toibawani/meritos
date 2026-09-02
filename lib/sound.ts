@@ -192,6 +192,69 @@ class SoundEngine {
       osc.stop(ctx.currentTime + 0.018);
     } catch {}
   }
+
+  /**
+   * Humane Harmonic Chime (Mindful resonant sound for empathy & peer vouching)
+   * Uses gentle harmonic overtones at 528Hz (Solfeggio healing frequency) with smooth decay.
+   */
+  public playHumaneChime() {
+    if (this.isMuted) return;
+    try {
+      const ctx = this.initCtx();
+      if (!ctx) return;
+
+      const harmonics = [
+        { freq: 528, gainVal: 0.06 },   // Fundamental
+        { freq: 792, gainVal: 0.035 },  // Perfect 5th overtone
+        { freq: 1056, gainVal: 0.02 },  // 2nd octave
+        { freq: 1584, gainVal: 0.01 }   // High shimmer
+      ];
+
+      harmonics.forEach(({ freq, gainVal }) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+        gain.gain.setValueAtTime(0.001, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(gainVal, ctx.currentTime + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.85);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.85);
+      });
+    } catch {}
+  }
+
+  /**
+   * Gentle warm note for humane toggle
+   */
+  public playWarmNote(freq: number = 396) {
+    if (this.isMuted) return;
+    try {
+      const ctx = this.initCtx();
+      if (!ctx) return;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      gain.gain.setValueAtTime(0.001, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.05, ctx.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.4);
+    } catch {}
+  }
 }
 
 export const sound = new SoundEngine();
