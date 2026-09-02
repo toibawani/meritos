@@ -1,47 +1,86 @@
 "use client";
 
 import React, { useState } from "react";
-import { RadarCapabilityScores } from "@/lib/types";
+import { RadarCapabilityScores, HumaneCapabilityScores } from "@/lib/types";
 import { useApp } from "@/lib/store";
 import { sound } from "@/lib/sound";
-import { ShieldCheck, Info } from "lucide-react";
+import { ShieldCheck, HeartHandshake, Cpu, Sparkles } from "lucide-react";
 
 export function RadarMatrix() {
-  const { profile } = useApp();
+  const { profile, radarMode, setRadarMode } = useApp();
   const [hoveredAxis, setHoveredAxis] = useState<string | null>(null);
 
-  const axes: { key: keyof RadarCapabilityScores; label: string; score: number; detail: string }[] = [
+  const systemsAxes: { key: string; label: string; score: number; detail: string }[] = [
     { 
       key: "quality", 
       label: "Code Quality", 
-      score: profile.radarScores.quality,
+      score: profile.radarScores?.quality || 98,
       detail: "Zero lint errors, strict type invariants, 98.4% average unit test coverage."
     },
     { 
       key: "architecture", 
       label: "Systems Architecture", 
-      score: profile.radarScores.architecture,
+      score: profile.radarScores?.architecture || 99,
       detail: "Clean separation of concerns, modular compilation passes, CQRS event sourcing."
     },
     { 
       key: "reliability", 
       label: "Fault Reliability", 
-      score: profile.radarScores.reliability,
+      score: profile.radarScores?.reliability || 97,
       detail: "Chaos test hardened, Raft partition auto-healing, deterministic state machines."
     },
     { 
       key: "speed", 
       label: "Execution Speed", 
-      score: profile.radarScores.speed,
+      score: profile.radarScores?.speed || 99,
       detail: "Zero-copy WASM slab allocators, SIMD int4 quantization, 14.2 Mpps packet filtering."
     },
     { 
       key: "cryptographicDepth", 
       label: "Cryptographic Depth", 
-      score: profile.radarScores.cryptographicDepth,
+      score: profile.radarScores?.cryptographicDepth || 100,
       detail: "Ed25519 verifiable credentials, SHA-256 Merkle root receipts, zero self-reporting."
     },
   ];
+
+  const humaneAxes: { key: string; label: string; score: number; detail: string }[] = [
+    { 
+      key: "reviewEmpathy", 
+      label: "Review Empathy", 
+      score: profile.humaneScores?.reviewEmpathy || 99,
+      detail: "Kind, actionable PR code reviews with positive reinforcement and zero snark."
+    },
+    { 
+      key: "mentorshipGrowth", 
+      label: "Mentorship Growth", 
+      score: profile.humaneScores?.mentorshipGrowth || 98,
+      detail: "Active pairing, onboarding junior contributors, and unblocking engineering peers."
+    },
+    { 
+      key: "blamelessCulture", 
+      label: "Blameless Culture", 
+      score: profile.humaneScores?.blamelessCulture || 100,
+      detail: "Zero-finger-pointing incident retrospectives; systemic prevention over blame."
+    },
+    { 
+      key: "asyncRfcClarity", 
+      label: "Async RFC Clarity", 
+      score: profile.humaneScores?.asyncRfcClarity || 97,
+      detail: "High-context written proposals respecting global time zones and deep focus time."
+    },
+    { 
+      key: "sustainableCadence", 
+      label: "Sustainable Cadence", 
+      score: profile.humaneScores?.sustainableCadence || 96,
+      detail: "Healthy on-call boundaries, 100% protected weekends, and steady long-term velocity."
+    },
+  ];
+
+  const isHumane = radarMode === "humane";
+  const axes = isHumane ? humaneAxes : systemsAxes;
+  const primaryColor = isHumane ? "#F43F5E" : "#10B981";
+  const fillColor = isHumane ? "rgba(244, 63, 94, 0.18)" : "rgba(16, 185, 129, 0.18)";
+  const dotHoverColor = isHumane ? "#FB7185" : "#34D399";
 
   // Radar geometry
   const size = 260;
@@ -66,16 +105,45 @@ export function RadarMatrix() {
 
   return (
     <div className="tactile-card rounded-2xl p-5 border border-white/[0.06] flex flex-col justify-between">
+      {/* Header with Mode Switcher */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center space-x-2">
-          <ShieldCheck className="w-4 h-4 text-emerald-400" />
+          {isHumane ? (
+            <HeartHandshake className="w-4 h-4 text-rose-400" />
+          ) : (
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+          )}
           <h3 className="text-xs font-bold uppercase font-mono tracking-wider text-white">
-            Competence Matrix (Radar)
+            {isHumane ? "Humane Craft Matrix" : "Competence Matrix"}
           </h3>
         </div>
-        <span className="text-[10px] font-mono text-zinc-500">
-          Multi-Axial Index
-        </span>
+
+        {/* Dual-Mode Toggle */}
+        <div className="flex items-center p-0.5 rounded-lg bg-[#090A10] border border-white/[0.06] text-[10px] font-mono">
+          <button
+            onClick={() => setRadarMode("systems")}
+            className={`flex items-center space-x-1 px-2 py-0.5 rounded-md transition-all ${
+              !isHumane 
+                ? "bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30" 
+                : "text-zinc-500 hover:text-zinc-300"
+            }`}
+          >
+            <Cpu className="w-3 h-3" />
+            <span>Systems</span>
+          </button>
+
+          <button
+            onClick={() => setRadarMode("humane")}
+            className={`flex items-center space-x-1 px-2 py-0.5 rounded-md transition-all ${
+              isHumane 
+                ? "bg-rose-500/20 text-rose-300 font-bold border border-rose-500/30" 
+                : "text-zinc-500 hover:text-zinc-300"
+            }`}
+          >
+            <HeartHandshake className="w-3 h-3" />
+            <span>Humane</span>
+          </button>
+        </div>
       </div>
 
       {/* SVG Radar Chart */}
@@ -119,10 +187,10 @@ export function RadarMatrix() {
           {/* User Score Filled Polygon */}
           <polygon
             points={polygonPoints}
-            fill="rgba(16, 185, 129, 0.18)"
-            stroke="#10B981"
+            fill={fillColor}
+            stroke={primaryColor}
             strokeWidth="2"
-            className="transition-all duration-300"
+            className="transition-all duration-500 ease-out"
           />
 
           {/* Axis Vertex Dots */}
@@ -135,12 +203,13 @@ export function RadarMatrix() {
                   cx={coords.x}
                   cy={coords.y}
                   r={isHovered ? 5 : 3.5}
-                  fill={isHovered ? "#34D399" : "#10B981"}
+                  fill={isHovered ? dotHoverColor : primaryColor}
                   stroke="#090A0F"
                   strokeWidth="2"
                   className="cursor-pointer transition-all"
                   onMouseEnter={() => {
-                    sound.playClick(900);
+                    if (isHumane) sound.playWarmNote(528);
+                    else sound.playClick(900);
                     setHoveredAxis(axis.key);
                   }}
                   onMouseLeave={() => setHoveredAxis(null)}
@@ -163,10 +232,16 @@ export function RadarMatrix() {
             }`}
           >
             <div className="flex items-center space-x-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <span 
+                className="w-1.5 h-1.5 rounded-full" 
+                style={{ backgroundColor: primaryColor }} 
+              />
               <span className="text-zinc-300 text-[11px]">{axis.label}</span>
             </div>
-            <span className="text-emerald-400 font-bold text-[11px]">
+            <span 
+              className="font-bold text-[11px]" 
+              style={{ color: primaryColor }}
+            >
               {axis.score}%
             </span>
           </div>
@@ -175,3 +250,4 @@ export function RadarMatrix() {
     </div>
   );
 }
+
