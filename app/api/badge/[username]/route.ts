@@ -61,6 +61,38 @@ export async function GET(
   </text>
 </svg>
 `.trim();
+  } else if (style === "humane") {
+    const empathyScore = MOCK_USER_PROFILE.humaneScores?.reviewEmpathy || 99;
+    const peerVoucherCount = MOCK_USER_PROFILE.peerAttestations?.length || 5;
+
+    svg = `
+<svg width="380" height="46" viewBox="0 0 380 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="humaneBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#171221" />
+      <stop offset="100%" stopColor="#1F1528" />
+    </linearGradient>
+  </defs>
+  <rect width="380" height="46" rx="8" fill="url(#humaneBg)" stroke="rgba(244,63,94,0.3)" stroke-width="1.2" />
+  
+  <!-- Rose Heart / Shield Badge -->
+  <rect x="8" y="8" width="30" height="30" rx="6" fill="#F43F5E" fill-opacity="0.15" stroke="#F43F5E" stroke-width="1.2" />
+  <path d="M23 16C21.5 14.5 19 14.5 17.5 16C16 17.5 16 20 17.5 21.5L23 27L28.5 21.5C30 20 30 17.5 28.5 16C27 14.5 24.5 14.5 23 16Z" fill="#F43F5E" />
+
+  <text x="46" y="21" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">
+    MeritOS <tspan fill="#F43F5E">Humane Certified</tspan>
+  </text>
+  <text x="46" y="34" font-family="'JetBrains Mono', monospace" font-size="9" fill="#FDA4AF">
+    ${empathyScore}% Review Empathy • ${peerVoucherCount} Peer Vouchers
+  </text>
+
+  <!-- Verified Pill -->
+  <rect x="290" y="12" width="80" height="22" rx="5" fill="#F43F5E" fill-opacity="0.15" stroke="#F43F5E" stroke-width="1" />
+  <text x="330" y="27" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" fill="#FDA4AF" text-anchor="middle">
+    HUMANE ✓
+  </text>
+</svg>
+`.trim();
   } else {
     // Default Linear-Grade Dark Badge
     svg = `

@@ -7,7 +7,7 @@ import { sound } from "@/lib/sound";
 
 export function BadgeGenerator() {
   const { profile, isBadgeModalOpen, setIsBadgeModalOpen } = useApp();
-  const [badgeStyle, setBadgeStyle] = useState<"default" | "compact" | "shield">("default");
+  const [badgeStyle, setBadgeStyle] = useState<"default" | "compact" | "shield" | "humane">("default");
   const [copiedType, setCopiedType] = useState<string | null>(null);
 
   if (!isBadgeModalOpen) return null;
@@ -60,21 +60,25 @@ export function BadgeGenerator() {
             <label className="text-[11px] font-mono uppercase text-zinc-400 font-semibold block">
               Choose Badge Style
             </label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {[
                 { id: "default", label: "Linear Dark" },
                 { id: "shield", label: "Dossier Shield" },
                 { id: "compact", label: "Minimalist Inline" },
+                { id: "humane", label: "Humane Shield" },
               ].map((style) => (
                 <button
                   key={style.id}
                   onClick={() => {
-                    sound.playClick();
+                    if (style.id === "humane") sound.playHumaneChime();
+                    else sound.playClick();
                     setBadgeStyle(style.id as any);
                   }}
                   className={`px-3 py-2 rounded-xl text-xs font-mono transition-all ${
                     badgeStyle === style.id
-                      ? "bg-emerald-500/20 border border-emerald-500/50 text-emerald-400 font-bold"
+                      ? style.id === "humane" 
+                        ? "bg-rose-500/20 border border-rose-500/50 text-rose-300 font-bold"
+                        : "bg-emerald-500/20 border border-emerald-500/50 text-emerald-400 font-bold"
                       : "tactile-card text-zinc-400 hover:text-white"
                   }`}
                 >

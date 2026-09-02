@@ -1,9 +1,18 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import HomePage from "@/app/page";
+import { useApp } from "@/lib/store";
 
 export default function ProfilePage({ params }: { params: { username: string } }) {
-  // In Next.js client component, HomePage renders the profile corresponding to the route/store
+  const { switchPersona, profile } = useApp();
+
+  useEffect(() => {
+    if (params.username && params.username !== profile.username) {
+      switchPersona(params.username);
+    }
+  }, [params.username, profile.username, switchPersona]);
+
   return <HomePage />;
 }
+
