@@ -19,7 +19,13 @@ import {
   Lock, 
   Sparkles,
   Layers,
-  AlertTriangle
+  AlertTriangle,
+  HeartHandshake,
+  MessageSquareHeart,
+  Compass,
+  BookOpen,
+  ThumbsUp,
+  CheckCircle2
 } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { sound } from "@/lib/sound";
@@ -27,7 +33,7 @@ import { verifyVerifiableReceipt, computeEvidenceMerkleRoot } from "@/lib/crypto
 
 export function ProofSandboxModal() {
   const { selectedSkill, setSelectedSkill, startChaosRun, chaosRun } = useApp();
-  const [activeTab, setActiveTab] = useState<"diff" | "terminal" | "crypto" | "chaos">("diff");
+  const [activeTab, setActiveTab] = useState<"diff" | "terminal" | "crypto" | "chaos" | "humane">("diff");
   const [copiedReceipt, setCopiedReceipt] = useState(false);
   const [copiedCommit, setCopiedCommit] = useState(false);
 
@@ -288,6 +294,25 @@ export function ProofSandboxModal() {
               </span>
             </button>
           )}
+
+          {/* Humane Craft & Review Tab */}
+          <button
+            onClick={() => {
+              sound.playHumaneChime();
+              setActiveTab("humane");
+            }}
+            className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+              activeTab === "humane"
+                ? "bg-rose-500/15 text-rose-300 border border-rose-500/30"
+                : "text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]"
+            }`}
+          >
+            <HeartHandshake className="w-3.5 h-3.5 text-rose-400" />
+            <span>Humane Craft & Review</span>
+            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20">
+              {selectedSkill.evidence.humaneCraft?.empathyIndex ? `${selectedSkill.evidence.humaneCraft.empathyIndex}%` : "Empathy"}
+            </span>
+          </button>
         </div>
 
         {/* Tab Content Area */}
@@ -714,6 +739,147 @@ export function ProofSandboxModal() {
                   </div>
                 );
               })}
+            </div>
+          )}
+
+          {/* TAB 5: HUMANE CRAFT & CODE REVIEW */}
+          {activeTab === "humane" && (
+            <div className="space-y-5 animate-fade-in">
+              {/* Empathy & Culture Banner */}
+              <div className="p-4 rounded-xl bg-gradient-to-r from-[#171320] via-[#1A1528] to-[#12131F] border border-rose-500/25 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center space-x-2">
+                    <HeartHandshake className="w-4 h-4 text-rose-400" />
+                    <h4 className="text-sm font-bold text-white">Humane Craft & Collaborative Review</h4>
+                  </div>
+                  <p className="text-xs text-zinc-400 leading-relaxed max-w-lg">
+                    {selectedSkill.evidence.humaneCraft?.mentorshipNotes || 
+                      "Evaluated for compassionate PR communication, clear architectural explanations, and psychological safety."}
+                  </p>
+                </div>
+
+                <div className="flex items-center space-x-3 shrink-0 bg-[#090A11] px-3.5 py-2 rounded-xl border border-white/[0.08]">
+                  <div className="flex flex-col text-right">
+                    <span className="text-[10px] uppercase font-mono text-zinc-500">Empathy Index</span>
+                    <span className="text-lg font-bold font-mono text-rose-400 leading-none">
+                      {selectedSkill.evidence.humaneCraft?.empathyIndex || 99.2}%
+                    </span>
+                  </div>
+                  <MessageSquareHeart className="w-5 h-5 text-rose-400" />
+                </div>
+              </div>
+
+              {/* Code Review Thread */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <MessageSquareHeart className="w-3.5 h-3.5 text-rose-400" />
+                    <h5 className="text-xs font-bold uppercase font-mono tracking-wider text-white">
+                      Pull Request Review Thread (Empathy in Action)
+                    </h5>
+                  </div>
+                  <span className="text-[10px] font-mono text-zinc-500">Kindness & Mentorship Log</span>
+                </div>
+
+                <div className="space-y-3">
+                  {(selectedSkill.evidence.humaneCraft?.reviewThread || [
+                    {
+                      id: "default-rev-1",
+                      author: "colleague_eng",
+                      avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80",
+                      role: "mentee" as const,
+                      commentType: "inquiry" as const,
+                      text: "Could we clarify the memory ownership semantics here? I want to make sure I understand the concurrency invariants.",
+                      empathyBadge: "Curiosity Welcomed"
+                    },
+                    {
+                      id: "default-rev-2",
+                      author: selectedSkill.proofReceipt?.credentialSubject.username || "toibawani",
+                      avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80",
+                      role: "reviewer" as const,
+                      commentType: "empathy_guidance" as const,
+                      text: "Great question! By isolating the lock-free queue behind an atomic pointer swap, callers never need to synchronize manually. Here is how we guarantee memory ordering without blocking readers:",
+                      codeSnippet: "+ // Atomic swap guarantees visibility across threads without mutex contention\n+ self.head.store(next_ptr, Ordering::Release);",
+                      empathyBadge: "Constructive Mentorship"
+                    }
+                  ]).map((comment) => (
+                    <div 
+                      key={comment.id}
+                      className="p-4 rounded-xl bg-[#0E1019] border border-white/[0.06] space-y-2.5"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2.5">
+                          <img 
+                            src={comment.avatarUrl} 
+                            alt={comment.author} 
+                            className="w-6 h-6 rounded-full object-cover border border-white/[0.1]" 
+                          />
+                          <span className="text-xs font-bold text-white font-mono">{comment.author}</span>
+                          <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded uppercase ${
+                            comment.role === "reviewer" 
+                              ? "bg-rose-500/10 text-rose-300 border border-rose-500/20"
+                              : "bg-cyan-500/10 text-cyan-300 border border-cyan-500/20"
+                          }`}>
+                            {comment.role}
+                          </span>
+                        </div>
+
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.05] text-zinc-400 border border-white/[0.08]">
+                          {comment.empathyBadge}
+                        </span>
+                      </div>
+
+                      <p className="text-xs text-zinc-300 font-sans leading-relaxed">
+                        {comment.text}
+                      </p>
+
+                      {comment.codeSnippet && (
+                        <pre className="p-2.5 rounded-lg bg-[#06070B] border border-white/[0.05] text-[11px] font-mono text-emerald-400 overflow-x-auto">
+                          {comment.codeSnippet}
+                        </pre>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Blameless Post-Mortem (if present) */}
+              {selectedSkill.evidence.humaneCraft?.postmortem && (
+                <div className="p-4 rounded-xl bg-[#0F121C] border border-amber-500/20 space-y-2">
+                  <div className="flex items-center space-x-2 text-amber-400 text-xs font-mono font-bold">
+                    <ShieldCheck className="w-4 h-4" />
+                    <span>{selectedSkill.evidence.humaneCraft.postmortem.title}</span>
+                  </div>
+                  <p className="text-xs text-zinc-300 leading-relaxed font-sans">
+                    {selectedSkill.evidence.humaneCraft.postmortem.blamelessSummary}
+                  </p>
+                  <div className="pt-2 border-t border-white/[0.05] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] font-mono text-zinc-400">
+                    <span className="text-emerald-400 font-semibold">
+                      ✓ {selectedSkill.evidence.humaneCraft.postmortem.humanImpact}
+                    </span>
+                    <span className="text-zinc-500">
+                      {selectedSkill.evidence.humaneCraft.postmortem.peerGratitude}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Async RFC Excerpt (if present) */}
+              {selectedSkill.evidence.humaneCraft?.asyncRfcExcerpt && (
+                <div className="p-4 rounded-xl bg-[#0F121C] border border-cyan-500/20 space-y-2">
+                  <div className="flex items-center space-x-2 text-cyan-400 text-xs font-mono font-bold">
+                    <BookOpen className="w-4 h-4" />
+                    <span>{selectedSkill.evidence.humaneCraft.asyncRfcExcerpt.title}</span>
+                  </div>
+                  <p className="text-xs text-zinc-300 leading-relaxed font-sans">
+                    {selectedSkill.evidence.humaneCraft.asyncRfcExcerpt.decisionReason}
+                  </p>
+                  <div className="pt-1 text-[11px] font-mono text-zinc-400">
+                    <span className="text-zinc-500">Tradeoffs Respected: </span>
+                    <span>{selectedSkill.evidence.humaneCraft.asyncRfcExcerpt.tradeoffsRespected}</span>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
