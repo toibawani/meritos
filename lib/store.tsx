@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { UserProfile, SkillNode, DomainType, ActivityEntry } from "./types";
+import { UserProfile, SkillNode, DomainType, ActivityEntry, PeerAttestation } from "./types";
 import { MOCK_USER_PROFILE, INITIAL_SKILLS, TOIBA_PROFILE, ALEX_PROFILE, ELENA_PROFILE } from "./data/seedData";
 import { sound } from "./sound";
 
@@ -34,7 +34,20 @@ interface AppContextType {
   setIsBadgeModalOpen: (open: boolean) => void;
   isAttestModalOpen: boolean;
   setIsAttestModalOpen: (open: boolean) => void;
+  isHumaneLedgerOpen: boolean;
+  setIsHumaneLedgerOpen: (open: boolean) => void;
+  isRecruiterFastTrackOpen: boolean;
+  setIsRecruiterFastTrackOpen: (open: boolean) => void;
+  isBlindEvaluationMode: boolean;
+  setIsBlindEvaluationMode: (mode: boolean) => void;
+  toggleBlindEvaluationMode: () => void;
+  isHumaneTheme: boolean;
+  setIsHumaneTheme: (theme: boolean) => void;
+  toggleHumaneTheme: () => void;
+  radarMode: "systems" | "humane";
+  setRadarMode: (mode: "systems" | "humane") => void;
   addNewSkillAttestation: (skill: SkillNode) => void;
+  addPeerVoucher: (voucher: PeerAttestation) => void;
   resetToDefaultData: () => void;
   chaosRun: ChaosRunState;
   startChaosRun: (skillId: string, scenarioId: string, durationMs?: number) => void;
@@ -52,6 +65,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isDossierOpen, setIsDossierOpen] = useState(false);
   const [isBadgeModalOpen, setIsBadgeModalOpen] = useState(false);
   const [isAttestModalOpen, setIsAttestModalOpen] = useState(false);
+  const [isHumaneLedgerOpen, setIsHumaneLedgerOpen] = useState(false);
+  const [isRecruiterFastTrackOpen, setIsRecruiterFastTrackOpen] = useState(false);
+  const [isBlindEvaluationMode, setIsBlindEvaluationModeState] = useState(false);
+  const [isHumaneTheme, setIsHumaneThemeState] = useState(false);
+  const [radarMode, setRadarModeState] = useState<"systems" | "humane">("systems");
 
   const [chaosRun, setChaosRun] = useState<ChaosRunState>({
     isRunning: false,
@@ -226,6 +244,47 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     });
   }, [profile.skills]);
 
+  const toggleBlindEvaluationMode = () => {
+    sound.playWarmNote(440);
+    setIsBlindEvaluationModeState(prev => !prev);
+  };
+
+  const toggleHumaneTheme = () => {
+    sound.playHumaneChime();
+    setIsHumaneThemeState(prev => !prev);
+  };
+
+  const setRadarMode = (mode: "systems" | "humane") => {
+    if (mode === "humane") sound.playHumaneChime();
+    else sound.playClick(900);
+    setRadarModeState(mode);
+  };
+
+  const addPeerVoucher = (voucher: PeerAttestation) => {
+    sound.playHumaneChime();
+    setProfile(prev => {
+      const newActivity: ActivityEntry = {
+        id: `act-peer-${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        type: "peer_voucher_signed",
+        skillId: "peer-mentorship",
+        skillName: `${voucher.voucherName} (${voucher.relationship})`,
+        domain: "systems",
+        status: "verified",
+        receiptHash: voucher.signature.substring(0, 16),
+        blockHeight: 894600 + Math.floor(Math.random() * 50),
+      };
+
+      return {
+        ...prev,
+        peerAttestations: [voucher, ...prev.peerAttestations],
+        activityLedger: [newActivity, ...prev.activityLedger],
+        verificationScore: Math.min(99.9, +(prev.verificationScore + 0.1).toFixed(1)),
+        xp: prev.xp + 350,
+      };
+    });
+  };
+
   const resetToDefaultData = () => {
     try { localStorage.removeItem("meritos_profile_v1"); } catch {}
     setProfile(TOIBA_PROFILE);
@@ -254,7 +313,20 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setIsBadgeModalOpen,
         isAttestModalOpen,
         setIsAttestModalOpen,
+        isHumaneLedgerOpen,
+        setIsHumaneLedgerOpen,
+        isRecruiterFastTrackOpen,
+        setIsRecruiterFastTrackOpen,
+        isBlindEvaluationMode,
+        setIsBlindEvaluationMode: setIsBlindEvaluationModeState,
+        toggleBlindEvaluationMode,
+        isHumaneTheme,
+        setIsHumaneTheme: setIsHumaneThemeState,
+        toggleHumaneTheme,
+        radarMode,
+        setRadarMode,
         addNewSkillAttestation,
+        addPeerVoucher,
         resetToDefaultData,
         chaosRun,
         startChaosRun,
