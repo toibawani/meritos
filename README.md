@@ -83,6 +83,22 @@ flowchart LR
   - `Dossier Shield`
   - `Minimalist Inline`
 
+### 6. 🤝 Cryptographic Peer Vouchers & Mentorship Ledger
+- **Peer-Signed Attestations (`did:merit:peer:...`):** Teammates, mentees, and engineering leads sign cryptographic vouchers attesting to human impact across 5 humane pillars:
+  - **Mentorship & Growth** (junior leveling, patient pairing)
+  - **Empathetic Code Reviews** (constructive PR guidance with zero ego)
+  - **Blameless Incident Culture** (calm outage leadership, systemic fixes)
+  - **Async RFC Clarity** (respecting time zones with high-context written architecture)
+  - **Sustainable Cadence** (anti-burnout boundaries, protected downtime)
+- **Dual-Mode Competence Radar:** Instant toggle between *Systems Architecture* and *Humane Craft & Empathy*.
+- **Humane Code Review Inspector:** Real pull request discussion threads exhibiting psychological safety and blameless retrospectives.
+
+### 7. 🕊️ "Skip the Take-Home" Recruiter Fast-Track & Zero-Bias Mode
+- **Time-Saved Calculator:** Computes candidate life spared (~48 hours of unpaid homework per hiring cycle) and senior engineering grading hours reclaimed.
+- **Blind Evaluation Mode:** 1-click anonymization masking candidate names, photos, and demographic markers to eliminate pedigree bias and focus 100% on verifiable craft.
+- **The Humane Hiring Charter:** A 3-point covenant pledged by ethical engineering orgs (no unpaid multi-day homework, 48h feedback guarantee, peer-to-peer conversations).
+- **Humane Ambient Mode:** Organic, warm-temperature dark theme with Solfeggio 528Hz harmonic sound synthesis for mindful developer focus.
+
 ---
 
 ## 🛠️ Tech Stack
