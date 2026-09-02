@@ -200,3 +200,135 @@ body {
 .animate-ping-slow {
   animation: ping-slow 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
+
+/* ─── Humane Organic Mode ─────────────────────────────────── */
+:root.humane-mode {
+  --bg-void: #0E0C14;
+  --bg-subtle: #120F1A;
+  --bg-surface-1: #16121F;
+  --bg-surface-2: #1C1628;
+  --bg-surface-3: #231A33;
+  --border-subtle: rgba(244, 63, 94, 0.08);
+  --border-specular: rgba(244, 63, 94, 0.15);
+  --emerald-glow: rgba(244, 63, 94, 0.18);
+}
+
+.humane-mode body {
+  background-image:
+    radial-gradient(circle at 40% -10%, rgba(244, 63, 94, 0.06) 0%, transparent 55%),
+    radial-gradient(circle at 85% 85%, rgba(251, 191, 36, 0.04) 0%, transparent 45%);
+}
+
+/* Humane mode card warm tint */
+.humane-mode .tactile-card {
+  background: #16121F;
+  border-color: rgba(244, 63, 94, 0.08);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(244, 63, 94, 0.04);
+}
+
+/* ─── Gradient text helper ─────────────────────────────────── */
+.gradient-text-emerald {
+  background: linear-gradient(135deg, #10B981, #34D399);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-rose {
+  background: linear-gradient(135deg, #F43F5E, #FB923C);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-amber {
+  background: linear-gradient(135deg, #F59E0B, #FBBF24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Organic glow pulse (humane mode) ─────────────────────── */
+@keyframes humane-glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.0); }
+  50%       { box-shadow: 0 0 18px -4px rgba(244, 63, 94, 0.35); }
+}
+
+.animate-humane-glow {
+  animation: humane-glow-pulse 3s ease-in-out infinite;
+}
+
+/* ─── Slide-in / fade-in ────────────────────────────────────── */
+@keyframes slide-in-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(14px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.animate-slide-in-up {
+  animation: slide-in-up 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.25s ease-out both;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate-scale-up {
+  animation: scale-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes scale-up {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ─── Neon underline for active nav links ───────────────────── */
+.nav-underline-active {
+  position: relative;
+}
+.nav-underline-active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #10B981, #34D399);
+  border-radius: 2px;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+/* ─── Number counter shimmer ─────────────────────────────────── */
+@keyframes number-shimmer {
+  0%   { color: #E2E8F0; }
+  40%  { color: #34D399; }
+  100% { color: #E2E8F0; }
+}
+
+.animate-number-update {
+  animation: number-shimmer 0.6s ease-out;
+}
+
+/* ─── Heatmap cell micro-transition ─────────────────────────── */
+.heatmap-cell {
+  transition: transform 0.12s ease, opacity 0.12s ease;
+}
+.heatmap-cell:hover {
+  transform: scale(1.25);
+  opacity: 1 !important;
+}
+
