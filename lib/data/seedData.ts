@@ -1,4 +1,4 @@
-import { UserProfile, SkillNode, ActivityEntry } from "../types";
+import { UserProfile, SkillNode, ActivityEntry, PeerAttestation } from "../types";
 
 export const TOIBA_SKILLS: SkillNode[] = [
   // SYSTEMS & LOW LEVEL
@@ -82,6 +82,54 @@ export const TOIBA_SKILLS: SkillNode[] = [
           ],
         },
       ],
+      humaneCraft: {
+        empathyIndex: 99.4,
+        mentorshipNotes: "Mentored 3 junior compiler contributors through their first Rust AST visitor PRs with pair reviews.",
+        reviewThread: [
+          {
+            id: "rev-01",
+            author: "dev_junior",
+            avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80",
+            role: "mentee",
+            commentType: "inquiry",
+            lineNumber: 41,
+            text: "I was unsure whether to allocate the ScopeContext on the stack or heap here. Would an Rc<RefCell> cause cycle issues?",
+            empathyBadge: "Curiosity Welcomed"
+          },
+          {
+            id: "rev-02",
+            author: "toibawani",
+            avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80",
+            role: "reviewer",
+            commentType: "empathy_guidance",
+            lineNumber: 42,
+            text: "Fantastic intuition! You spotted the danger accurately. With cyclic lexical scopes, Rc can leak memory on closure return. If we pass the pre-allocated arena allocator reference instead, we get zero heap fragmentation and guaranteed O(1) deallocation without locks. Let's pair on this tomorrow if you'd like!",
+            codeSnippet: "+ // Arena allocated scope reference avoids cyclic reference cycles\n+ let scope = arena.alloc(ScopeContext::new(parent_id));",
+            empathyBadge: "Constructive Mentorship"
+          },
+          {
+            id: "rev-03",
+            author: "dev_junior",
+            avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80",
+            role: "mentee",
+            commentType: "praise",
+            text: "That explanation makes so much sense! Benchmark latency dropped from 4.2ms to 1.2ms. Thank you for taking the time to explain the why behind it!",
+            empathyBadge: "Knowledge Shared"
+          }
+        ],
+        postmortem: {
+          title: "Blameless Post-Mortem: AST Token Buffer Overflow during v2.3 release",
+          blamelessSummary: "During high-concurrency 100k token transpilation, a boundary guard check triggered an unhandled EOF. Rather than blaming the author of the commit, our team identified that our CI fuzzing suite lacked unterminated surrogate pair test matrices.",
+          humanImpact: "Zero on-call stress; incident was remediated within 22 minutes with an automated fuzz rule and team pizza retro.",
+          preventionAction: "Added automated libFuzzer chaos pass to prevent regressions permanently.",
+          peerGratitude: "Special thanks to junior teammates for identifying the edge case during documentation review."
+        },
+        asyncRfcExcerpt: {
+          title: "RFC-014: Zero-Copy Token Streaming vs Allocating Parser",
+          decisionReason: "Written async across 3 time zones to respect teammates' deep work windows without synchronous debate meetings.",
+          tradeoffsRespected: "Acknowledged ergonomic tradeoff of explicit lifetimes in favor of predictability and reduced GC pauses."
+        }
+      },
     },
     proofReceipt: {
       "@context": ["https://www.w3.org/2018/credentials/v1"],
@@ -1156,6 +1204,97 @@ export const TOIBA_PROFILE: UserProfile = {
     speed: 99,
     cryptographicDepth: 100,
   },
+  humaneScores: {
+    reviewEmpathy: 99,
+    mentorshipGrowth: 98,
+    blamelessCulture: 100,
+    asyncRfcClarity: 97,
+    sustainableCadence: 96,
+  },
+  sustainableRhythm: {
+    deepWorkRatio: 94,
+    weekendBoundaries: "100% Protected",
+    avgReviewTurnaround: "< 3.5h",
+    meetingFreeDays: 2,
+    humaneImpactIndex: 98.8,
+  },
+  peerAttestations: [
+    {
+      id: "peer-01",
+      voucherName: "Dr. Marcus Vance",
+      voucherTitle: "VP of Distributed Systems",
+      voucherCompany: "Prism Cloud",
+      voucherAvatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+      voucherDid: "did:merit:peer:marcus_vance:98e1a2",
+      pillar: "blameless_culture",
+      relationship: "Engineering Lead",
+      testimony: "During our high-profile Raft split-brain partition incident at 3 AM, Toiba immediately took charge with extreme calm and zero finger-pointing. She focused 100% on protecting customer state and psychological safety for the on-call engineer, later authoring our most celebrated blameless retrospective.",
+      dateAttested: "2026-08-10T14:30:00Z",
+      verifiedBadge: "Cryptographic Peer Voucher",
+      signature: "3a9f1b2c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f90123456789abcdef012345678",
+      merkleLeaf: "0x89f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f90123456789abcdef01234567"
+    },
+    {
+      id: "peer-02",
+      voucherName: "Siddharth Nair",
+      voucherTitle: "Senior Systems Engineer",
+      voucherCompany: "Decentralized Corp",
+      voucherAvatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+      voucherDid: "did:merit:peer:sid_nair:77bc41",
+      pillar: "mentorship",
+      relationship: "Mentee",
+      testimony: "Toiba personally onboarded me into low-level compiler optimization. She never made me feel inadequate for asking basic questions about LLVM IR or memory barriers. Her pair-programming sessions are patient, joyful masterclasses in system ergonomics.",
+      dateAttested: "2026-08-04T09:15:00Z",
+      verifiedBadge: "Cryptographic Peer Voucher",
+      signature: "7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f90123456789abcdef012",
+      merkleLeaf: "0x4b5c6d7e8f90123456789abcdef0123456789abcdef0123456789abcdef0123"
+    },
+    {
+      id: "peer-03",
+      voucherName: "Maya Chen",
+      voucherTitle: "Staff Frontend Architect",
+      voucherCompany: "Linear Motion Labs",
+      voucherAvatarUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80",
+      voucherDid: "did:merit:peer:maya_chen:33df19",
+      pillar: "review_empathy",
+      relationship: "Teammate",
+      testimony: "Her pull request reviews are legendary across our engineering org. She always highlights the smart parts of your code before suggesting optimizations, provides concrete code diffs rather than vague criticisms, and never uses dogmatic commands. An absolute dream collaborator.",
+      dateAttested: "2026-07-29T16:45:00Z",
+      verifiedBadge: "Cryptographic Peer Voucher",
+      signature: "1f2e3d4c5b6a708990a1b2c3d4e5f60718293a4b5c6d7e8f90123456789abcde",
+      merkleLeaf: "0x123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0"
+    },
+    {
+      id: "peer-04",
+      voucherName: "Kofi Mensah",
+      voucherTitle: "Principal Security Architect",
+      voucherCompany: "ZeroTrust Network",
+      voucherAvatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
+      voucherDid: "did:merit:peer:kofi_mensah:55a9c0",
+      pillar: "async_clarity",
+      relationship: "Cross-Functional Peer",
+      testimony: "Working across 8 timezones with Toiba is seamless. Her architectural RFCs are so thoroughly articulated, contextualized, and empathetic to operational constraints that our team rarely needs synchronous meetings. She saves hundreds of engineering hours every quarter.",
+      dateAttested: "2026-07-20T11:00:00Z",
+      verifiedBadge: "Cryptographic Peer Voucher",
+      signature: "9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b93c84f295b5c4d3e2f1a0b93",
+      merkleLeaf: "0xabcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789"
+    },
+    {
+      id: "peer-05",
+      voucherName: "Dr. Anya Sharma",
+      voucherTitle: "VP of Engineering & Culture",
+      voucherCompany: "Humanity Tech Alliance",
+      voucherAvatarUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
+      voucherDid: "did:merit:peer:anya_sharma:42ee81",
+      pillar: "sustainable_cadence",
+      relationship: "Engineering Lead",
+      testimony: "Toiba champions healthy boundaries. She models high performance without frantic weekend crunch, fiercely protects team on-call recovery time, and demonstrates that world-class distributed systems can be built with sustainable, human rhythms.",
+      dateAttested: "2026-07-15T18:20:00Z",
+      verifiedBadge: "Cryptographic Peer Voucher",
+      signature: "5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3a2f1e0d9c8b7a6f5e4d",
+      merkleLeaf: "0x9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba"
+    }
+  ],
   activityLedger: [
     {
       id: "act-01",
@@ -1225,6 +1364,37 @@ export const ALEX_PROFILE: UserProfile = {
     speed: 98,
     cryptographicDepth: 97,
   },
+  humaneScores: {
+    reviewEmpathy: 96,
+    mentorshipGrowth: 95,
+    blamelessCulture: 99,
+    asyncRfcClarity: 98,
+    sustainableCadence: 94,
+  },
+  sustainableRhythm: {
+    deepWorkRatio: 91,
+    weekendBoundaries: "98% Protected",
+    avgReviewTurnaround: "< 4.0h",
+    meetingFreeDays: 2,
+    humaneImpactIndex: 96.4,
+  },
+  peerAttestations: [
+    {
+      id: "peer-alex-01",
+      voucherName: "Elena Rostova",
+      voucherTitle: "Lead AI Inference Architect",
+      voucherCompany: "NeuralScale",
+      voucherAvatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
+      voucherDid: "did:merit:peer:elena_rostova:22dd99",
+      pillar: "review_empathy",
+      relationship: "Teammate",
+      testimony: "Alex gives the most thorough, supportive reviews on kernel integration. When bridging C++ CUDA runtimes with eBPF, he provided step-by-step memory safety notes that prevented weeks of head-scratching.",
+      dateAttested: "2026-08-01T12:00:00Z",
+      verifiedBadge: "Cryptographic Peer Voucher",
+      signature: "4b5c6d7e8f90123456789abcdef0123456789abcdef0123456789abcdef0123456",
+      merkleLeaf: "0x3344556677889900aabbccddeeff00112233445566778899aabbccddeeff0011"
+    }
+  ],
   activityLedger: [
     {
       id: "act-alex-01",
@@ -1272,6 +1442,37 @@ export const ELENA_PROFILE: UserProfile = {
     speed: 99,
     cryptographicDepth: 98,
   },
+  humaneScores: {
+    reviewEmpathy: 98,
+    mentorshipGrowth: 99,
+    blamelessCulture: 97,
+    asyncRfcClarity: 99,
+    sustainableCadence: 95,
+  },
+  sustainableRhythm: {
+    deepWorkRatio: 95,
+    weekendBoundaries: "100% Protected",
+    avgReviewTurnaround: "< 3.0h",
+    meetingFreeDays: 3,
+    humaneImpactIndex: 98.0,
+  },
+  peerAttestations: [
+    {
+      id: "peer-elena-01",
+      voucherName: "Toiba Wani",
+      voucherTitle: "Grandmaster Systems Architect",
+      voucherCompany: "MeritOS Core",
+      voucherAvatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+      voucherDid: "did:merit:ed25519:9f8a3c2e1184bc23",
+      pillar: "mentorship",
+      relationship: "Teammate",
+      testimony: "Elena is one of the most generous mentors in deep learning systems. She breaks down complex tensor quantization mathematics into intuitive diagrams and writes benchmark suites with crystal-clear docstrings.",
+      dateAttested: "2026-08-05T15:00:00Z",
+      verifiedBadge: "Cryptographic Peer Voucher",
+      signature: "7a8b9c0d1e2f3a4b5c6d7e8f90123456789abcdef0123456789abcdef01234567",
+      merkleLeaf: "0x99aabbccddeeff00112233445566778899aabbccddeeff001122334455667788"
+    }
+  ],
   activityLedger: [
     {
       id: "act-elena-01",
