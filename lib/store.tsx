@@ -38,6 +38,13 @@ interface AppContextType {
   setIsHumaneLedgerOpen: (open: boolean) => void;
   isRecruiterFastTrackOpen: boolean;
   setIsRecruiterFastTrackOpen: (open: boolean) => void;
+  isCommandPaletteOpen: boolean;
+  setIsCommandPaletteOpen: (open: boolean) => void;
+  toggleCommandPalette: () => void;
+  isShareModalOpen: boolean;
+  setIsShareModalOpen: (open: boolean) => void;
+  isTeamFitOpen: boolean;
+  setIsTeamFitOpen: (open: boolean) => void;
   isBlindEvaluationMode: boolean;
   setIsBlindEvaluationMode: (mode: boolean) => void;
   toggleBlindEvaluationMode: () => void;
@@ -67,6 +74,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isAttestModalOpen, setIsAttestModalOpen] = useState(false);
   const [isHumaneLedgerOpen, setIsHumaneLedgerOpen] = useState(false);
   const [isRecruiterFastTrackOpen, setIsRecruiterFastTrackOpen] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isTeamFitOpen, setIsTeamFitOpen] = useState(false);
   const [isBlindEvaluationMode, setIsBlindEvaluationModeState] = useState(false);
   const [isHumaneTheme, setIsHumaneThemeState] = useState(false);
   const [radarMode, setRadarModeState] = useState<"systems" | "humane">("systems");
@@ -317,6 +327,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setIsHumaneLedgerOpen,
         isRecruiterFastTrackOpen,
         setIsRecruiterFastTrackOpen,
+        isCommandPaletteOpen,
+        setIsCommandPaletteOpen,
+        toggleCommandPalette: () => setIsCommandPaletteOpen(prev => !prev),
+        isShareModalOpen,
+        setIsShareModalOpen,
+        isTeamFitOpen,
+        setIsTeamFitOpen,
         isBlindEvaluationMode,
         setIsBlindEvaluationMode: setIsBlindEvaluationModeState,
         toggleBlindEvaluationMode,
