@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { 
   ShieldCheck, Plus, FileText, Volume2, VolumeX, Share2, 
-  ChevronDown, Award, Zap, User, HeartHandshake, EyeOff, Sparkles, Feather
+  ChevronDown, Award, Zap, User, HeartHandshake, EyeOff, Sparkles, Feather, Search
 } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { sound } from "@/lib/sound";
@@ -17,6 +17,8 @@ export function Navbar() {
     soundMuted, toggleSound, 
     setIsDossierOpen, setIsBadgeModalOpen, setIsAttestModalOpen,
     setIsHumaneLedgerOpen, setIsRecruiterFastTrackOpen,
+    isCommandPaletteOpen, setIsCommandPaletteOpen,
+    setIsShareModalOpen, setIsTeamFitOpen,
     isBlindEvaluationMode, isHumaneTheme, toggleHumaneTheme
   } = useApp();
   const [personaOpen, setPersonaOpen] = useState(false);
@@ -75,10 +77,21 @@ export function Navbar() {
             </button>
 
             <button onClick={() => { sound.playClick(); setIsBadgeModalOpen(true); }} className="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04] transition-all flex items-center space-x-1.5">
-              <Share2 className="w-3 h-3 text-cyan-400" />
+              <Award className="w-3 h-3 text-cyan-400" />
               <span>Badges</span>
             </button>
           </nav>
+
+          {/* Quick Command Palette Launcher */}
+          <button
+            onClick={() => { sound.playClick(950); setIsCommandPaletteOpen(true); }}
+            className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-lg text-xs text-white/50 hover:text-white bg-white/[0.04] border border-white/[0.08] hover:border-white/20 transition-all font-mono"
+            title="Open Universal Command Palette (Cmd+K)"
+          >
+            <Search className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Search...</span>
+            <kbd className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-white/40 border border-white/10">⌘K</kbd>
+          </button>
         </div>
 
         {/* Center: XP Level Bar or Blind Mode Notice */}
@@ -176,6 +189,16 @@ export function Navbar() {
             className="w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-white border border-transparent hover:border-white/[0.08] hover:bg-white/[0.04] transition-all"
           >
             {soundMuted ? <VolumeX className="w-4 h-4 text-zinc-500" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
+          </button>
+
+          {/* Share */}
+          <button
+            onClick={() => { sound.playClick(900); setIsShareModalOpen(true); }}
+            className="hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-emerald-300 hover:text-white border border-emerald-500/20 hover:border-emerald-500/40 bg-emerald-500/10 transition-all"
+            title="Share profile & QR code"
+          >
+            <Share2 className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Share</span>
           </button>
 
           {/* Export */}
