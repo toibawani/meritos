@@ -9,6 +9,7 @@ import { HumaneLedgerModal } from "@/components/HumaneLedgerModal";
 import { HumaneRecruiterFastTrack } from "@/components/HumaneRecruiterFastTrack";
 import { CareerTimeline } from "@/components/CareerTimeline";
 import { LivePulse } from "@/components/LivePulse";
+import { ActivityHeatmap } from "@/components/ActivityHeatmap";
 import { 
   ShieldCheck, ArrowRight, Plus, Share2, Sparkles, Terminal, 
   FileText, CheckCircle2, HeartHandshake, Zap, Compass, Clock 
@@ -59,6 +60,9 @@ export default function HomePage() {
             <LivePulse />
           </div>
         </div>
+
+        {/* 52-Week Cryptographic Attestation Cadence Heatmap */}
+        <ActivityHeatmap />
 
         {/* Humane Engineering & Mentorship Highlight Card */}
         <div className="tactile-card rounded-2xl p-8 border border-rose-500/20 relative overflow-hidden bg-gradient-to-r from-[#14121F] via-[#171424] to-[#121626]">
