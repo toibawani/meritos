@@ -2,6 +2,9 @@
   "name": "meritos",
   "version": "1.0.0",
   "private": true,
+  "bin": {
+    "merit-cli": "./bin/merit-cli.mjs"
+  },
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",
