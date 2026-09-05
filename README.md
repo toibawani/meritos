@@ -98,6 +98,11 @@ flowchart LR
 - **Blind Evaluation Mode:** 1-click anonymization masking candidate names, photos, and demographic markers to eliminate pedigree bias and focus 100% on verifiable craft.
 - **The Humane Hiring Charter:** A 3-point covenant pledged by ethical engineering orgs (no unpaid multi-day homework, 48h feedback guarantee, peer-to-peer conversations).
 - **Humane Ambient Mode:** Organic, warm-temperature dark theme with Solfeggio 528Hz harmonic sound synthesis for mindful developer focus.
+- **⌨️ Universal Command Palette (`⌘K` / `Ctrl+K`):** Keyboard-first navigation engine for searching verified skills, switching personas, toggling zero-bias mode, playing 432Hz focus drone, and exporting hiring dossiers.
+- **📅 52-Week Cryptographic Cadence Heatmap:** High-resolution contribution matrix displaying continuous verified attestations, streaks, and proof intensity.
+- **👥 Team Fit & Skill Gap Simulator:** Instant squad-match modeling for hiring managers to evaluate architecture overlap, gap mitigation, and mentorship multipliers.
+- **🌐 W3C DID Document Resolver (`/api/did/[username]`):** Native decentralized identity resolution compliant with `did:merit` and `Ed25519VerificationKey2020`.
+- **📱 Vector QR Code & Cryptographic Share Modal:** 1-click mobile verification scan, markdown embed badges, and verifiable profile sharing.
 
 ---
 
@@ -129,6 +134,12 @@ npm install
 ```bash
 npm run dev
 ```
+
+### 4. Run automated cryptographic test suite
+```bash
+npm test
+```
+Executes Node's native test runner against Ed25519 signatures, Merkle root deterministic hashing, and persona data integrity.
 
 Open [http://localhost:3000](http://localhost:3000) to explore your Competence Passport.
 
