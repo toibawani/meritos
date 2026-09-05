@@ -9,7 +9,46 @@ import { DossierExportModal } from "@/components/DossierExportModal";
 
 export const metadata: Metadata = {
   title: "MeritOS | The Proof-of-Competence Platform",
-  description: "Lifelong, portable identity for verified developer competence. Real work cryptographically verified and signed into immutable attestation receipts.",
+  description: "Lifelong, portable identity for verified developer competence. Real work cryptographically verified with Ed25519 signatures and immutable Merkle attestation receipts.",
+  keywords: [
+    "developer portfolio",
+    "proof of competence",
+    "cryptographic attestations",
+    "ed25519 signatures",
+    "humane engineering",
+    "developer identity",
+    "peer mentorship ledger"
+  ],
+  authors: [{ name: "MeritOS Team" }],
+  creator: "MeritOS Core",
+  publisher: "MeritOS",
+  metadataBase: new URL("https://meritos.dev"),
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://meritos.dev",
+    siteName: "MeritOS",
+    title: "MeritOS | The Proof-of-Competence Platform",
+    description: "Cryptographically verified developer competence, humane engineering attestations, and immutable Merkle receipts.",
+    images: [
+      {
+        url: "/og-preview.png",
+        width: 1200,
+        height: 630,
+        alt: "MeritOS - The Proof-of-Competence Platform"
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MeritOS | The Proof-of-Competence Platform",
+    description: "Replace resume spam with cryptographically verified code proofs and humane engineering reviews.",
+    creator: "@meritos_dev"
+  },
+  robots: {
+    index: true,
+    follow: true
+  }
 };
 
 export default function RootLayout({
@@ -19,6 +58,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              "name": "MeritOS",
+              "applicationCategory": "DeveloperApplication",
+              "operatingSystem": "Web",
+              "description": "Cryptographically verified proof-of-competence platform for modern software engineers.",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+              }
+            })
+          }}
+        />
+      </head>
       <body className="bg-[#090A0F] text-[#E2E8F0] min-h-screen antialiased selection:bg-emerald-500/20 selection:text-emerald-300">
         <AppProvider>
           <div className="flex flex-col min-h-screen">
