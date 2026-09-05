@@ -7,6 +7,8 @@ import { BadgeGenerator } from "@/components/BadgeGenerator";
 import { AttestationWizard } from "@/components/AttestationWizard";
 import { DossierExportModal } from "@/components/DossierExportModal";
 import { CommandPalette } from "@/components/CommandPalette";
+import { ShareModal } from "@/components/ShareModal";
+import { TeamFitSimulator } from "@/components/TeamFitSimulator";
 
 export const metadata: Metadata = {
   title: "MeritOS | The Proof-of-Competence Platform",
@@ -88,6 +90,8 @@ export default function RootLayout({
             </main>
             {/* Global Modals & Drawers */}
             <CommandPalette />
+            <ShareModal />
+            <TeamFitSimulator />
             <ProofSandboxModal />
             <BadgeGenerator />
             <AttestationWizard />
