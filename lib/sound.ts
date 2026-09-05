@@ -5,6 +5,19 @@
 class SoundEngine {
   private ctx: AudioContext | null = null;
   private isMuted: boolean = false;
+  private droneOsc: OscillatorNode | null = null;
+  private droneGain: GainNode | null = null;
+
+  constructor() {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("meritos_sound_muted");
+        if (saved !== null) {
+          this.isMuted = saved === "true";
+        }
+      } catch {}
+    }
+  }
 
   private initCtx() {
     if (typeof window === "undefined") return null;
@@ -22,6 +35,14 @@ class SoundEngine {
 
   public setMuted(muted: boolean) {
     this.isMuted = muted;
+    if (muted && this.droneOsc) {
+      this.stopFocusDrone();
+    }
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("meritos_sound_muted", String(muted));
+      } catch {}
+    }
   }
 
   public getMuted(): boolean {
@@ -254,6 +275,122 @@ class SoundEngine {
       osc.start(ctx.currentTime);
       osc.stop(ctx.currentTime + 0.4);
     } catch {}
+  }
+
+  /**
+   * Subtle mechanical keyboard tap for terminal/search input
+   */
+  public playKeyboardThud() {
+    if (this.isMuted) return;
+    try {
+      const ctx = this.initCtx();
+      if (!ctx) return;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(220, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(60, ctx.currentTime + 0.025);
+
+      gain.gain.setValueAtTime(0.04, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.025);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start();
+      osc.stop(ctx.currentTime + 0.025);
+    } catch {}
+  }
+
+  /**
+   * Radar matrix sweep sound
+   */
+  public playRadarSweep() {
+    if (this.isMuted) return;
+    try {
+      const ctx = this.initCtx();
+      if (!ctx) return;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(440, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.18);
+
+      gain.gain.setValueAtTime(0.001, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.05, ctx.currentTime + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.22);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.22);
+    } catch {}
+  }
+
+  /**
+   * 432Hz deep focus bilateral ambient drone
+   */
+  public playFocusDrone(): boolean {
+    if (this.isMuted) return false;
+    try {
+      const ctx = this.initCtx();
+      if (!ctx) return false;
+
+      if (this.droneOsc) {
+        this.stopFocusDrone();
+        return false;
+      }
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(432, ctx.currentTime); // Sacred Solfeggio natural resonance
+
+      gain.gain.setValueAtTime(0.001, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.025, ctx.currentTime + 1.5);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start();
+      this.droneOsc = osc;
+      this.droneGain = gain;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Stop active focus drone
+   */
+  public stopFocusDrone() {
+    if (this.droneOsc && this.droneGain && this.ctx) {
+      try {
+        this.droneGain.gain.linearRampToValueAtTime(0.0001, this.ctx.currentTime + 0.8);
+        setTimeout(() => {
+          try {
+            this.droneOsc?.stop();
+            this.droneOsc?.disconnect();
+            this.droneOsc = null;
+            this.droneGain = null;
+          } catch {}
+        }, 850);
+      } catch {
+        this.droneOsc = null;
+        this.droneGain = null;
+      }
+    }
+  }
+
+  public isFocusDroneActive(): boolean {
+    return this.droneOsc !== null;
   }
 }
 
