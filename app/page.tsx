@@ -50,6 +50,16 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* Career Timeline & Live Network Pulse */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-7">
+            <CareerTimeline />
+          </div>
+          <div className="lg:col-span-5">
+            <LivePulse />
+          </div>
+        </div>
+
         {/* Humane Engineering & Mentorship Highlight Card */}
         <div className="tactile-card rounded-2xl p-8 border border-rose-500/20 relative overflow-hidden bg-gradient-to-r from-[#14121F] via-[#171424] to-[#121626]">
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
