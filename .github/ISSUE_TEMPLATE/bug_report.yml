@@ -1,0 +1,47 @@
+name: 🐛 Bug Report
+description: Report an issue with receipt verification, cryptographic signatures, or UI components.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve MeritOS! Please fill out the details below.
+  - type: input
+    id: receipt_hash
+    attributes:
+      label: Attestation Receipt / Merkle Root Hash
+      description: If this issue involves a verifiable credential or proof, paste the hash or DID.
+      placeholder: "e.g. did:merit:ed25519:... or 0x9f8a3c2e..."
+  - type: textarea
+    id: description
+    attributes:
+      label: Description of the Bug
+      description: A clear and concise explanation of what went wrong.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps To Reproduce
+      description: How can we reproduce the behavior?
+      placeholder: |
+        1. Navigate to '/verify'
+        2. Paste receipt JSON
+        3. Click 'Verify Receipt'
+        4. See error...
+    validations:
+      required: true
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: Where did you experience this issue?
+      options:
+        - Chrome / Chromium
+        - Firefox
+        - Safari / WebKit
+        - Edge
+        - Node.js CLI / Script
+    validations:
+      required: true

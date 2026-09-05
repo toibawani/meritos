@@ -1,0 +1,31 @@
+name: 🔌 New Attestation Provider RFC
+description: Propose a third-party automated verifier integration (Cargo, Bazel, Go test, eBPF, Chaos Mesh).
+title: "[RFC: Provider]: "
+labels: ["integration", "rfc"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Attestation providers translate deterministic tool outputs into signed Merkle leaves.
+  - type: input
+    id: provider_name
+    attributes:
+      label: Provider Name & Ecosystem
+      placeholder: "e.g. Cargo Criterion Benchmark Verifier / Rust"
+    validations:
+      required: true
+  - type: textarea
+    id: evidence_type
+    attributes:
+      label: Evidence Payload & Determinism
+      description: What raw artifacts are ingested and how is determinism guaranteed?
+      placeholder: "e.g. Ingests Criterion JSON output, validates CPU cycle counts..."
+    validations:
+      required: true
+  - type: textarea
+    id: leaf_structure
+    attributes:
+      label: Merkle Leaf Serialization Format
+      description: The canonical binary format hashed into the SHA-256 Merkle tree.
+    validations:
+      required: true

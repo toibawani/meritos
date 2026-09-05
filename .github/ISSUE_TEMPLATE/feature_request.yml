@@ -1,0 +1,34 @@
+name: 💡 Feature Request
+description: Propose a new capability, cryptographic proof type, or hiring metric for MeritOS.
+title: "[Feature]: "
+labels: ["enhancement", "discussion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        We welcome community proposals for advancing proof-of-competence engineering standards.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What challenge or friction does this feature solve?
+      placeholder: "e.g. Current take-home assignments take 8 hours because..."
+    validations:
+      required: true
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed Solution / Technical Design
+      description: Describe your proposed architecture, cryptographic mechanism, or user flow.
+    validations:
+      required: true
+  - type: checkboxes
+    id: category
+    attributes:
+      label: Relevant Areas
+      options:
+        - label: Cryptography (Ed25519, Merkle Trees, zk-SNARKs)
+        - label: Humane Engineering & Peer Mentorship Ledger
+        - label: Skill DAG Visualizer & Canvas Surface
+        - label: Recruiter Tools & Dossier PDF Export
+        - label: W3C Verifiable Credentials & DID Standards
