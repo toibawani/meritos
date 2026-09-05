@@ -332,3 +332,43 @@ body {
   opacity: 1 !important;
 }
 
+/* ─── Print & PDF Optimization for Dossier Export ───────────── */
+@media print {
+  header,
+  nav,
+  button,
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: #FFFFFF !important;
+    color: #111827 !important;
+    font-size: 11pt;
+  }
+
+  .tactile-card {
+    background: #FFFFFF !important;
+    border: 1px solid #E5E7EB !important;
+    color: #111827 !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+
+  a {
+    color: #059669 !important;
+    text-decoration: underline;
+  }
+
+  /* Force display of dossier modal content when printing */
+  .dossier-print-container {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+}
+
+
