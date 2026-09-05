@@ -6,6 +6,7 @@ import { ProofSandboxModal } from "@/components/ProofSandboxModal";
 import { BadgeGenerator } from "@/components/BadgeGenerator";
 import { AttestationWizard } from "@/components/AttestationWizard";
 import { DossierExportModal } from "@/components/DossierExportModal";
+import { CommandPalette } from "@/components/CommandPalette";
 
 export const metadata: Metadata = {
   title: "MeritOS | The Proof-of-Competence Platform",
@@ -86,6 +87,7 @@ export default function RootLayout({
               {children}
             </main>
             {/* Global Modals & Drawers */}
+            <CommandPalette />
             <ProofSandboxModal />
             <BadgeGenerator />
             <AttestationWizard />
