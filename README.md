@@ -18,7 +18,7 @@
 &nbsp;
 [![Docker](https://img.shields.io/badge/docker-ready-2496ED?style=flat-square&logo=docker&logoColor=white)](./Dockerfile)
 
-**Live demo:** 👉 **[https://meritos.vercel.app](https://meritos.vercel.app)** · _(dev fallback: `npm run dev` → http://localhost:3000)_
+**Live demo:** 👉 **[https://meritos-tau.vercel.app](https://meritos-tau.vercel.app)** · _(dev fallback: `npm run dev` → http://localhost:3000)_
 
 <br />
 
@@ -46,6 +46,26 @@
 <code>http://localhost:3000</code> (home → <code>/p/toibawani</code> → open the Proof Sandbox → run a
 verification → export a badge) at ~1280×800, then
 <code>ffmpeg -i demo.mov -vf "fps=12,scale=1280:-1" docs/assets/demo.gif</code>. Keep it under 15&nbsp;s.</sub>
+
+### 📸 Screenshots
+
+Real captures of the live deployment (`https://meritos-tau.vercel.app`), one per
+high-value view. Regenerate with `node scripts/capture-screenshots.mjs` after
+`npx playwright install chromium` (or set `BASE_URL=http://localhost:3000` to
+capture a local build).
+
+<p align="center">
+  <img src="./docs/assets/home.webp" alt="MeritOS landing page" width="49%" />
+  <img src="./docs/assets/profile.webp" alt="Verified developer profile" width="49%" />
+</p>
+<p align="center">
+  <img src="./docs/assets/verify.webp" alt="Recruiter verification sandbox" width="98%" />
+</p>
+
+<sub><strong>Landing</strong> (hero + live verified-activity pulse) · <strong>Profile</strong>
+(<code>/p/toibawani</code> — verified profile, skill DAG, badge rail) · <strong>Verify</strong>
+(the recruiter audit sandbox). The animated <code>demo.gif</code> walkthrough is recorded
+separately — see the recipe above.</sub>
 
 ---
 
@@ -197,7 +217,7 @@ Verification runs **entirely client-side via WebCrypto** — no server round-tri
 trust in our infrastructure (see [ADR 0002](./docs/adr/0002-client-side-webcrypto-verification.md)).
 
 Visit the standalone in-browser audit sandbox at:
-👉 **[https://meritos.vercel.app/verify](https://meritos.vercel.app/verify)** · _(dev: `http://localhost:3000/verify`)_
+👉 **[https://meritos-tau.vercel.app/verify](https://meritos-tau.vercel.app/verify)** · _(dev: `http://localhost:3000/verify`)_
 
 ---
 
