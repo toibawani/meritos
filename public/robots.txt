@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Public profile pages are meant to be shareable and verifiable.
+Sitemap: https://meritos.vercel.app/sitemap.xml

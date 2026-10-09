@@ -4,7 +4,7 @@ import { join } from "node:path";
 
 /** Liveness probe for uptime checks, load balancers and deploy smoke tests. */
 export async function GET() {
-  let commit = process.env.VERCEL_GIT_COMMIT_SHA || process.env.COMMIT_SHA || "unknown";
+  const commit = process.env.VERCEL_GIT_COMMIT_SHA || process.env.COMMIT_SHA || "unknown";
   let version = process.env.npm_package_version || "1.0.0";
 
   try {

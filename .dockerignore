@@ -1,0 +1,42 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Next.js build output
+/.next/
+/out/
+.next
+
+# Standalone server bundle (produced by `next build` with output: 'standalone')
+/.next/standalone/
+
+# Test artifacts
+/.test-build/
+/test-results/
+/playwright-report/
+/coverage/
+
+# Production
+/build
+
+# Misc
+.DS_Store
+*.pem
+Thumbs.db
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local env files
+.env
+.env*.local
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
