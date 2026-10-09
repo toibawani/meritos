@@ -11,7 +11,7 @@ export async function GET(request: NextRequest, { params }: { params: { username
     profile = ELENA_PROFILE;
   }
 
-  const host = request.headers.get("host") || "meritos.dev";
+  const host = request.headers.get("host") || "meritos-tau.vercel.app";
   const protocol = host.includes("localhost") ? "http" : "https";
   const baseUrl = `${protocol}://${host}`;
 

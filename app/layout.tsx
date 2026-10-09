@@ -26,11 +26,11 @@ export const metadata: Metadata = {
   authors: [{ name: "MeritOS Team" }],
   creator: "MeritOS Core",
   publisher: "MeritOS",
-  metadataBase: new URL("https://meritos.dev"),
+  metadataBase: new URL("https://meritos-tau.vercel.app"),
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://meritos.dev",
+    url: "https://meritos-tau.vercel.app",
     siteName: "MeritOS",
     title: "MeritOS | The Proof-of-Competence Platform",
     description:

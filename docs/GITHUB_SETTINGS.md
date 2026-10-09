@@ -12,7 +12,7 @@ UI (Settings) to maximize the 30-second recruiter impression.
   Proof-of-Competence Platform — portable, cryptographically verifiable developer identity (W3C VCs, did:merit, Ed25519 Merkle receipts). Next.js + WebCrypto, zero backend.
   ```
 
-- **Website:** `https://meritos.vercel.app` (the live demo).
+- **Website:** `https://meritos-tau.vercel.app` (the live demo).
 - **Topics** (add each):
   - `verifiable-credentials`
   - `did`

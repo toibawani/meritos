@@ -10,7 +10,8 @@ export function ShareModal() {
   const [copiedType, setCopiedType] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"link" | "badge" | "did">("link");
 
-  const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://meritos.dev";
+  const baseUrl =
+    typeof window !== "undefined" ? window.location.origin : "https://meritos-tau.vercel.app";
   const profileUrl = `${baseUrl}/p/${profile.username}`;
   const didUrl = `${baseUrl}/api/did/${profile.username}`;
   const badgeUrl = `${baseUrl}/api/badge/${profile.username}`;

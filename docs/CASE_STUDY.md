@@ -1,7 +1,7 @@
 # Case Study: MeritOS — A Proof-of-Competence Platform
 
 **Author:** Toiba Wani · **Stack:** Next.js 14 (App Router) · TypeScript 5 strict · Tailwind · native WebCrypto
-**Repo:** https://github.com/toibawani/meritos · **Live:** https://meritos.vercel.app
+**Repo:** https://github.com/toibawani/meritos · **Live:** https://meritos-tau.vercel.app
 
 ---
 

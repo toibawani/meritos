@@ -14,7 +14,8 @@ export function BadgeGenerator() {
 
   if (!isBadgeModalOpen) return null;
 
-  const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://meritos.id";
+  const baseUrl =
+    typeof window !== "undefined" ? window.location.origin : "https://meritos-tau.vercel.app";
   const badgeUrl = `${baseUrl}/api/badge/${profile.username}?style=${badgeStyle}`;
   const profileUrl = `${baseUrl}/p/${profile.username}`;
 
