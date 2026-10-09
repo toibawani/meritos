@@ -1,0 +1,39 @@
+name: Deploy
+
+# Manual + push-to-main production deploy. Requires the CI workflow to be
+# green first (see ci.yml). Enable by adding the secrets listed in
+# docs/DEPLOYMENT.md (VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID).
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci-gate:
+    # Re-run the CI gate so a deploy never ships on top of a red commit.
+    uses: ./.github/workflows/ci.yml
+
+  deploy:
+    needs: ci-gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Vercel (production)
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          npm i -g vercel@latest
+          # Pull Vercel project settings and environment variables.
+          vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+          # Build with real production env, then emit prebuilt output.
+          vercel build --prod --token="$VERCEL_TOKEN"
+          # Ship the prebuilt output directly to production.
+          vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
