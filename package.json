@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",
-    "start": "next start -p 3000",
+    "start": "node scripts/start-standalone.mjs",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "format": "node scripts/format.mjs",
