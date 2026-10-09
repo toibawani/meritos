@@ -6,6 +6,8 @@
 # Testing
 /coverage
 /.test-build/
+/test-results/
+/playwright-report/
 
 # Next.js build output
 /.next/
