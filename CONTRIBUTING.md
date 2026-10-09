@@ -26,15 +26,15 @@ This runs, in order: `lint` → `typecheck` → `format:check` → `test` → `b
 
 ## Project layout
 
-| Path            | Purpose                                                       |
-| --------------- | ------------------------------------------------------------- |
-| `lib/crypto.ts` | Ed25519, SHA-256, Merkle receipts, W3C VC — pure, unit-tested |
-| `lib/zkProof.ts`| Zero-knowledge hash commitments / selective disclosure        |
-| `lib/store.tsx` | Client state, personas, persisted identity                    |
-| `app/`          | Next.js App Router pages and API routes                       |
-| `components/`   | Presentational + interactive UI                               |
-| `tests/`        | Node built-in test runner suites                              |
-| `e2e/`          | Playwright smoke tests (run against `next build && next start`) |
+| Path             | Purpose                                                         |
+| ---------------- | --------------------------------------------------------------- |
+| `lib/crypto.ts`  | Ed25519, SHA-256, Merkle receipts, W3C VC — pure, unit-tested   |
+| `lib/zkProof.ts` | Zero-knowledge hash commitments / selective disclosure          |
+| `lib/store.tsx`  | Client state, personas, persisted identity                      |
+| `app/`           | Next.js App Router pages and API routes                         |
+| `components/`    | Presentational + interactive UI                                 |
+| `tests/`         | Node built-in test runner suites                                |
+| `e2e/`           | Playwright smoke tests (run against `next build && next start`) |
 
 ## Adding an ADR
 

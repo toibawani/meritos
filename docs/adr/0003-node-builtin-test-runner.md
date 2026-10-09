@@ -22,7 +22,7 @@ against TypeScript sources compiled to a throwaway `.test-build/` directory by
 1. **Zero additional dependencies.** Jest/Vitest pull in a large dependency
    tree. The built-in runner ships with Node, so `npm test` works from a fresh
    `npm ci` with nothing extra.
-2. **Real WebCrypto.** Node exposes `globalThis.crypto.subtle` (the *same* API
+2. **Real WebCrypto.** Node exposes `globalThis.crypto.subtle` (the _same_ API
    surface the browser uses), so we test the exact primitives the app runs —
    no mocking, no jsdom, no node-specific divergence.
 3. **Fast, deterministic startup.** No config file, no transform pipeline for

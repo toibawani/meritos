@@ -55,5 +55,5 @@ We **do not** anchor to a blockchain.
   comparable security at 32-byte keys with faster verification.
 - **Blockchain (Ethereum/Polygon) anchoring:** rejected for cost, latency, and
   the requirement for offline verification (see above).
-- **W3C VC Data Integrity + `Ed25519Signature2020`:** adopted in *spirit* —
+- **W3C VC Data Integrity + `Ed25519Signature2020`:** adopted in _spirit_ —
   our DID documents already reference `Ed25519VerificationKey2020`.

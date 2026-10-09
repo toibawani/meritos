@@ -22,8 +22,8 @@ Ed25519 signature checks and Merkle root recomputation in the tab.
 
 ## Rationale
 
-1. **Trust minimization.** A recruiter verifying *my* credentials should not
-   have to trust *my* server to tell them the signature is valid. Client-side
+1. **Trust minimization.** A recruiter verifying _my_ credentials should not
+   have to trust _my_ server to tell them the signature is valid. Client-side
    verification means the trust anchor is the W3C VC format and the public key
    in the DID document — not our infrastructure. This is the single most
    important property for a Proof-of-Competence product.
@@ -42,7 +42,7 @@ Ed25519 signature checks and Merkle root recomputation in the tab.
 - ⚠️ Requires `crypto.subtle` (secure context). Fine on `https://` and
   `localhost`, which covers all real deployment targets.
 - ⚠️ Public-key distribution still benefits from the hosted `/api/did/[username]`
-  route; that route is a *convenience mirror*, not a trust dependency (the DID
+  route; that route is a _convenience mirror_, not a trust dependency (the DID
   is embedded in the credential itself).
 
 ## Alternatives considered

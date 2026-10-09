@@ -19,11 +19,11 @@ The `.github/workflows/deploy.yml` workflow redeploys on every push to `main`,
 **after** the CI gate passes. To enable it, add these repository secrets
 (Settings → Secrets and variables → Actions):
 
-| Secret               | Where to find it                                                        |
-| -------------------- | ----------------------------------------------------------------------- |
-| `VERCEL_TOKEN`       | Vercel → Account Settings → Tokens → Create                            |
-| `VERCEL_ORG_ID`      | Vercel project → Settings → General (`Project ID` block)                |
-| `VERCEL_PROJECT_ID`  | Same as above                                                           |
+| Secret              | Where to find it                                         |
+| ------------------- | -------------------------------------------------------- |
+| `VERCEL_TOKEN`      | Vercel → Account Settings → Tokens → Create              |
+| `VERCEL_ORG_ID`     | Vercel project → Settings → General (`Project ID` block) |
+| `VERCEL_PROJECT_ID` | Same as above                                            |
 
 Once set, `git push origin main` (or a manual `workflow_dispatch`) builds and
 ships to production. Vercel automatically injects `VERCEL_GIT_COMMIT_SHA`, which
