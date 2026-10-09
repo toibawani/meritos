@@ -1,22 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { 
-  X, 
-  Plus, 
-  ShieldCheck, 
-  Code2, 
-  Terminal, 
-  Cpu, 
-  Zap, 
-  Database, 
-  Sparkles, 
-  CheckCircle2, 
-  ArrowRight, 
-  ArrowLeft,
-  Loader2,
-  Lock
-} from "lucide-react";
+import { X, ShieldCheck, CheckCircle2, ArrowRight, ArrowLeft, Loader2, Lock } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { SkillNode, DomainType, SkillLevel, AttestationEvidence } from "@/lib/types";
 import { sound } from "@/lib/sound";
@@ -35,7 +20,8 @@ export function AttestationWizard() {
   const [description, setDescription] = useState("");
   const [repoUrl, setRepoUrl] = useState("https://github.com/toibawani/engine-lab");
   const [commitHash, setCommitHash] = useState("a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9");
-  const [diffContent, setDiffContent] = useState(`+ pub fn compute_simd_lane_stride<T: SimdElement>(slice: &[T]) -> SimdResult {
+  const [diffContent, setDiffContent] =
+    useState(`+ pub fn compute_simd_lane_stride<T: SimdElement>(slice: &[T]) -> SimdResult {
 +     let chunks = slice.chunks_exact(8);
 +     // Hardware accelerated vector dot product with zero heap alloc
 +     chunks.fold(T::splat(0), |acc, x| acc.simd_mul_add(x, x))
@@ -83,14 +69,17 @@ test result: ok. 18 passed; 0 failed; finished in 0.42s`);
     ];
 
     steps.forEach((msg, idx) => {
-      setTimeout(() => {
-        sound.playTerminalTick();
-        setEvalProgress((prev) => [...prev, msg]);
-        if (idx === steps.length - 1) {
-          setIsEvaluating(false);
-          sound.playVerifiedChime();
-        }
-      }, (idx + 1) * 600);
+      setTimeout(
+        () => {
+          sound.playTerminalTick();
+          setEvalProgress((prev) => [...prev, msg]);
+          if (idx === steps.length - 1) {
+            setIsEvaluating(false);
+            sound.playVerifiedChime();
+          }
+        },
+        (idx + 1) * 600
+      );
     });
   };
 
@@ -142,7 +131,14 @@ test result: ok. 18 passed; 0 failed; finished in 0.42s`);
       status: "verified",
       description: description || "Cryptographically attested high-performance implementation.",
       xp: level === "master" ? 1400 : 900,
-      iconName: domain === "systems" ? "Cpu" : domain === "frontend" ? "Zap" : domain === "cloud" ? "Database" : "Sparkles",
+      iconName:
+        domain === "systems"
+          ? "Cpu"
+          : domain === "frontend"
+            ? "Zap"
+            : domain === "cloud"
+              ? "Database"
+              : "Sparkles",
       x: 360 + (profile.skills.length % 3) * 180,
       y: domain === "systems" ? 120 : domain === "frontend" ? 280 : domain === "cloud" ? 440 : 600,
       prerequisites: [],
@@ -170,16 +166,16 @@ test result: ok. 18 passed; 0 failed; finished in 0.42s`);
           <div className="flex items-center space-x-2">
             <ShieldCheck className="w-5 h-5 text-emerald-400" />
             <div>
-              <h3 className="text-sm font-bold text-white font-sans">
-                Skill Attestation Wizard
-              </h3>
+              <h3 className="text-sm font-bold text-white font-sans">Skill Attestation Wizard</h3>
               <span className="text-[11px] font-mono text-zinc-400">
-                Step {step} of 4: {
-                  step === 1 ? "Define Competence Node" :
-                  step === 2 ? "Attach Verifiable Evidence" :
-                  step === 3 ? "Automated Static Evaluation" :
-                  "Cryptographic Signing & Receipt Minting"
-                }
+                Step {step} of 4:{" "}
+                {step === 1
+                  ? "Define Competence Node"
+                  : step === 2
+                    ? "Attach Verifiable Evidence"
+                    : step === 3
+                      ? "Automated Static Evaluation"
+                      : "Cryptographic Signing & Receipt Minting"}
               </span>
             </div>
           </div>
@@ -197,7 +193,7 @@ test result: ok. 18 passed; 0 failed; finished in 0.42s`);
 
         {/* Progress Bar */}
         <div className="w-full h-1 bg-white/[0.06]">
-          <div 
+          <div
             className="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 transition-all duration-300"
             style={{ width: `${(step / 4) * 100}%` }}
           />
@@ -350,7 +346,9 @@ test result: ok. 18 passed; 0 failed; finished in 0.42s`);
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                   )}
                   <span>
-                    {isEvaluating ? "Automated Static Evaluation in progress..." : "Static Evaluation Passed"}
+                    {isEvaluating
+                      ? "Automated Static Evaluation in progress..."
+                      : "Static Evaluation Passed"}
                   </span>
                 </div>
 
@@ -393,7 +391,9 @@ test result: ok. 18 passed; 0 failed; finished in 0.42s`);
                 </div>
 
                 <p className="text-xs text-zinc-400 leading-relaxed">
-                  Minting this attestation will cryptographically sign the Merkle root of the attached evidence and append an immutable block receipt to your Competence Passport.
+                  Minting this attestation will cryptographically sign the Merkle root of the
+                  attached evidence and append an immutable block receipt to your Competence
+                  Passport.
                 </p>
               </div>
             </div>
@@ -413,7 +413,9 @@ test result: ok. 18 passed; 0 failed; finished in 0.42s`);
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back</span>
             </button>
-          ) : <div />}
+          ) : (
+            <div />
+          )}
 
           {step === 1 && (
             <button
@@ -456,7 +458,9 @@ test result: ok. 18 passed; 0 failed; finished in 0.42s`);
               className="flex items-center space-x-1.5 px-5 py-2 rounded-lg tactile-btn-primary text-xs font-semibold disabled:opacity-50"
             >
               <ShieldCheck className="w-4 h-4 text-[#042F2E]" />
-              <span>{isSigning ? "Signing Receipt..." : "Cryptographically Sign & Mint to Tree"}</span>
+              <span>
+                {isSigning ? "Signing Receipt..." : "Cryptographically Sign & Mint to Tree"}
+              </span>
             </button>
           )}
         </div>

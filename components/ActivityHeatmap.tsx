@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { 
-  Calendar, Zap, Flame, ShieldCheck, Info, ChevronRight, Sparkles 
-} from "lucide-react";
+import { Calendar, Flame, ShieldCheck } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { sound } from "@/lib/sound";
 
@@ -18,7 +16,6 @@ interface HeatmapDay {
 export function ActivityHeatmap() {
   const { profile } = useApp();
   const [hoveredDay, setHoveredDay] = useState<HeatmapDay | null>(null);
-  const [selectedYear, setSelectedYear] = useState("2026");
 
   // Generate 52 weeks (364 days) of realistic cryptographic attestation data
   const heatmapData = useMemo(() => {
@@ -74,7 +71,7 @@ export function ActivityHeatmap() {
         date: dateStr,
         count,
         xp,
-        level
+        level,
       });
     }
 
@@ -114,7 +111,18 @@ export function ActivityHeatmap() {
   };
 
   const monthLabels = [
-    "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
   ];
 
   return (
@@ -133,7 +141,8 @@ export function ActivityHeatmap() {
             </span>
           </div>
           <p className="text-xs text-white/50 mt-1 font-mono">
-            {totalAttestations.toLocaleString()} cryptographically signed code proofs & peer vouchers in the past year
+            {totalAttestations.toLocaleString()} cryptographically signed code proofs & peer
+            vouchers in the past year
           </p>
         </div>
 
@@ -142,16 +151,24 @@ export function ActivityHeatmap() {
           <div className="px-3 py-1.5 rounded-xl bg-white/[0.03] border border-white/10 flex items-center gap-2">
             <Flame className="w-4 h-4 text-amber-400" />
             <div className="text-left">
-              <div className="text-[10px] uppercase tracking-wider text-white/40 font-mono">Streak</div>
-              <div className="text-xs font-bold text-white font-mono">{profile.streakDays} Days</div>
+              <div className="text-[10px] uppercase tracking-wider text-white/40 font-mono">
+                Streak
+              </div>
+              <div className="text-xs font-bold text-white font-mono">
+                {profile.streakDays} Days
+              </div>
             </div>
           </div>
 
           <div className="px-3 py-1.5 rounded-xl bg-white/[0.03] border border-white/10 flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <div className="text-left">
-              <div className="text-[10px] uppercase tracking-wider text-white/40 font-mono">Total XP</div>
-              <div className="text-xs font-bold text-emerald-300 font-mono">+{totalXp.toLocaleString()}</div>
+              <div className="text-[10px] uppercase tracking-wider text-white/40 font-mono">
+                Total XP
+              </div>
+              <div className="text-xs font-bold text-emerald-300 font-mono">
+                +{totalXp.toLocaleString()}
+              </div>
             </div>
           </div>
         </div>
@@ -211,14 +228,17 @@ export function ActivityHeatmap() {
               <span className="font-semibold text-white">{hoveredDay.date}:</span>
               {hoveredDay.count > 0 ? (
                 <span className="text-emerald-300">
-                  {hoveredDay.count} verified {hoveredDay.count === 1 ? "attestation" : "attestations"} (+{hoveredDay.xp} XP)
+                  {hoveredDay.count} verified{" "}
+                  {hoveredDay.count === 1 ? "attestation" : "attestations"} (+{hoveredDay.xp} XP)
                 </span>
               ) : (
                 <span className="text-white/40">Resting day (Zero Burnout Policy)</span>
               )}
             </div>
           ) : (
-            <span className="text-white/30">Hover over any day to inspect verified cryptographic receipts</span>
+            <span className="text-white/30">
+              Hover over any day to inspect verified cryptographic receipts
+            </span>
           )}
         </div>
 

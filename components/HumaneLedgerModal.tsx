@@ -1,70 +1,68 @@
 "use client";
 
 import React, { useState } from "react";
-import { 
-  X, 
-  HeartHandshake, 
-  ShieldCheck, 
-  Sparkles, 
-  MessageSquareHeart, 
-  Award, 
-  Clock, 
-  Check, 
-  Copy, 
-  Plus, 
-  Users, 
-  Compass, 
-  Flame, 
-  BookOpen, 
-  Feather
+import {
+  X,
+  HeartHandshake,
+  ShieldCheck,
+  MessageSquareHeart,
+  Check,
+  Copy,
+  Plus,
+  Compass,
+  BookOpen,
+  Feather,
 } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { sound } from "@/lib/sound";
 import { PeerAttestation, HumanePillar } from "@/lib/types";
 
-const PILLAR_CONFIG: Record<HumanePillar | "all", { label: string; icon: any; color: string; bg: string; border: string }> = {
+const PILLAR_CONFIG: Record<
+  HumanePillar | "all",
+  { label: string; icon: any; color: string; bg: string; border: string }
+> = {
   all: {
     label: "All Vouchers",
     icon: HeartHandshake,
     color: "text-white",
     bg: "bg-white/10",
-    border: "border-white/20"
+    border: "border-white/20",
   },
   mentorship: {
     label: "Mentorship & Growth",
     icon: Compass,
     color: "text-emerald-400",
     bg: "bg-emerald-500/10",
-    border: "border-emerald-500/25"
+    border: "border-emerald-500/25",
   },
   review_empathy: {
     label: "Empathetic Reviews",
     icon: MessageSquareHeart,
     color: "text-rose-400",
     bg: "bg-rose-500/10",
-    border: "border-rose-500/25"
+    border: "border-rose-500/25",
   },
   blameless_culture: {
     label: "Blameless Culture",
     icon: ShieldCheck,
     color: "text-amber-400",
     bg: "bg-amber-500/10",
-    border: "border-amber-500/25"
+    border: "border-amber-500/25",
   },
   async_clarity: {
     label: "Async RFC Clarity",
     icon: BookOpen,
     color: "text-cyan-400",
     bg: "bg-cyan-500/10",
-    border: "border-cyan-500/25"
+    border: "border-cyan-500/25",
   },
   sustainable_cadence: {
     label: "Sustainable Rhythm",
     icon: Feather,
     color: "text-violet-400",
     bg: "bg-violet-500/10",
-    border: "border-violet-500/25"
-  }
+    border: "border-violet-500/25",
+  },
 };
 
 export function HumaneLedgerModal() {
@@ -78,7 +76,8 @@ export function HumaneLedgerModal() {
     name: "",
     title: "",
     company: "",
-    relationship: "Teammate" as "Mentee" | "Teammate" | "Engineering Lead" | "Cross-Functional Peer",
+    relationship: "Teammate" as
+      "Mentee" | "Teammate" | "Engineering Lead" | "Cross-Functional Peer",
     pillar: "mentorship" as HumanePillar,
     testimony: "",
   });
@@ -86,7 +85,7 @@ export function HumaneLedgerModal() {
 
   if (!isHumaneLedgerOpen) return null;
 
-  const filteredVouchers = (profile.peerAttestations || []).filter(v => 
+  const filteredVouchers = (profile.peerAttestations || []).filter((v) =>
     selectedPillar === "all" ? true : v.pillar === selectedPillar
   );
 
@@ -106,8 +105,16 @@ export function HumaneLedgerModal() {
 
     // Simulate WebCrypto Ed25519 signature creation
     setTimeout(() => {
-      const randomBytes = Array.from({ length: 32 }, () => Math.floor(Math.random() * 256).toString(16).padStart(2, "0")).join("");
-      const merkleBytes = Array.from({ length: 32 }, () => Math.floor(Math.random() * 256).toString(16).padStart(2, "0")).join("");
+      const randomBytes = Array.from({ length: 32 }, () =>
+        Math.floor(Math.random() * 256)
+          .toString(16)
+          .padStart(2, "0")
+      ).join("");
+      const merkleBytes = Array.from({ length: 32 }, () =>
+        Math.floor(Math.random() * 256)
+          .toString(16)
+          .padStart(2, "0")
+      ).join("");
 
       const newVoucher: PeerAttestation = {
         id: `peer-${Date.now()}`,
@@ -141,7 +148,7 @@ export function HumaneLedgerModal() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
-      <div 
+      <div
         className="w-full max-w-4xl max-h-[90vh] bg-[#0C0E15] border border-white/[0.10] rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-scale-up"
         style={{ boxShadow: "0 25px 60px -15px rgba(0, 0, 0, 0.9)" }}
       >
@@ -152,14 +159,18 @@ export function HumaneLedgerModal() {
               <HeartHandshake className="w-3.5 h-3.5 text-rose-400" />
               <span>Humane Engineering Standard</span>
               <span>•</span>
-              <span className="text-white font-semibold">{profile.peerAttestations?.length || 0} Cryptographic Vouchers</span>
+              <span className="text-white font-semibold">
+                {profile.peerAttestations?.length || 0} Cryptographic Vouchers
+              </span>
             </div>
 
             <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight font-sans">
               Peer Attestation & Mentorship Ledger
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400 max-w-2xl leading-relaxed">
-              Software is crafted by humans, for humans. Real teammates and mentees sign cryptographic vouchers attesting to mentorship, psychological safety, and kind collaboration.
+              Software is crafted by humans, for humans. Real teammates and mentees sign
+              cryptographic vouchers attesting to mentorship, psychological safety, and kind
+              collaboration.
             </p>
           </div>
 
@@ -180,15 +191,49 @@ export function HumaneLedgerModal() {
         {/* Humane Capability Highlight Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 p-4 sm:px-6 bg-[#08090E] border-b border-white/[0.06]">
           {[
-            { label: "Review Empathy", score: `${profile.humaneScores?.reviewEmpathy || 99}%`, desc: "Constructive feedback tone", color: "text-rose-400" },
-            { label: "Mentorship Growth", score: `${profile.humaneScores?.mentorshipGrowth || 98}%`, desc: "3 junior engineers leveled", color: "text-emerald-400" },
-            { label: "Blameless Culture", score: `${profile.humaneScores?.blamelessCulture || 100}%`, desc: "Zero-blame outage leader", color: "text-amber-400" },
-            { label: "Async RFC Clarity", score: `${profile.humaneScores?.asyncRfcClarity || 97}%`, desc: "High-context decisions", color: "text-cyan-400" },
-            { label: "Sustainable Cadence", score: `${profile.sustainableRhythm?.deepWorkRatio || 94}%`, desc: "Anti-burnout boundary", color: "text-violet-400" },
+            {
+              label: "Review Empathy",
+              score: `${profile.humaneScores?.reviewEmpathy || 99}%`,
+              desc: "Constructive feedback tone",
+              color: "text-rose-400",
+            },
+            {
+              label: "Mentorship Growth",
+              score: `${profile.humaneScores?.mentorshipGrowth || 98}%`,
+              desc: "3 junior engineers leveled",
+              color: "text-emerald-400",
+            },
+            {
+              label: "Blameless Culture",
+              score: `${profile.humaneScores?.blamelessCulture || 100}%`,
+              desc: "Zero-blame outage leader",
+              color: "text-amber-400",
+            },
+            {
+              label: "Async RFC Clarity",
+              score: `${profile.humaneScores?.asyncRfcClarity || 97}%`,
+              desc: "High-context decisions",
+              color: "text-cyan-400",
+            },
+            {
+              label: "Sustainable Cadence",
+              score: `${profile.sustainableRhythm?.deepWorkRatio || 94}%`,
+              desc: "Anti-burnout boundary",
+              color: "text-violet-400",
+            },
           ].map(({ label, score, desc, color }) => (
-            <div key={label} className="p-2.5 rounded-xl bg-[#10121B] border border-white/[0.05] flex flex-col justify-between">
-              <span className="text-[10px] uppercase font-mono text-zinc-500 block truncate">{label}</span>
-              <span className={`text-base sm:text-lg font-bold font-mono ${color} leading-none mt-1`}>{score}</span>
+            <div
+              key={label}
+              className="p-2.5 rounded-xl bg-[#10121B] border border-white/[0.05] flex flex-col justify-between"
+            >
+              <span className="text-[10px] uppercase font-mono text-zinc-500 block truncate">
+                {label}
+              </span>
+              <span
+                className={`text-base sm:text-lg font-bold font-mono ${color} leading-none mt-1`}
+              >
+                {score}
+              </span>
               <span className="text-[9px] text-zinc-500 font-mono mt-0.5 truncate">{desc}</span>
             </div>
           ))}
@@ -239,7 +284,7 @@ export function HumaneLedgerModal() {
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           {/* Interactive Form for Signing New Voucher */}
           {isVouchFormOpen && (
-            <form 
+            <form
               onSubmit={handleSignVoucher}
               className="p-5 rounded-xl bg-gradient-to-b from-[#141725] to-[#10121B] border border-rose-500/30 shadow-xl space-y-4 animate-fade-in"
             >
@@ -248,52 +293,68 @@ export function HumaneLedgerModal() {
                   <HeartHandshake className="w-4 h-4 text-rose-400" />
                   <h4 className="text-sm font-bold text-white">Sign a Humane Competence Voucher</h4>
                 </div>
-                <span className="text-[10px] font-mono text-zinc-500">Ed25519 WebCrypto Signed</span>
+                <span className="text-[10px] font-mono text-zinc-500">
+                  Ed25519 WebCrypto Signed
+                </span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div>
-                  <label className="block font-mono text-[11px] text-zinc-400 mb-1">Your Full Name</label>
+                  <label className="block font-mono text-[11px] text-zinc-400 mb-1">
+                    Your Full Name
+                  </label>
                   <input
                     type="text"
                     required
                     value={formData.name}
-                    onChange={e => setFormData({ ...formData, name: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="e.g. Dr. Sarah Jenkins"
                     className="w-full px-3 py-1.5 rounded-lg bg-[#08090E] border border-white/[0.1] text-white focus:outline-none focus:border-rose-500/50 font-sans"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-mono text-[11px] text-zinc-400 mb-1">Title & Organization</label>
+                  <label className="block font-mono text-[11px] text-zinc-400 mb-1">
+                    Title & Organization
+                  </label>
                   <input
                     type="text"
                     value={formData.title}
-                    onChange={e => setFormData({ ...formData, title: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     placeholder="e.g. Staff Distributed Architect @ Stripe"
                     className="w-full px-3 py-1.5 rounded-lg bg-[#08090E] border border-white/[0.1] text-white focus:outline-none focus:border-rose-500/50 font-sans"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-mono text-[11px] text-zinc-400 mb-1">Working Relationship</label>
+                  <label className="block font-mono text-[11px] text-zinc-400 mb-1">
+                    Working Relationship
+                  </label>
                   <select
                     value={formData.relationship}
-                    onChange={e => setFormData({ ...formData, relationship: e.target.value as any })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, relationship: e.target.value as any })
+                    }
                     className="w-full px-3 py-1.5 rounded-lg bg-[#08090E] border border-white/[0.1] text-white focus:outline-none focus:border-rose-500/50 font-sans"
                   >
                     <option value="Mentee">Mentee (Was guided/taught by candidate)</option>
                     <option value="Teammate">Teammate (Engineered together)</option>
-                    <option value="Engineering Lead">Engineering Lead (Managed/mentored candidate)</option>
-                    <option value="Cross-Functional Peer">Cross-Functional Peer (Product / SRE / Security)</option>
+                    <option value="Engineering Lead">
+                      Engineering Lead (Managed/mentored candidate)
+                    </option>
+                    <option value="Cross-Functional Peer">
+                      Cross-Functional Peer (Product / SRE / Security)
+                    </option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block font-mono text-[11px] text-zinc-400 mb-1">Humane Pillar</label>
+                  <label className="block font-mono text-[11px] text-zinc-400 mb-1">
+                    Humane Pillar
+                  </label>
                   <select
                     value={formData.pillar}
-                    onChange={e => setFormData({ ...formData, pillar: e.target.value as any })}
+                    onChange={(e) => setFormData({ ...formData, pillar: e.target.value as any })}
                     className="w-full px-3 py-1.5 rounded-lg bg-[#08090E] border border-white/[0.1] text-white focus:outline-none focus:border-rose-500/50 font-sans"
                   >
                     <option value="mentorship">Mentorship & Growing Others</option>
@@ -313,7 +374,7 @@ export function HumaneLedgerModal() {
                   required
                   rows={3}
                   value={formData.testimony}
-                  onChange={e => setFormData({ ...formData, testimony: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, testimony: e.target.value })}
                   placeholder="Share authentic observations of how they mentored others, handled production stress without blame, or elevated code quality through kindness..."
                   className="w-full p-3 rounded-lg bg-[#08090E] border border-white/[0.1] text-white focus:outline-none focus:border-rose-500/50 text-xs font-sans leading-relaxed"
                 />
@@ -333,7 +394,9 @@ export function HumaneLedgerModal() {
                   className="flex items-center space-x-1.5 px-4 py-1.5 rounded-lg bg-gradient-to-r from-rose-500 to-amber-500 text-white font-semibold text-xs hover:opacity-95"
                 >
                   <ShieldCheck className="w-4 h-4" />
-                  <span>{isSigning ? "Signing with Ed25519..." : "Cryptographically Sign & Post"}</span>
+                  <span>
+                    {isSigning ? "Signing with Ed25519..." : "Cryptographically Sign & Post"}
+                  </span>
                 </button>
               </div>
             </form>
@@ -345,21 +408,23 @@ export function HumaneLedgerModal() {
               const cfg = PILLAR_CONFIG[voucher.pillar] || PILLAR_CONFIG.mentorship;
               const Icon = cfg.icon;
               return (
-                <div 
+                <div
                   key={voucher.id}
                   className="p-5 rounded-2xl bg-[#11131E] border border-white/[0.07] hover:border-white/[0.14] transition-all relative overflow-hidden"
                 >
                   {/* Top line: Author info & Pillar pill */}
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.04]">
                     <div className="flex items-center space-x-3">
-                      <img 
-                        src={voucher.voucherAvatarUrl} 
-                        alt={voucher.voucherName} 
+                      <img
+                        src={voucher.voucherAvatarUrl}
+                        alt={voucher.voucherName}
                         className="w-10 h-10 rounded-full object-cover border border-white/[0.10]"
                       />
                       <div>
                         <div className="flex items-center space-x-2">
-                          <h4 className="text-sm font-bold text-white font-sans">{voucher.voucherName}</h4>
+                          <h4 className="text-sm font-bold text-white font-sans">
+                            {voucher.voucherName}
+                          </h4>
                           <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/[0.06] text-zinc-400">
                             {voucher.relationship}
                           </span>
@@ -371,7 +436,9 @@ export function HumaneLedgerModal() {
                     </div>
 
                     <div className="flex items-center space-x-2">
-                      <span className={`inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono ${cfg.bg} ${cfg.color} border ${cfg.border}`}>
+                      <span
+                        className={`inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono ${cfg.bg} ${cfg.color} border ${cfg.border}`}
+                      >
                         <Icon className="w-3 h-3" />
                         <span>{cfg.label}</span>
                       </span>
@@ -386,7 +453,7 @@ export function HumaneLedgerModal() {
                   {/* Testimony quote */}
                   <div className="py-3">
                     <p className="text-xs sm:text-sm text-zinc-300 font-sans leading-relaxed italic">
-                      "{voucher.testimony}"
+                      &quot;{voucher.testimony}&quot;
                     </p>
                   </div>
 
@@ -405,7 +472,11 @@ export function HumaneLedgerModal() {
                         title="Copy Ed25519 signature"
                       >
                         <span>Sig: {voucher.signature.substring(0, 10)}…</span>
-                        {copiedId === voucher.id ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                        {copiedId === voucher.id ? (
+                          <Check className="w-3 h-3 text-emerald-400" />
+                        ) : (
+                          <Copy className="w-3 h-3" />
+                        )}
                       </button>
                     </div>
                   </div>

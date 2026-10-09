@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, Copy, Check, Share2, Sparkles, ExternalLink } from "lucide-react";
+import { X, Copy, Check, Share2 } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { sound } from "@/lib/sound";
 
 export function BadgeGenerator() {
   const { profile, isBadgeModalOpen, setIsBadgeModalOpen } = useApp();
-  const [badgeStyle, setBadgeStyle] = useState<"default" | "compact" | "shield" | "humane">("default");
+  const [badgeStyle, setBadgeStyle] = useState<"default" | "compact" | "shield" | "humane">(
+    "default"
+  );
   const [copiedType, setCopiedType] = useState<string | null>(null);
 
   if (!isBadgeModalOpen) return null;
@@ -17,7 +19,6 @@ export function BadgeGenerator() {
   const profileUrl = `${baseUrl}/p/${profile.username}`;
 
   const markdownSnippet = `[![MeritOS: Verified Competence Index](${badgeUrl})](${profileUrl})`;
-  const htmlSnippet = `<a href="${profileUrl}"><img src="${badgeUrl}" alt="MeritOS Verified Competence" /></a>`;
 
   const copyToClipboard = (text: string, type: string) => {
     sound.playClick(1000);
@@ -33,9 +34,7 @@ export function BadgeGenerator() {
         <div className="px-6 py-4 bg-[#12131A] border-b border-white/[0.06] flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Share2 className="w-4 h-4 text-cyan-400" />
-            <h3 className="text-sm font-bold text-white font-sans">
-              Dynamic Live GitHub Badges
-            </h3>
+            <h3 className="text-sm font-bold text-white font-sans">Dynamic Live GitHub Badges</h3>
           </div>
 
           <button
@@ -52,7 +51,11 @@ export function BadgeGenerator() {
         {/* Modal Body */}
         <div className="p-6 space-y-6">
           <p className="text-xs text-zinc-400 leading-relaxed">
-            Embed an auto-updating, cryptographically verified badge in your GitHub profile <code className="text-zinc-300 font-mono bg-white/[0.06] px-1 py-0.5 rounded">README.md</code>.
+            Embed an auto-updating, cryptographically verified badge in your GitHub profile{" "}
+            <code className="text-zinc-300 font-mono bg-white/[0.06] px-1 py-0.5 rounded">
+              README.md
+            </code>
+            .
           </p>
 
           {/* Style Selector */}
@@ -76,7 +79,7 @@ export function BadgeGenerator() {
                   }}
                   className={`px-3 py-2 rounded-xl text-xs font-mono transition-all ${
                     badgeStyle === style.id
-                      ? style.id === "humane" 
+                      ? style.id === "humane"
                         ? "bg-rose-500/20 border border-rose-500/50 text-rose-300 font-bold"
                         : "bg-emerald-500/20 border border-emerald-500/50 text-emerald-400 font-bold"
                       : "tactile-card text-zinc-400 hover:text-white"

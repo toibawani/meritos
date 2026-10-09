@@ -1,78 +1,77 @@
 "use client";
 
 import React, { useState } from "react";
-import { RadarCapabilityScores, HumaneCapabilityScores } from "@/lib/types";
 import { useApp } from "@/lib/store";
 import { sound } from "@/lib/sound";
-import { ShieldCheck, HeartHandshake, Cpu, Sparkles } from "lucide-react";
+import { ShieldCheck, HeartHandshake, Cpu } from "lucide-react";
 
 export function RadarMatrix() {
   const { profile, radarMode, setRadarMode } = useApp();
   const [hoveredAxis, setHoveredAxis] = useState<string | null>(null);
 
   const systemsAxes: { key: string; label: string; score: number; detail: string }[] = [
-    { 
-      key: "quality", 
-      label: "Code Quality", 
+    {
+      key: "quality",
+      label: "Code Quality",
       score: profile.radarScores?.quality || 98,
-      detail: "Zero lint errors, strict type invariants, 98.4% average unit test coverage."
+      detail: "Zero lint errors, strict type invariants, 98.4% average unit test coverage.",
     },
-    { 
-      key: "architecture", 
-      label: "Systems Architecture", 
+    {
+      key: "architecture",
+      label: "Systems Architecture",
       score: profile.radarScores?.architecture || 99,
-      detail: "Clean separation of concerns, modular compilation passes, CQRS event sourcing."
+      detail: "Clean separation of concerns, modular compilation passes, CQRS event sourcing.",
     },
-    { 
-      key: "reliability", 
-      label: "Fault Reliability", 
+    {
+      key: "reliability",
+      label: "Fault Reliability",
       score: profile.radarScores?.reliability || 97,
-      detail: "Chaos test hardened, Raft partition auto-healing, deterministic state machines."
+      detail: "Chaos test hardened, Raft partition auto-healing, deterministic state machines.",
     },
-    { 
-      key: "speed", 
-      label: "Execution Speed", 
+    {
+      key: "speed",
+      label: "Execution Speed",
       score: profile.radarScores?.speed || 99,
-      detail: "Zero-copy WASM slab allocators, SIMD int4 quantization, 14.2 Mpps packet filtering."
+      detail: "Zero-copy WASM slab allocators, SIMD int4 quantization, 14.2 Mpps packet filtering.",
     },
-    { 
-      key: "cryptographicDepth", 
-      label: "Cryptographic Depth", 
+    {
+      key: "cryptographicDepth",
+      label: "Cryptographic Depth",
       score: profile.radarScores?.cryptographicDepth || 100,
-      detail: "Ed25519 verifiable credentials, SHA-256 Merkle root receipts, zero self-reporting."
+      detail: "Ed25519 verifiable credentials, SHA-256 Merkle root receipts, zero self-reporting.",
     },
   ];
 
   const humaneAxes: { key: string; label: string; score: number; detail: string }[] = [
-    { 
-      key: "reviewEmpathy", 
-      label: "Review Empathy", 
+    {
+      key: "reviewEmpathy",
+      label: "Review Empathy",
       score: profile.humaneScores?.reviewEmpathy || 99,
-      detail: "Kind, actionable PR code reviews with positive reinforcement and zero snark."
+      detail: "Kind, actionable PR code reviews with positive reinforcement and zero snark.",
     },
-    { 
-      key: "mentorshipGrowth", 
-      label: "Mentorship Growth", 
+    {
+      key: "mentorshipGrowth",
+      label: "Mentorship Growth",
       score: profile.humaneScores?.mentorshipGrowth || 98,
-      detail: "Active pairing, onboarding junior contributors, and unblocking engineering peers."
+      detail: "Active pairing, onboarding junior contributors, and unblocking engineering peers.",
     },
-    { 
-      key: "blamelessCulture", 
-      label: "Blameless Culture", 
+    {
+      key: "blamelessCulture",
+      label: "Blameless Culture",
       score: profile.humaneScores?.blamelessCulture || 100,
-      detail: "Zero-finger-pointing incident retrospectives; systemic prevention over blame."
+      detail: "Zero-finger-pointing incident retrospectives; systemic prevention over blame.",
     },
-    { 
-      key: "asyncRfcClarity", 
-      label: "Async RFC Clarity", 
+    {
+      key: "asyncRfcClarity",
+      label: "Async RFC Clarity",
       score: profile.humaneScores?.asyncRfcClarity || 97,
-      detail: "High-context written proposals respecting global time zones and deep focus time."
+      detail: "High-context written proposals respecting global time zones and deep focus time.",
     },
-    { 
-      key: "sustainableCadence", 
-      label: "Sustainable Cadence", 
+    {
+      key: "sustainableCadence",
+      label: "Sustainable Cadence",
       score: profile.humaneScores?.sustainableCadence || 96,
-      detail: "Healthy on-call boundaries, 100% protected weekends, and steady long-term velocity."
+      detail: "Healthy on-call boundaries, 100% protected weekends, and steady long-term velocity.",
     },
   ];
 
@@ -89,7 +88,7 @@ export function RadarMatrix() {
   const numAxes = axes.length;
 
   const getCoordinates = (index: number, valueRatio: number) => {
-    const angle = (Math.PI * 2 / numAxes) * index - Math.PI / 2;
+    const angle = ((Math.PI * 2) / numAxes) * index - Math.PI / 2;
     const x = center + radius * valueRatio * Math.cos(angle);
     const y = center + radius * valueRatio * Math.sin(angle);
     return { x, y };
@@ -123,8 +122,8 @@ export function RadarMatrix() {
           <button
             onClick={() => setRadarMode("systems")}
             className={`flex items-center space-x-1 px-2 py-0.5 rounded-md transition-all ${
-              !isHumane 
-                ? "bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30" 
+              !isHumane
+                ? "bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30"
                 : "text-zinc-500 hover:text-zinc-300"
             }`}
           >
@@ -135,8 +134,8 @@ export function RadarMatrix() {
           <button
             onClick={() => setRadarMode("humane")}
             className={`flex items-center space-x-1 px-2 py-0.5 rounded-md transition-all ${
-              isHumane 
-                ? "bg-rose-500/20 text-rose-300 font-bold border border-rose-500/30" 
+              isHumane
+                ? "bg-rose-500/20 text-rose-300 font-bold border border-rose-500/30"
                 : "text-zinc-500 hover:text-zinc-300"
             }`}
           >
@@ -232,16 +231,13 @@ export function RadarMatrix() {
             }`}
           >
             <div className="flex items-center space-x-2">
-              <span 
-                className="w-1.5 h-1.5 rounded-full" 
-                style={{ backgroundColor: primaryColor }} 
+              <span
+                className="w-1.5 h-1.5 rounded-full"
+                style={{ backgroundColor: primaryColor }}
               />
               <span className="text-zinc-300 text-[11px]">{axis.label}</span>
             </div>
-            <span 
-              className="font-bold text-[11px]" 
-              style={{ color: primaryColor }}
-            >
+            <span className="font-bold text-[11px]" style={{ color: primaryColor }}>
               {axis.score}%
             </span>
           </div>
@@ -250,4 +246,3 @@ export function RadarMatrix() {
     </div>
   );
 }
-

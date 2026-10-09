@@ -1,27 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { 
-  ShieldCheck, 
-  AlertTriangle, 
-  CheckCircle2, 
-  Copy, 
-  Upload, 
-  Sparkles, 
-  FileCheck, 
-  Lock,
-  ArrowRight,
-  RotateCcw
-} from "lucide-react";
+import { ShieldCheck, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { sound } from "@/lib/sound";
 import { verifyVerifiableReceipt } from "@/lib/crypto";
-import { VerifiableReceipt } from "@/lib/types";
 
 export function ReceiptVerifier() {
   const { profile } = useApp();
 
-  const defaultReceipt = profile.skills[0]?.proofReceipt 
+  const defaultReceipt = profile.skills[0]?.proofReceipt
     ? JSON.stringify(profile.skills[0].proofReceipt, null, 2)
     : "";
 
@@ -44,7 +32,10 @@ export function ReceiptVerifier() {
       const parsed: any = JSON.parse(rawJson);
 
       // Check if this is a Humane Peer Voucher
-      if (parsed.type?.includes("PeerMentorshipAttestation") || parsed.type?.includes("PeerAttestation")) {
+      if (
+        parsed.type?.includes("PeerMentorshipAttestation") ||
+        parsed.type?.includes("PeerAttestation")
+      ) {
         const isTampered = rawJson.includes("tampered");
         if (isTampered) {
           setAuditResult({
@@ -52,7 +43,8 @@ export function ReceiptVerifier() {
             tampered: true,
             merkleVerified: false,
             signatureVerified: false,
-            details: "Cryptographic signature mismatch: Peer voucher payload has been tampered with.",
+            details:
+              "Cryptographic signature mismatch: Peer voucher payload has been tampered with.",
             latencyMs: 3,
           });
           sound.playClick(300);
@@ -106,32 +98,34 @@ export function ReceiptVerifier() {
     const payload = {
       "@context": [
         "https://www.w3.org/2018/credentials/v1",
-        "https://meritos.id/contexts/humane-craft-v1.json"
+        "https://meritos.id/contexts/humane-craft-v1.json",
       ],
-      "id": `urn:uuid:${peerVoucher?.id || "peer-01"}`,
-      "type": ["VerifiableCredential", "PeerMentorshipAttestation"],
-      "issuer": peerVoucher?.voucherDid || "did:merit:peer:elena_rostova",
-      "issuanceDate": peerVoucher?.dateAttested || "2026-08-20T14:30:00Z",
-      "credentialSubject": {
-        "id": profile.did,
-        "voucherName": peerVoucher?.voucherName || "Elena Rostova",
-        "voucherTitle": peerVoucher?.voucherTitle || "VP of Distributed Systems",
-        "voucherCompany": peerVoucher?.voucherCompany || "Helios Systems",
-        "pillar": peerVoucher?.pillar || "mentorship-growth",
-        "merkleRoot": peerVoucher?.merkleLeaf || "7f8b9a1c2d3e4f5061728394a5b6c7d8e9f0123456789abcdef0123456789abc",
-        "testimony": peerVoucher?.testimony || "Exceptional systems mentor and compassionate tech lead."
+      id: `urn:uuid:${peerVoucher?.id || "peer-01"}`,
+      type: ["VerifiableCredential", "PeerMentorshipAttestation"],
+      issuer: peerVoucher?.voucherDid || "did:merit:peer:elena_rostova",
+      issuanceDate: peerVoucher?.dateAttested || "2026-08-20T14:30:00Z",
+      credentialSubject: {
+        id: profile.did,
+        voucherName: peerVoucher?.voucherName || "Elena Rostova",
+        voucherTitle: peerVoucher?.voucherTitle || "VP of Distributed Systems",
+        voucherCompany: peerVoucher?.voucherCompany || "Helios Systems",
+        pillar: peerVoucher?.pillar || "mentorship-growth",
+        merkleRoot:
+          peerVoucher?.merkleLeaf ||
+          "7f8b9a1c2d3e4f5061728394a5b6c7d8e9f0123456789abcdef0123456789abc",
+        testimony:
+          peerVoucher?.testimony || "Exceptional systems mentor and compassionate tech lead.",
       },
-      "proof": {
-        "type": "Ed25519Signature2020",
-        "created": peerVoucher?.dateAttested || "2026-08-20T14:30:00Z",
-        "verificationMethod": `${peerVoucher?.voucherDid || "did:merit:peer:elena_rostova"}#keys-1`,
-        "proofValue": peerVoucher?.signature || "z3A7vB9dK1Led25519_verified_peer_signature"
-      }
+      proof: {
+        type: "Ed25519Signature2020",
+        created: peerVoucher?.dateAttested || "2026-08-20T14:30:00Z",
+        verificationMethod: `${peerVoucher?.voucherDid || "did:merit:peer:elena_rostova"}#keys-1`,
+        proofValue: peerVoucher?.signature || "z3A7vB9dK1Led25519_verified_peer_signature",
+      },
     };
     setRawJson(JSON.stringify(payload, null, 2));
     setAuditResult(null);
   };
-
 
   const handleTamperTest = () => {
     sound.playClick(400);
@@ -145,7 +139,8 @@ export function ReceiptVerifier() {
         if (parsed.credentialSubject.statement) {
           parsed.credentialSubject.statement += " [tampered text]";
         }
-        parsed.credentialSubject.merkleRoot = "tampered_" + (parsed.credentialSubject.merkleRoot?.substring(9) || "hash");
+        parsed.credentialSubject.merkleRoot =
+          "tampered_" + (parsed.credentialSubject.merkleRoot?.substring(9) || "hash");
       }
       setRawJson(JSON.stringify(parsed, null, 2));
       setAuditResult(null);
@@ -166,7 +161,8 @@ export function ReceiptVerifier() {
           Verify Cryptographic Credentials
         </h1>
         <p className="text-xs sm:text-sm text-zinc-400 max-w-xl mx-auto">
-          Audit any MeritOS W3C Verifiable Credential or Peer Voucher. Validates SHA-256 Merkle root integrity and Ed25519 signatures in-browser without server trust.
+          Audit any MeritOS W3C Verifiable Credential or Peer Voucher. Validates SHA-256 Merkle root
+          integrity and Ed25519 signatures in-browser without server trust.
         </p>
       </div>
 
@@ -213,9 +209,7 @@ export function ReceiptVerifier() {
             W3C Verifiable Credential Payload (JSON-LD)
           </span>
 
-          <span className="text-[11px] font-mono text-zinc-500">
-            WebCrypto P-256 / Ed25519
-          </span>
+          <span className="text-[11px] font-mono text-zinc-500">WebCrypto P-256 / Ed25519</span>
         </div>
 
         <textarea
@@ -247,11 +241,13 @@ export function ReceiptVerifier() {
 
       {/* Verification Result Card */}
       {auditResult && (
-        <div className={`p-6 rounded-2xl border transition-all animate-scale-up ${
-          auditResult.valid
-            ? "bg-emerald-950/20 border-emerald-500/40 text-emerald-300"
-            : "bg-rose-950/20 border-rose-500/40 text-rose-300"
-        }`}>
+        <div
+          className={`p-6 rounded-2xl border transition-all animate-scale-up ${
+            auditResult.valid
+              ? "bg-emerald-950/20 border-emerald-500/40 text-emerald-300"
+              : "bg-rose-950/20 border-rose-500/40 text-rose-300"
+          }`}
+        >
           <div className="flex items-start justify-between">
             <div className="flex items-center space-x-3">
               {auditResult.valid ? (
@@ -270,16 +266,12 @@ export function ReceiptVerifier() {
                     ? "Cryptographic Attestation Valid & Authentic"
                     : "Cryptographic Verification Failed (Tamper Detected)"}
                 </h3>
-                <p className="text-xs text-zinc-300 font-mono mt-0.5">
-                  {auditResult.details}
-                </p>
+                <p className="text-xs text-zinc-300 font-mono mt-0.5">{auditResult.details}</p>
               </div>
             </div>
 
             <div className="text-right font-mono text-xs">
-              <span className="bg-white/10 px-2.5 py-1 rounded-md">
-                {auditResult.latencyMs} ms
-              </span>
+              <span className="bg-white/10 px-2.5 py-1 rounded-md">{auditResult.latencyMs} ms</span>
             </div>
           </div>
 
@@ -291,14 +283,22 @@ export function ReceiptVerifier() {
 
             <div className="p-2.5 rounded-lg bg-black/40 border border-white/[0.04]">
               <span className="text-zinc-500 text-[10px] block">Merkle Tree Root</span>
-              <span className={auditResult.valid ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>
+              <span
+                className={
+                  auditResult.valid ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"
+                }
+              >
                 {auditResult.valid ? "Matched" : "Tampered"}
               </span>
             </div>
 
             <div className="p-2.5 rounded-lg bg-black/40 border border-white/[0.04]">
               <span className="text-zinc-500 text-[10px] block">Digital Signature</span>
-              <span className={auditResult.valid ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>
+              <span
+                className={
+                  auditResult.valid ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"
+                }
+              >
                 {auditResult.valid ? "Verified Ed25519" : "Signature Mismatch"}
               </span>
             </div>

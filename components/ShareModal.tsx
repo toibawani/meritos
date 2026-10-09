@@ -1,10 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { 
-  Share2, X, Copy, Check, ExternalLink, QrCode, ShieldCheck, 
-  Terminal, Globe, Sparkles 
-} from "lucide-react";
+import { Share2, X, Copy, Check, ShieldCheck, Terminal } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { sound } from "@/lib/sound";
 
@@ -37,10 +34,7 @@ export function ShareModal() {
     const placeFinder = (startX: number, startY: number) => {
       for (let y = 0; y < 7; y++) {
         for (let x = 0; x < 7; x++) {
-          if (
-            y === 0 || y === 6 || x === 0 || x === 6 ||
-            (y >= 2 && y <= 4 && x >= 2 && x <= 4)
-          ) {
+          if (y === 0 || y === 6 || x === 0 || x === 6 || (y >= 2 && y <= 4 && x >= 2 && x <= 4)) {
             grid[startY + y][startX + x] = true;
           }
         }
@@ -66,11 +60,12 @@ export function ShareModal() {
           (x < 8 && y < 8) ||
           (x >= size - 8 && y < 8) ||
           (x < 8 && y >= size - 8) ||
-          (x === 6 || y === 6)
+          x === 6 ||
+          y === 6
         ) {
           continue;
         }
-        const val = ((seed * (x + 1) * (y + 1) * 31337) % 100);
+        const val = (seed * (x + 1) * (y + 1) * 31337) % 100;
         grid[y][x] = val > 50;
       }
     }
@@ -83,10 +78,7 @@ export function ShareModal() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
       {/* Backdrop */}
-      <div 
-        className="fixed inset-0" 
-        onClick={() => setIsShareModalOpen(false)} 
-      />
+      <div className="fixed inset-0" onClick={() => setIsShareModalOpen(false)} />
 
       <div className="relative w-full max-w-lg bg-[#0F111A] border border-white/10 rounded-2xl shadow-2xl shadow-emerald-950/40 overflow-hidden z-10 flex flex-col">
         {/* Header */}
@@ -97,7 +89,9 @@ export function ShareModal() {
             </div>
             <div>
               <h2 className="text-base font-bold text-white">Share Verified Profile</h2>
-              <p className="text-xs text-white/50 font-mono">Portable cryptographic proof of craft</p>
+              <p className="text-xs text-white/50 font-mono">
+                Portable cryptographic proof of craft
+              </p>
             </div>
           </div>
           <button
@@ -165,14 +159,7 @@ export function ShareModal() {
                     {qrCells.map((row, y) =>
                       row.map((cell, x) =>
                         cell ? (
-                          <rect
-                            key={`${x}-${y}`}
-                            x={x}
-                            y={y}
-                            width="1"
-                            height="1"
-                            fill="#090A0F"
-                          />
+                          <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill="#090A0F" />
                         ) : null
                       )
                     )}
@@ -203,7 +190,11 @@ export function ShareModal() {
                     onClick={() => copyToClipboard(profileUrl, "link")}
                     className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono flex items-center gap-1.5 transition-all shrink-0"
                   >
-                    {copiedType === "link" ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedType === "link" ? (
+                      <Check className="w-3.5 h-3.5" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
                     <span>{copiedType === "link" ? "Copied" : "Copy"}</span>
                   </button>
                 </div>
@@ -223,7 +214,9 @@ export function ShareModal() {
               </div>
 
               <div>
-                <label className="text-xs text-white/50 font-mono block mb-1.5">Markdown (README.md)</label>
+                <label className="text-xs text-white/50 font-mono block mb-1.5">
+                  Markdown (README.md)
+                </label>
                 <div className="flex items-center gap-2">
                   <input
                     readOnly
@@ -234,7 +227,11 @@ export function ShareModal() {
                     onClick={() => copyToClipboard(markdownBadge, "badge-md")}
                     className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-mono flex items-center gap-1.5 transition-all shrink-0"
                   >
-                    {copiedType === "badge-md" ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedType === "badge-md" ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
                     <span>{copiedType === "badge-md" ? "Copied" : "Copy"}</span>
                   </button>
                 </div>
@@ -252,7 +249,11 @@ export function ShareModal() {
                     onClick={() => copyToClipboard(htmlBadge, "badge-html")}
                     className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-mono flex items-center gap-1.5 transition-all shrink-0"
                   >
-                    {copiedType === "badge-html" ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedType === "badge-html" ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
                     <span>{copiedType === "badge-html" ? "Copied" : "Copy"}</span>
                   </button>
                 </div>
@@ -271,12 +272,15 @@ export function ShareModal() {
                   {profile.did}
                 </div>
                 <p className="text-white/40 text-[11px] leading-relaxed">
-                  Cryptographically resolves via Ed25519 multibase keypair without reliance on centralized social platforms.
+                  Cryptographically resolves via Ed25519 multibase keypair without reliance on
+                  centralized social platforms.
                 </p>
               </div>
 
               <div>
-                <label className="text-xs text-white/50 font-mono block mb-1.5">DID Resolution JSON-LD Endpoint</label>
+                <label className="text-xs text-white/50 font-mono block mb-1.5">
+                  DID Resolution JSON-LD Endpoint
+                </label>
                 <div className="flex items-center gap-2">
                   <input
                     readOnly
@@ -287,7 +291,11 @@ export function ShareModal() {
                     onClick={() => copyToClipboard(didUrl, "did-url")}
                     className="px-3 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono flex items-center gap-1.5 transition-all shrink-0"
                   >
-                    {copiedType === "did-url" ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedType === "did-url" ? (
+                      <Check className="w-3.5 h-3.5" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
                     <span>{copiedType === "did-url" ? "Copied" : "Copy"}</span>
                   </button>
                 </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Activity, ShieldCheck, CheckCircle2, Clock, ExternalLink } from "lucide-react";
+import { Activity } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { sound } from "@/lib/sound";
 

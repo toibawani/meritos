@@ -1,28 +1,26 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
-import { 
-  ZoomIn, 
-  ZoomOut, 
-  RotateCcw, 
-  ShieldCheck, 
-  Cpu, 
-  Zap, 
-  Database, 
-  Sparkles, 
-  Binary, 
-  Layers, 
-  Shield, 
-  Layout, 
-  Share2, 
-  GitMerge, 
+import React, { useState, useRef, useMemo } from "react";
+import {
+  ZoomIn,
+  ZoomOut,
+  RotateCcw,
+  Cpu,
+  Zap,
+  Database,
+  Sparkles,
+  Binary,
+  Layers,
+  Shield,
+  Layout,
+  Share2,
+  GitMerge,
   Info,
   Star,
-  TrendingUp,
   Award,
   Lock,
   Search,
-  X
+  X,
 } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { SkillNode, DomainType } from "@/lib/types";
@@ -33,7 +31,10 @@ interface Position {
   y: number;
 }
 
-const DOMAIN_CONFIG: Record<DomainType, { label: string; color: string; bg: string; border: string }> = {
+const DOMAIN_CONFIG: Record<
+  DomainType,
+  { label: string; color: string; bg: string; border: string }
+> = {
   systems: {
     label: "Systems & Low-Level",
     color: "#06B6D4",
@@ -76,15 +77,15 @@ const ICON_MAP: Record<string, any> = {
 };
 
 export function SkillDagGraph() {
-  const { 
-    profile, 
-    selectedSkill, 
-    setSelectedSkill, 
-    domainFilter, 
+  const {
+    profile,
+    selectedSkill,
+    setSelectedSkill,
+    domainFilter,
     setDomainFilter,
     searchQuery,
     setSearchQuery,
-    claimMastery
+    claimMastery,
   } = useApp();
   const [masteryClaimedId, setMasteryClaimedId] = useState<string | null>(null);
 
@@ -107,8 +108,8 @@ export function SkillDagGraph() {
   const filteredSkills = useMemo(() => {
     return profile.skills.filter((skill) => {
       const matchesDomain = domainFilter === "all" || skill.domain === domainFilter;
-      const matchesSearch = 
-        !searchQuery || 
+      const matchesSearch =
+        !searchQuery ||
         skill.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
         skill.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         skill.shortCode.toLowerCase().includes(searchQuery.toLowerCase());
@@ -136,12 +137,12 @@ export function SkillDagGraph() {
       target.prerequisites.forEach((prereqId) => {
         const source = skillMap.get(prereqId);
         if (source) {
-          const isHighlighted = 
-            hoveredNodeId === source.id || 
+          const isHighlighted =
+            hoveredNodeId === source.id ||
             hoveredNodeId === target.id ||
-            selectedSkill?.id === source.id || 
+            selectedSkill?.id === source.id ||
             selectedSkill?.id === target.id;
-            
+
           const isVerifiedPath = source.status === "verified" && target.status === "verified";
 
           edgeList.push({
@@ -202,7 +203,7 @@ export function SkillDagGraph() {
   return (
     <div className="relative w-full h-[650px] sm:h-[720px] bg-[#090A0F] overflow-hidden select-none border-b border-white/[0.06]">
       {/* Background Grid Texture */}
-      <div 
+      <div
         className="absolute inset-0 pointer-events-none opacity-20"
         style={{
           backgroundImage: `
@@ -239,7 +240,10 @@ export function SkillDagGraph() {
 
         {(["all", "systems", "frontend", "cloud", "ai"] as const).map((dom) => {
           const isSelected = domainFilter === dom;
-          const count = dom === "all" ? profile.skills.length : profile.skills.filter(s => s.domain === dom).length;
+          const count =
+            dom === "all"
+              ? profile.skills.length
+              : profile.skills.filter((s) => s.domain === dom).length;
           return (
             <button
               key={dom}
@@ -327,7 +331,7 @@ export function SkillDagGraph() {
               <Cpu className="w-4 h-4 text-cyan-400/60" />
               <span>Systems & Low-Level</span>
             </div>
-            
+
             {/* Frontend Lane */}
             <div className="absolute left-4 top-[240px] text-xs font-mono font-semibold uppercase tracking-wider text-purple-400/50 flex items-center space-x-2">
               <Zap className="w-4 h-4 text-purple-400/60" />
@@ -399,8 +403,8 @@ export function SkillDagGraph() {
                       edge.isHighlighted
                         ? "#10B981"
                         : edge.isVerifiedPath
-                        ? "rgba(16, 185, 129, 0.45)"
-                        : "rgba(255, 255, 255, 0.12)"
+                          ? "rgba(16, 185, 129, 0.45)"
+                          : "rgba(255, 255, 255, 0.12)"
                     }
                     strokeWidth={edge.isHighlighted ? "2.5" : "1.8"}
                     strokeDasharray={edge.isVerifiedPath ? "none" : "4 4"}
@@ -443,19 +447,20 @@ export function SkillDagGraph() {
                   isSelected
                     ? "bg-[#1A1D2B] shadow-2xl"
                     : isHovered
-                    ? "bg-[#141720]"
-                    : "bg-[#10121A]"
+                      ? "bg-[#141720]"
+                      : "bg-[#10121A]"
                 }`}
                 style={{
-                  left: `${skill.x}px`, top: `${skill.y}px`,
+                  left: `${skill.x}px`,
+                  top: `${skill.y}px`,
                   border: isSelected
                     ? `1.5px solid ${domainStyle.color}55`
-                    : `1px solid rgba(255,255,255,${isHovered ? '0.12' : '0.07'})`,
+                    : `1px solid rgba(255,255,255,${isHovered ? "0.12" : "0.07"})`,
                   boxShadow: isSelected
                     ? `0 0 24px -4px ${domainStyle.color}30, 0 8px 24px -4px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.06)`
                     : isHovered
-                    ? '0 6px 20px -4px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05)'
-                    : '0 2px 8px -2px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.04)',
+                      ? "0 6px 20px -4px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05)"
+                      : "0 2px 8px -2px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.04)",
                 }}
               >
                 {/* Top Row: code + status */}
@@ -480,17 +485,29 @@ export function SkillDagGraph() {
 
                 {/* Icon + Title */}
                 <div className="flex items-start gap-2 my-1">
-                  <div className="p-1 rounded-lg shrink-0 mt-0.5" style={{ backgroundColor: domainStyle.bg }}>
+                  <div
+                    className="p-1 rounded-lg shrink-0 mt-0.5"
+                    style={{ backgroundColor: domainStyle.bg }}
+                  >
                     <IconComponent className="w-3.5 h-3.5" style={{ color: domainStyle.color }} />
                   </div>
-                  <span className="text-[11px] font-semibold text-white leading-tight line-clamp-2">{skill.label}</span>
+                  <span className="text-[11px] font-semibold text-white leading-tight line-clamp-2">
+                    {skill.label}
+                  </span>
                 </div>
 
                 {/* XP mini-bar */}
-                <div className="mt-1.5 h-0.5 w-full rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                <div
+                  className="mt-1.5 h-0.5 w-full rounded-full overflow-hidden"
+                  style={{ background: "rgba(255,255,255,0.06)" }}
+                >
                   <div
                     className="h-full rounded-full transition-all duration-700"
-                    style={{ width: `${Math.min(100, (skill.xp / 1500) * 100)}%`, background: domainStyle.color, opacity: 0.7 }}
+                    style={{
+                      width: `${Math.min(100, (skill.xp / 1500) * 100)}%`,
+                      background: domainStyle.color,
+                      opacity: 0.7,
+                    }}
                   />
                 </div>
 
@@ -498,7 +515,11 @@ export function SkillDagGraph() {
                 <div className="mt-1.5 flex items-center justify-between text-[10px] font-mono">
                   <span className="text-zinc-500">+{skill.xp} XP</span>
                   <span className="font-medium" style={{ color: domainStyle.color }}>
-                    {skill.level === 'master' ? 'MASTER' : skill.level === 'expert' ? 'EXPERT' : 'PRO'}
+                    {skill.level === "master"
+                      ? "MASTER"
+                      : skill.level === "expert"
+                        ? "EXPERT"
+                        : "PRO"}
                   </span>
                 </div>
 
@@ -508,25 +529,31 @@ export function SkillDagGraph() {
                     onClick={(e) => handleClaimMastery(e, skill.id)}
                     className="absolute inset-x-0 -bottom-8 mx-auto flex items-center justify-center gap-1 px-2 py-1 rounded-lg text-[10px] font-semibold transition-all z-20"
                     style={{
-                      background: isMasteryClaimed ? '#10B981' : domainStyle.bg,
+                      background: isMasteryClaimed ? "#10B981" : domainStyle.bg,
                       border: `1px solid ${domainStyle.color}50`,
-                      color: isMasteryClaimed ? '#042F2E' : domainStyle.color,
-                      width: 'fit-content',
-                      whiteSpace: 'nowrap',
+                      color: isMasteryClaimed ? "#042F2E" : domainStyle.color,
+                      width: "fit-content",
+                      whiteSpace: "nowrap",
                     }}
                   >
                     <Award className="w-3 h-3" />
-                    {isMasteryClaimed ? 'Claimed!' : 'Claim Mastery'}
+                    {isMasteryClaimed ? "Claimed!" : "Claim Mastery"}
                   </button>
                 )}
 
                 {/* Edge connector dots */}
                 {skill.prerequisites.length > 0 && (
-                  <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2 border-cyan-500/60 flex items-center justify-center" style={{ background: '#0E1015' }}>
+                  <div
+                    className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2 border-cyan-500/60 flex items-center justify-center"
+                    style={{ background: "#0E1015" }}
+                  >
                     <div className="w-1 h-1 rounded-full bg-cyan-400" />
                   </div>
                 )}
-                <div className="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2 border-emerald-500/60 flex items-center justify-center" style={{ background: '#0E1015' }}>
+                <div
+                  className="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2 border-emerald-500/60 flex items-center justify-center"
+                  style={{ background: "#0E1015" }}
+                >
                   <div className="w-1 h-1 rounded-full bg-emerald-400" />
                 </div>
               </div>

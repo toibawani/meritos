@@ -1,10 +1,25 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo } from "react";
-import { 
-  Search, Terminal, ShieldCheck, HeartHandshake, FileText, Award, 
-  Users, Zap, Radio, Eye, EyeOff, Volume2, VolumeX, ArrowRight, 
-  CornerDownLeft, Compass, Sparkles, X, Share2
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import {
+  Search,
+  Terminal,
+  ShieldCheck,
+  HeartHandshake,
+  FileText,
+  Award,
+  Users,
+  Zap,
+  Radio,
+  Eye,
+  EyeOff,
+  Volume2,
+  VolumeX,
+  CornerDownLeft,
+  Compass,
+  Sparkles,
+  X,
+  Share2,
 } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { sound } from "@/lib/sound";
@@ -38,7 +53,7 @@ export function CommandPalette() {
     radarMode,
     setRadarMode,
     setIsShareModalOpen,
-    setIsTeamFitOpen
+    setIsTeamFitOpen,
   } = useApp();
 
   const [query, setQuery] = useState("");
@@ -71,11 +86,14 @@ export function CommandPalette() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isCommandPaletteOpen, setIsCommandPaletteOpen]);
 
-  const closeAndRun = (fn: () => void) => {
-    sound.playClick(800);
-    setIsCommandPaletteOpen(false);
-    fn();
-  };
+  const closeAndRun = useCallback(
+    (fn: () => void) => {
+      sound.playClick(800);
+      setIsCommandPaletteOpen(false);
+      fn();
+    },
+    [setIsCommandPaletteOpen]
+  );
 
   const allCommands = useMemo<CommandItem[]>(() => {
     const items: CommandItem[] = [
@@ -87,7 +105,7 @@ export function CommandPalette() {
         subtitle: "Audit scorecard, verified proofs & peer vouchers for hiring committees",
         icon: FileText,
         badge: "PDF / Print",
-        action: () => closeAndRun(() => setIsDossierOpen(true))
+        action: () => closeAndRun(() => setIsDossierOpen(true)),
       },
       {
         id: "action-humane-ledger",
@@ -96,7 +114,7 @@ export function CommandPalette() {
         subtitle: "Review Ed25519 peer attestations across 5 humane pillars",
         icon: HeartHandshake,
         badge: "Cryptographic",
-        action: () => closeAndRun(() => setIsHumaneLedgerOpen(true))
+        action: () => closeAndRun(() => setIsHumaneLedgerOpen(true)),
       },
       {
         id: "action-fast-track",
@@ -105,7 +123,7 @@ export function CommandPalette() {
         subtitle: "Calculate candidate hours saved and review zero-bias packet",
         icon: Zap,
         badge: "48h Saved",
-        action: () => closeAndRun(() => setIsRecruiterFastTrackOpen(true))
+        action: () => closeAndRun(() => setIsRecruiterFastTrackOpen(true)),
       },
       {
         id: "action-badge",
@@ -113,7 +131,7 @@ export function CommandPalette() {
         title: "Generate Verified Embed Badges",
         subtitle: "SVG markdown badges for GitHub READMEs and portfolios",
         icon: Award,
-        action: () => closeAndRun(() => setIsBadgeModalOpen(true))
+        action: () => closeAndRun(() => setIsBadgeModalOpen(true)),
       },
       {
         id: "action-attest-new",
@@ -122,7 +140,7 @@ export function CommandPalette() {
         subtitle: "Launch WebCrypto keypair signing wizard with Merkle leaf commit",
         icon: Terminal,
         badge: "WebCrypto",
-        action: () => closeAndRun(() => setIsAttestModalOpen(true))
+        action: () => closeAndRun(() => setIsAttestModalOpen(true)),
       },
       {
         id: "action-share",
@@ -130,7 +148,7 @@ export function CommandPalette() {
         title: "Share Verified Profile / QR Code",
         subtitle: "Direct URL, vector QR code & decentralized ID assertion",
         icon: Share2,
-        action: () => closeAndRun(() => setIsShareModalOpen(true))
+        action: () => closeAndRun(() => setIsShareModalOpen(true)),
       },
       {
         id: "action-team-fit",
@@ -139,7 +157,7 @@ export function CommandPalette() {
         subtitle: "Model squad tech stack coverage and mentorship leverage",
         icon: Users,
         badge: "Simulator",
-        action: () => closeAndRun(() => setIsTeamFitOpen(true))
+        action: () => closeAndRun(() => setIsTeamFitOpen(true)),
       },
 
       // Personas
@@ -150,7 +168,7 @@ export function CommandPalette() {
         subtitle: "Grandmaster Systems Architect (Rust, WASM, AST, Distributed Raft)",
         icon: Terminal,
         badge: "Active",
-        action: () => closeAndRun(() => switchPersona("toibawani"))
+        action: () => closeAndRun(() => switchPersona("toibawani")),
       },
       {
         id: "persona-alex",
@@ -158,7 +176,7 @@ export function CommandPalette() {
         title: "Switch Persona: Alex Rivera",
         subtitle: "Principal Frontend Architect (React Fiber, WebGPU, Micro-Frontends)",
         icon: Sparkles,
-        action: () => closeAndRun(() => switchPersona("alex_rivera"))
+        action: () => closeAndRun(() => switchPersona("alex_rivera")),
       },
       {
         id: "persona-elena",
@@ -166,18 +184,20 @@ export function CommandPalette() {
         title: "Switch Persona: Elena Rostova",
         subtitle: "Staff Cloud & AI Platform Engineer (eBPF, Kubernetes CRDs, AWQ Quantization)",
         icon: Radio,
-        action: () => closeAndRun(() => switchPersona("elena_rostova"))
+        action: () => closeAndRun(() => switchPersona("elena_rostova")),
       },
 
       // Preferences & Toggles
       {
         id: "pref-blind-eval",
         category: "Preferences",
-        title: isBlindEvaluationMode ? "Disable Zero-Bias Mode" : "Enable Zero-Bias / Blind Evaluation Mode",
+        title: isBlindEvaluationMode
+          ? "Disable Zero-Bias Mode"
+          : "Enable Zero-Bias / Blind Evaluation Mode",
         subtitle: "Mask candidate avatar, name, and pedigree to prevent unconscious bias",
         icon: isBlindEvaluationMode ? EyeOff : Eye,
         badge: isBlindEvaluationMode ? "Enabled" : "Off",
-        action: () => closeAndRun(() => toggleBlindEvaluationMode())
+        action: () => closeAndRun(() => toggleBlindEvaluationMode()),
       },
       {
         id: "pref-radar-toggle",
@@ -185,7 +205,8 @@ export function CommandPalette() {
         title: `Switch Competence Radar: ${radarMode === "systems" ? "Humane Impact" : "Technical Architecture"}`,
         subtitle: "Toggle between technical capabilities and mentorship empathy metrics",
         icon: Compass,
-        action: () => closeAndRun(() => setRadarMode(radarMode === "systems" ? "humane" : "systems"))
+        action: () =>
+          closeAndRun(() => setRadarMode(radarMode === "systems" ? "humane" : "systems")),
       },
       {
         id: "pref-sound-toggle",
@@ -193,22 +214,24 @@ export function CommandPalette() {
         title: soundMuted ? "Unmute Tactile Sound Effects" : "Mute Sound Synthesizer",
         subtitle: "Web Audio harmonic feedback for clicks, verifications and chimes",
         icon: soundMuted ? VolumeX : Volume2,
-        action: () => closeAndRun(() => toggleSound())
+        action: () => closeAndRun(() => toggleSound()),
       },
       {
         id: "pref-focus-drone",
         category: "Preferences",
-        title: sound.isFocusDroneActive() ? "Stop 432Hz Focus Drone" : "Start 432Hz Deep Focus Ambient Drone",
+        title: sound.isFocusDroneActive()
+          ? "Stop 432Hz Focus Drone"
+          : "Start 432Hz Deep Focus Ambient Drone",
         subtitle: "Sacred Solfeggio natural bilateral drone for deep code review",
         icon: Radio,
         badge: "432Hz",
-        action: () => closeAndRun(() => sound.playFocusDrone())
-      }
+        action: () => closeAndRun(() => sound.playFocusDrone()),
+      },
     ];
 
     // Add profile skills
     if (profile && profile.skills) {
-      profile.skills.forEach(skill => {
+      profile.skills.forEach((skill) => {
         items.push({
           id: `skill-${skill.id}`,
           category: "Skills",
@@ -216,7 +239,7 @@ export function CommandPalette() {
           subtitle: `${skill.shortCode} • Level: ${skill.level.toUpperCase()} • XP: ${skill.xp} • ${skill.domain.toUpperCase()}`,
           icon: ShieldCheck,
           badge: skill.status === "verified" ? "Verified" : "In Progress",
-          action: () => closeAndRun(() => setSelectedSkill(skill))
+          action: () => closeAndRun(() => setSelectedSkill(skill)),
         });
       });
     }
@@ -238,28 +261,32 @@ export function CommandPalette() {
     setIsTeamFitOpen,
     toggleBlindEvaluationMode,
     toggleSound,
-    setRadarMode
+    setRadarMode,
+    closeAndRun,
   ]);
 
   const filteredCommands = useMemo(() => {
     if (!query.trim()) return allCommands;
     const lower = query.toLowerCase();
-    return allCommands.filter(item => 
-      item.title.toLowerCase().includes(lower) || 
-      (item.subtitle && item.subtitle.toLowerCase().includes(lower)) ||
-      item.category.toLowerCase().includes(lower) ||
-      (item.badge && item.badge.toLowerCase().includes(lower))
+    return allCommands.filter(
+      (item) =>
+        item.title.toLowerCase().includes(lower) ||
+        (item.subtitle && item.subtitle.toLowerCase().includes(lower)) ||
+        item.category.toLowerCase().includes(lower) ||
+        (item.badge && item.badge.toLowerCase().includes(lower))
     );
   }, [allCommands, query]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setSelectedIndex(prev => (prev + 1) % Math.max(1, filteredCommands.length));
+      setSelectedIndex((prev) => (prev + 1) % Math.max(1, filteredCommands.length));
       sound.playClick(1000);
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setSelectedIndex(prev => (prev - 1 + filteredCommands.length) % Math.max(1, filteredCommands.length));
+      setSelectedIndex(
+        (prev) => (prev - 1 + filteredCommands.length) % Math.max(1, filteredCommands.length)
+      );
       sound.playClick(1000);
     } else if (e.key === "Enter") {
       e.preventDefault();
@@ -274,10 +301,7 @@ export function CommandPalette() {
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 sm:pt-28 p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
       {/* Click outside backdrop */}
-      <div 
-        className="fixed inset-0" 
-        onClick={() => setIsCommandPaletteOpen(false)} 
-      />
+      <div className="fixed inset-0" onClick={() => setIsCommandPaletteOpen(false)} />
 
       <div className="relative w-full max-w-2xl bg-[#0F111A]/95 border border-white/10 rounded-2xl shadow-2xl shadow-emerald-950/30 overflow-hidden z-10 flex flex-col max-h-[80vh] backdrop-blur-xl">
         {/* Search Input Bar */}
@@ -318,7 +342,9 @@ export function CommandPalette() {
             <div className="text-center py-12 text-white/40">
               <Search className="w-8 h-8 mx-auto mb-2 opacity-40 text-white" />
               <p className="text-sm">No commands or verified skills matching &quot;{query}&quot;</p>
-              <p className="text-xs text-white/30 mt-1">Try &quot;mentor&quot;, &quot;toiba&quot;, &quot;ast&quot;, or &quot;drone&quot;</p>
+              <p className="text-xs text-white/30 mt-1">
+                Try &quot;mentor&quot;, &quot;toiba&quot;, &quot;ast&quot;, or &quot;drone&quot;
+              </p>
             </div>
           ) : (
             filteredCommands.map((item, index) => {
@@ -330,32 +356,42 @@ export function CommandPalette() {
                   onClick={() => item.action()}
                   onMouseEnter={() => setSelectedIndex(index)}
                   className={`flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer transition-all ${
-                    isSelected 
-                      ? "bg-gradient-to-r from-emerald-500/20 to-teal-500/10 border border-emerald-500/30 text-white translate-x-1" 
+                    isSelected
+                      ? "bg-gradient-to-r from-emerald-500/20 to-teal-500/10 border border-emerald-500/30 text-white translate-x-1"
                       : "text-white/70 hover:bg-white/[0.04] hover:text-white"
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0 pr-2">
-                    <div className={`p-2 rounded-lg shrink-0 ${
-                      isSelected ? "bg-emerald-500/20 text-emerald-300" : "bg-white/5 text-white/60"
-                    }`}>
+                    <div
+                      className={`p-2 rounded-lg shrink-0 ${
+                        isSelected
+                          ? "bg-emerald-500/20 text-emerald-300"
+                          : "bg-white/5 text-white/60"
+                      }`}
+                    >
                       <Icon className="w-4 h-4" />
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium text-sm text-white truncate">{item.title}</span>
+                        <span className="font-medium text-sm text-white truncate">
+                          {item.title}
+                        </span>
                         {item.badge && (
-                          <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono uppercase tracking-wider ${
-                            item.badge === "Active" || item.badge === "Verified"
-                              ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                              : "bg-white/10 text-white/60 border border-white/10"
-                          }`}>
+                          <span
+                            className={`text-[10px] px-1.5 py-0.5 rounded font-mono uppercase tracking-wider ${
+                              item.badge === "Active" || item.badge === "Verified"
+                                ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
+                                : "bg-white/10 text-white/60 border border-white/10"
+                            }`}
+                          >
                             {item.badge}
                           </span>
                         )}
                       </div>
                       {item.subtitle && (
-                        <p className="text-xs text-white/40 truncate font-mono mt-0.5">{item.subtitle}</p>
+                        <p className="text-xs text-white/40 truncate font-mono mt-0.5">
+                          {item.subtitle}
+                        </p>
                       )}
                     </div>
                   </div>

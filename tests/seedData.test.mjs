@@ -25,7 +25,10 @@ describe("MeritOS Data Integrity & Persona Verification", () => {
 
     // Check hex public keys (standard 64-char or 66-char uncompressed SEC1 hex)
     const pkMatches = content.match(/publicKey:\s*"([a-f0-9]{64,66})"/g);
-    assert.ok(pkMatches && pkMatches.length >= 3, "Each persona must have a valid hex Ed25519 public key");
+    assert.ok(
+      pkMatches && pkMatches.length >= 3,
+      "Each persona must have a valid hex Ed25519 public key"
+    );
   });
 
   test("Validates cryptographic receipts and Merkle root presence in skill proofs", () => {
@@ -33,7 +36,10 @@ describe("MeritOS Data Integrity & Persona Verification", () => {
 
     assert.ok(content.includes("merkleRoot"), "Proofs must contain Merkle root assertions");
     assert.ok(content.includes("evidenceFingerprint"), "Proofs must contain evidence fingerprints");
-    assert.ok(content.includes("verificationMethod"), "Proofs must specify W3C verification method");
+    assert.ok(
+      content.includes("verificationMethod"),
+      "Proofs must specify W3C verification method"
+    );
     assert.ok(content.includes("Ed25519VerificationKey2020"), "Must adhere to Ed25519 suite 2020");
   });
 

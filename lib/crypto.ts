@@ -22,19 +22,26 @@ export function hexToBuf(hex: string): Uint8Array {
 }
 
 /**
- * Compute SHA-256 hash using native WebCrypto API
+ * Compute SHA-256 hash using the native WebCrypto API.
+ *
+ * WebCrypto (`crypto.subtle`) is available in every supported runtime:
+ * modern browsers, Node 18+, and Next.js server components/route handlers.
+ * We deliberately throw when it is missing instead of shipping a hand-rolled
+ * SHA-256: a wrong-but-confident hash is worse than a loud failure, and an
+ * unaudited 90-line copy-paste implementation cannot be trusted for receipts.
  */
 export async function computeSha256(data: string): Promise<string> {
   const encoder = new TextEncoder();
   const dataBytes = encoder.encode(data);
-  
-  if (typeof crypto !== "undefined" && crypto.subtle) {
-    const hashBuffer = await crypto.subtle.digest("SHA-256", dataBytes);
-    return bufToHex(hashBuffer);
+
+  if (typeof crypto === "undefined" || !crypto.subtle) {
+    throw new Error(
+      "WebCrypto (crypto.subtle) is required for SHA-256 receipts and is unavailable in this runtime."
+    );
   }
-  
-  // Fallback pure-JS SHA-256 implementation if crypto.subtle is unavailable in odd SSR edge cases
-  return fallbackSha256(data);
+
+  const hashBuffer = await crypto.subtle.digest("SHA-256", dataBytes);
+  return bufToHex(hashBuffer);
 }
 
 /**
@@ -202,7 +209,9 @@ export async function createVerifiableReceipt(params: {
       signatureValue = bufToHex(sigBuffer);
     } catch {
       // Fallback deterministic signature
-      signatureValue = await computeSha256(payloadToSign + params.publicKeyHex + "meritos_sig_seal");
+      signatureValue = await computeSha256(
+        payloadToSign + params.publicKeyHex + "meritos_sig_seal"
+      );
     }
   } else {
     // Deterministic cryptographic signature hash
@@ -210,10 +219,7 @@ export async function createVerifiableReceipt(params: {
   }
 
   const receipt: VerifiableReceipt = {
-    "@context": [
-      "https://www.w3.org/2018/credentials/v1",
-      "https://meritos.id/contexts/v1.jsonld",
-    ],
+    "@context": ["https://www.w3.org/2018/credentials/v1", "https://meritos.id/contexts/v1.jsonld"],
     id: receiptId,
     type: ["VerifiableCredential", "MeritOSCompetenceAttestation"],
     issuer: {
@@ -267,7 +273,7 @@ export async function verifyVerifiableReceipt(
     const { credentialSubject, proof, issuer } = receipt;
 
     // 1. Verify Merkle Root consistency if evidence is supplied
-    let merkleVerified = true;
+    const merkleVerified = true;
     if (evidence) {
       const { merkleRoot: calculatedRoot } = await computeEvidenceMerkleRoot(evidence);
       if (calculatedRoot !== credentialSubject.merkleRoot) {
@@ -288,7 +294,9 @@ export async function verifyVerifiableReceipt(
 
     // Check if signature matches deterministic or WebCrypto format
     if (proof.signatureValue) {
-      const expectedSig = await computeSha256(payloadToVerify + issuer.publicKey + "meritos_sig_seal");
+      const expectedSig = await computeSha256(
+        payloadToVerify + issuer.publicKey + "meritos_sig_seal"
+      );
       if (proof.signatureValue === expectedSig) {
         signatureVerified = true;
       } else if (proof.signatureValue.length >= 64) {
@@ -320,92 +328,4 @@ export async function verifyVerifiableReceipt(
       latencyMs: Math.round(performance.now() - startTime),
     };
   }
-}
-
-/**
- * Fallback SHA-256 implementation
- */
-function fallbackSha256(ascii: string): string {
-  function rightRotate(value: number, amount: number) {
-    return (value >>> amount) | (value << (32 - amount));
-  }
-
-  const mathPow = Math.pow;
-  const maxWord = mathPow(2, 32);
-  let i: number, j: number;
-  let result = "";
-
-  const words: number[] = [];
-  const asciiBitLength = ascii.length * 8;
-
-  let hash = ((fallbackSha256 as any).h = (fallbackSha256 as any).h || []);
-  const k = ((fallbackSha256 as any).k = (fallbackSha256 as any).k || []);
-  let primeCounter = k.length;
-
-  const isComposite: Record<number, number> = {};
-  for (let candidate = 2; primeCounter < 64; candidate++) {
-    if (!isComposite[candidate]) {
-      for (i = 0; i < 300; i += candidate) {
-        isComposite[i] = candidate;
-      }
-      hash[primeCounter] = (mathPow(candidate, 0.5) * maxWord) | 0;
-      k[primeCounter++] = (mathPow(candidate, 1 / 3) * maxWord) | 0;
-    }
-  }
-
-  ascii += "\x80";
-  while ((ascii.length % 64) - 56) ascii += "\x00";
-  for (i = 0; i < ascii.length; i++) {
-    j = ascii.charCodeAt(i);
-    if (j >> 8) return "";
-    words[i >> 2] |= j << (((3 - i) % 4) * 8);
-  }
-  words[words.length] = (asciiBitLength / maxWord) | 0;
-  words[words.length] = asciiBitLength;
-
-  for (j = 0; j < words.length; ) {
-    const w = words.slice(j, (j += 16));
-    const oldHash = hash;
-    hash = hash.slice(0, 8);
-
-    for (i = 0; i < 64; i++) {
-      const i2 = i + j;
-      const w15 = w[i - 15],
-        w2 = w[i - 2];
-
-      const a = hash[0],
-        e = hash[4];
-      const temp1 =
-        hash[7] +
-        (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) +
-        ((e & hash[5]) ^ (~e & hash[6])) +
-        k[i] +
-        (w[i] =
-          i < 16
-            ? w[i]
-            : (w[i - 16] +
-                (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3)) +
-                w[i - 7] +
-                (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))) |
-              0);
-      const temp2 =
-        (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) +
-        ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
-
-      hash = [(temp1 + temp2) | 0].concat(hash);
-      hash[4] = (hash[4] + temp1) | 0;
-    }
-
-    for (i = 0; i < 8; i++) {
-      hash[i] = (hash[i] + oldHash[i]) | 0;
-    }
-  }
-
-  for (i = 0; i < 8; i++) {
-    for (let i2 = 3; i2 >= 0; i2--) {
-      const b = (hash[i] >> (i2 * 8)) & 255;
-      result += (b < 16 ? "0" : "") + b.toString(16);
-    }
-  }
-  return result;
 }

@@ -2,8 +2,10 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { UserProfile, SkillNode, DomainType, ActivityEntry, PeerAttestation } from "./types";
-import { MOCK_USER_PROFILE, INITIAL_SKILLS, TOIBA_PROFILE, ALEX_PROFILE, ELENA_PROFILE } from "./data/seedData";
+import { TOIBA_PROFILE, ALEX_PROFILE, ELENA_PROFILE } from "./data/seedData";
 import { sound } from "./sound";
+
+const AVAILABLE_PERSONAS: UserProfile[] = [TOIBA_PROFILE, ALEX_PROFILE, ELENA_PROFILE];
 
 interface ChaosRunState {
   isRunning: boolean;
@@ -90,7 +92,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     result: null,
   });
 
-  const availablePersonas: UserProfile[] = [TOIBA_PROFILE, ALEX_PROFILE, ELENA_PROFILE];
+  const availablePersonas: UserProfile[] = AVAILABLE_PERSONAS;
 
   // Restore persisted state
   useEffect(() => {
@@ -103,19 +105,23 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       }
       const savedPersona = localStorage.getItem("meritos_active_persona");
       if (savedPersona) {
-        const found = [TOIBA_PROFILE, ALEX_PROFILE, ELENA_PROFILE].find(p => p.username === savedPersona);
+        const found = [TOIBA_PROFILE, ALEX_PROFILE, ELENA_PROFILE].find(
+          (p) => p.username === savedPersona
+        );
         if (found) setProfile(found);
       }
     } catch {}
   }, []);
 
   const switchPersona = useCallback((username: string) => {
-    const found = availablePersonas.find(p => p.username === username);
+    const found = availablePersonas.find((p) => p.username === username);
     if (!found) return;
     sound.playClick(800);
     setProfile(found);
     setSelectedSkillState(null);
-    try { localStorage.setItem("meritos_active_persona", username); } catch {}
+    try {
+      localStorage.setItem("meritos_active_persona", username);
+    } catch {}
   }, []);
 
   const setSelectedSkill = (skill: SkillNode | null) => {
@@ -132,7 +138,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const next = !soundMuted;
     setSoundMutedState(next);
     sound.setMuted(next);
-    try { localStorage.setItem("meritos_sound_muted", String(next)); } catch {}
+    try {
+      localStorage.setItem("meritos_sound_muted", String(next));
+    } catch {}
     if (!next) sound.playClick(1000);
   };
 
@@ -140,7 +148,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     sound.playVerifiedChime();
     setProfile((prev) => {
       const existingIdx = prev.skills.findIndex((s) => s.id === newSkill.id);
-      let updatedSkills = [...prev.skills];
+      const updatedSkills = [...prev.skills];
       if (existingIdx >= 0) {
         updatedSkills[existingIdx] = newSkill;
       } else {
@@ -166,14 +174,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         skillName: newSkill.label,
         domain: newSkill.domain,
         status: "verified",
-        receiptHash: newSkill.proofReceipt?.proof.signatureValue?.substring(0, 16) || "0x9f8a...23ef",
+        receiptHash:
+          newSkill.proofReceipt?.proof.signatureValue?.substring(0, 16) || "0x9f8a...23ef",
         blockHeight: 894500 + Math.floor(Math.random() * 100),
       };
 
       return {
         ...prev,
         skills: updatedSkills,
-        totalVerifiedSkills: updatedSkills.filter(s => s.status === "verified").length,
+        totalVerifiedSkills: updatedSkills.filter((s) => s.status === "verified").length,
         verificationScore: Math.min(99.9, +(prev.verificationScore + 0.2).toFixed(1)),
         xp: newXp,
         level: newLevel,
@@ -185,8 +194,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const claimMastery = (skillId: string) => {
     sound.playVerifiedChime();
-    setProfile(prev => {
-      const updatedSkills = prev.skills.map(s => {
+    setProfile((prev) => {
+      const updatedSkills = prev.skills.map((s) => {
         if (s.id === skillId) {
           return { ...s, masteryCount: (s.masteryCount || 0) + 1, freshnessPercentage: 100 };
         }
@@ -197,8 +206,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         timestamp: new Date().toISOString(),
         type: "mastery_claimed",
         skillId,
-        skillName: prev.skills.find(s => s.id === skillId)?.label || skillId,
-        domain: prev.skills.find(s => s.id === skillId)?.domain || "systems",
+        skillName: prev.skills.find((s) => s.id === skillId)?.label || skillId,
+        domain: prev.skills.find((s) => s.id === skillId)?.domain || "systems",
         status: "verified",
         receiptHash: `0x${Math.random().toString(16).substring(2, 18)}`,
         blockHeight: 894500 + Math.floor(Math.random() * 1000),
@@ -211,57 +220,67 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  const startChaosRun = useCallback((skillId: string, scenarioId: string, durationMs = 4000) => {
-    sound.playChaosRumble();
-    const skill = profile.skills.find(s => s.id === skillId);
-    const scenario = skill?.evidence.chaosScenarios?.find(c => c.id === scenarioId);
-    if (!scenario) return;
+  const startChaosRun = useCallback(
+    (skillId: string, scenarioId: string, durationMs = 4000) => {
+      sound.playChaosRumble();
+      const skill = profile.skills.find((s) => s.id === skillId);
+      const scenario = skill?.evidence.chaosScenarios?.find((c) => c.id === scenarioId);
+      if (!scenario) return;
 
-    setChaosRun({ isRunning: true, skillId, scenarioId, progress: 0, logBuffer: [], result: null });
+      setChaosRun({
+        isRunning: true,
+        skillId,
+        scenarioId,
+        progress: 0,
+        logBuffer: [],
+        result: null,
+      });
 
-    const logs = scenario.terminalLogs;
-    const stepInterval = durationMs / Math.max(logs.length, 1);
+      const logs = scenario.terminalLogs;
+      const stepInterval = durationMs / Math.max(logs.length, 1);
 
-    logs.forEach((log, idx) => {
-      setTimeout(() => {
-        sound.playTerminalTick();
-        setChaosRun(prev => ({
-          ...prev,
-          progress: Math.round(((idx + 1) / logs.length) * 100),
-          logBuffer: [...prev.logBuffer, log.text],
-        }));
-        if (idx === logs.length - 1) {
-          setTimeout(() => {
-            setChaosRun(prev => ({ ...prev, isRunning: false, result: "pass" }));
-            sound.playVerifiedChime();
-            setProfile(prev => {
-              const chaosActivity: ActivityEntry = {
-                id: `act-chaos-${Date.now()}`,
-                timestamp: new Date().toISOString(),
-                type: "chaos_simulated",
-                skillId,
-                skillName: skill?.label || skillId,
-                domain: skill?.domain || "systems",
-                status: "verified",
-                receiptHash: `0x${Math.random().toString(16).substring(2, 18)}`,
-                blockHeight: 894500 + Math.floor(Math.random() * 1000),
-              };
-              return { ...prev, activityLedger: [chaosActivity, ...prev.activityLedger] };
-            });
-          }, 600);
-        }
-      }, stepInterval * idx);
-    });
-  }, [profile.skills]);
+      logs.forEach((log, idx) => {
+        setTimeout(() => {
+          sound.playTerminalTick();
+          setChaosRun((prev) => ({
+            ...prev,
+            progress: Math.round(((idx + 1) / logs.length) * 100),
+            logBuffer: [...prev.logBuffer, log.text],
+          }));
+          if (idx === logs.length - 1) {
+            setTimeout(() => {
+              setChaosRun((prev) => ({ ...prev, isRunning: false, result: "pass" }));
+              sound.playVerifiedChime();
+              setProfile((prev) => {
+                const chaosActivity: ActivityEntry = {
+                  id: `act-chaos-${Date.now()}`,
+                  timestamp: new Date().toISOString(),
+                  type: "chaos_simulated",
+                  skillId,
+                  skillName: skill?.label || skillId,
+                  domain: skill?.domain || "systems",
+                  status: "verified",
+                  receiptHash: `0x${Math.random().toString(16).substring(2, 18)}`,
+                  blockHeight: 894500 + Math.floor(Math.random() * 1000),
+                };
+                return { ...prev, activityLedger: [chaosActivity, ...prev.activityLedger] };
+              });
+            }, 600);
+          }
+        }, stepInterval * idx);
+      });
+    },
+    [profile.skills]
+  );
 
   const toggleBlindEvaluationMode = () => {
     sound.playWarmNote(440);
-    setIsBlindEvaluationModeState(prev => !prev);
+    setIsBlindEvaluationModeState((prev) => !prev);
   };
 
   const toggleHumaneTheme = () => {
     sound.playHumaneChime();
-    setIsHumaneThemeState(prev => !prev);
+    setIsHumaneThemeState((prev) => !prev);
   };
 
   const setRadarMode = (mode: "systems" | "humane") => {
@@ -272,7 +291,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const addPeerVoucher = (voucher: PeerAttestation) => {
     sound.playHumaneChime();
-    setProfile(prev => {
+    setProfile((prev) => {
       const newActivity: ActivityEntry = {
         id: `act-peer-${Date.now()}`,
         timestamp: new Date().toISOString(),
@@ -296,7 +315,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
 
   const resetToDefaultData = () => {
-    try { localStorage.removeItem("meritos_profile_v1"); } catch {}
+    try {
+      localStorage.removeItem("meritos_profile_v1");
+    } catch {}
     setProfile(TOIBA_PROFILE);
     sound.playClick(600);
   };
@@ -329,7 +350,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setIsRecruiterFastTrackOpen,
         isCommandPaletteOpen,
         setIsCommandPaletteOpen,
-        toggleCommandPalette: () => setIsCommandPaletteOpen(prev => !prev),
+        toggleCommandPalette: () => setIsCommandPaletteOpen((prev) => !prev),
         isShareModalOpen,
         setIsShareModalOpen,
         isTeamFitOpen,

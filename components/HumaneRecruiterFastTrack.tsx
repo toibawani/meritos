@@ -1,33 +1,30 @@
 "use client";
 
 import React, { useState } from "react";
-import { 
-  X, 
-  Clock, 
-  ShieldCheck, 
-  EyeOff, 
-  Eye, 
-  Sparkles, 
-  FileText, 
-  Check, 
-  Copy, 
-  CheckCircle2, 
-  ArrowRight, 
-  HeartHandshake, 
-  Zap, 
-  DollarSign, 
-  Scale
+import {
+  X,
+  Clock,
+  ShieldCheck,
+  EyeOff,
+  Eye,
+  Check,
+  Copy,
+  CheckCircle2,
+  HeartHandshake,
+  Zap,
+  DollarSign,
+  Scale,
 } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { sound } from "@/lib/sound";
 
 export function HumaneRecruiterFastTrack() {
-  const { 
-    profile, 
-    isRecruiterFastTrackOpen, 
+  const {
+    profile,
+    isRecruiterFastTrackOpen,
     setIsRecruiterFastTrackOpen,
     isBlindEvaluationMode,
-    toggleBlindEvaluationMode
+    toggleBlindEvaluationMode,
   } = useApp();
 
   const [takeHomeCount, setTakeHomeCount] = useState(5);
@@ -59,7 +56,7 @@ export function HumaneRecruiterFastTrack() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
-      <div 
+      <div
         className="w-full max-w-3xl max-h-[90vh] bg-[#0D0F18] border border-white/[0.10] rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-scale-up"
         style={{ boxShadow: "0 25px 60px -15px rgba(0, 0, 0, 0.95)" }}
       >
@@ -74,10 +71,12 @@ export function HumaneRecruiterFastTrack() {
             </div>
 
             <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight font-sans">
-              "Skip the Take-Home" Humane Evaluation Hub
+              &quot;Skip the Take-Home&quot; Humane Evaluation Hub
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400 max-w-xl leading-relaxed">
-              Unpaid take-home tests burn out candidates and bias against engineers with families. MeritOS replaces multi-day homework with authentic AST diffs, test traces, and peer vouchers.
+              Unpaid take-home tests burn out candidates and bias against engineers with families.
+              MeritOS replaces multi-day homework with authentic AST diffs, test traces, and peer
+              vouchers.
             </p>
           </div>
 
@@ -96,24 +95,27 @@ export function HumaneRecruiterFastTrack() {
 
         {/* Content Body */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          
           {/* SECTION 1: Blind Evaluation Mode Toggle */}
           <div className="p-4 rounded-xl bg-[#131624] border border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="flex items-center space-x-2">
                 <Scale className="w-4 h-4 text-emerald-400" />
-                <h4 className="text-sm font-bold text-white">Blind Evaluation Mode (Zero Unconscious Bias)</h4>
+                <h4 className="text-sm font-bold text-white">
+                  Blind Evaluation Mode (Zero Unconscious Bias)
+                </h4>
               </div>
               <p className="text-xs text-zinc-400 leading-relaxed max-w-lg">
-                Mask candidate photo, name, and demographic identifiers across the passport. Focus hiring committees solely on verified technical diffs, code review empathy, and test pass rates.
+                Mask candidate photo, name, and demographic identifiers across the passport. Focus
+                hiring committees solely on verified technical diffs, code review empathy, and test
+                pass rates.
               </p>
             </div>
 
             <button
               onClick={toggleBlindEvaluationMode}
               className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-semibold shrink-0 transition-all border ${
-                isBlindEvaluationMode 
-                  ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-lg shadow-emerald-950/50" 
+                isBlindEvaluationMode
+                  ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-lg shadow-emerald-950/50"
                   : "bg-white/[0.06] text-zinc-300 border-white/[0.12] hover:bg-white/[0.10]"
               }`}
             >
@@ -139,7 +141,8 @@ export function HumaneRecruiterFastTrack() {
                   Developer & Recruiter Time-Saved Calculator
                 </h4>
                 <p className="text-xs text-zinc-400 mt-0.5">
-                  See how much time is reclaimed by auditing verified proofs instead of issuing take-homes:
+                  See how much time is reclaimed by auditing verified proofs instead of issuing
+                  take-homes:
                 </p>
               </div>
 
@@ -151,7 +154,7 @@ export function HumaneRecruiterFastTrack() {
                   min={1}
                   max={12}
                   value={takeHomeCount}
-                  onChange={e => {
+                  onChange={(e) => {
                     sound.playClick(1100);
                     setTakeHomeCount(Number(e.target.value));
                   }}
@@ -226,7 +229,11 @@ export function HumaneRecruiterFastTrack() {
                 onClick={handleCopyCharter}
                 className="flex items-center space-x-1 text-xs font-mono text-zinc-400 hover:text-white"
               >
-                {copiedCharter ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                {copiedCharter ? (
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                ) : (
+                  <Copy className="w-3.5 h-3.5" />
+                )}
                 <span>{copiedCharter ? "Copied" : "Copy Pledge"}</span>
               </button>
             </div>
@@ -238,7 +245,8 @@ export function HumaneRecruiterFastTrack() {
                   <span>1. No Unpaid Homework</span>
                 </div>
                 <p className="text-[11px] text-zinc-400 leading-snug">
-                  Auditing verified AST visitor diffs and 100k fuzz test traces provides 10x higher signal than toy homework.
+                  Auditing verified AST visitor diffs and 100k fuzz test traces provides 10x higher
+                  signal than toy homework.
                 </p>
               </div>
 
@@ -248,7 +256,8 @@ export function HumaneRecruiterFastTrack() {
                   <span>2. 48h Feedback SLA</span>
                 </div>
                 <p className="text-[11px] text-zinc-400 leading-snug">
-                  Candidates receive respectful, detailed feedback or decision within 48 hours. Zero ghosting.
+                  Candidates receive respectful, detailed feedback or decision within 48 hours. Zero
+                  ghosting.
                 </p>
               </div>
 
@@ -258,7 +267,8 @@ export function HumaneRecruiterFastTrack() {
                   <span>3. Human-to-Human</span>
                 </div>
                 <p className="text-[11px] text-zinc-400 leading-snug">
-                  No automated one-way video filters. Every conversation is a reciprocal peer architecture discussion.
+                  No automated one-way video filters. Every conversation is a reciprocal peer
+                  architecture discussion.
                 </p>
               </div>
             </div>
@@ -277,7 +287,11 @@ export function HumaneRecruiterFastTrack() {
               onClick={handleCopySummary}
               className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg tactile-btn text-xs font-medium text-zinc-300 hover:text-white"
             >
-              {copiedSummary ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              {copiedSummary ? (
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
+              ) : (
+                <Copy className="w-3.5 h-3.5" />
+              )}
               <span>{copiedSummary ? "Brief Copied" : "Copy Brief for Committee"}</span>
             </button>
 

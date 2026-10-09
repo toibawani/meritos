@@ -1,0 +1,10 @@
+node_modules
+.next
+out
+build
+coverage
+package-lock.json
+public
+docs/assets
+*.min.js
+bin/merit-cli.mjs

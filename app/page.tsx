@@ -10,21 +10,17 @@ import { HumaneRecruiterFastTrack } from "@/components/HumaneRecruiterFastTrack"
 import { CareerTimeline } from "@/components/CareerTimeline";
 import { LivePulse } from "@/components/LivePulse";
 import { ActivityHeatmap } from "@/components/ActivityHeatmap";
-import { 
-  ShieldCheck, ArrowRight, Plus, Share2, Sparkles, Terminal, 
-  FileText, CheckCircle2, HeartHandshake, Zap, Compass, Clock 
-} from "lucide-react";
+import { ShieldCheck, Plus, Share2, HeartHandshake, Zap } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { sound } from "@/lib/sound";
 
 export default function HomePage() {
-  const { 
-    profile, 
-    setIsAttestModalOpen, 
-    setIsBadgeModalOpen, 
-    setIsDossierOpen,
+  const {
+    profile,
+    setIsAttestModalOpen,
+    setIsBadgeModalOpen,
     setIsHumaneLedgerOpen,
-    setIsRecruiterFastTrackOpen
+    setIsRecruiterFastTrackOpen,
   } = useApp();
 
   return (
@@ -76,7 +72,9 @@ export default function HomePage() {
                 Engineering excellence measured with human heart.
               </h2>
               <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                Great engineers don't just optimize latency; they guide junior teammates, review code with empathy, lead blameless outage post-mortems, and protect sustainable work rhythms. Verified by cryptographic peer attestations.
+                Great engineers don&apos;t just optimize latency; they guide junior teammates,
+                review code with empathy, lead blameless outage post-mortems, and protect
+                sustainable work rhythms. Verified by cryptographic peer attestations.
               </p>
             </div>
 
@@ -115,10 +113,12 @@ export default function HomePage() {
                 <span>Zero-Noise Competence Standard</span>
               </div>
               <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white font-sans">
-                Never prove "I know this" twice.
+                Never prove &quot;I know this&quot; twice.
               </h2>
               <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                Every skill node in MeritOS is anchored to authentic pull requests, deterministic benchmark runs, and W3C cryptographic signatures. Recruiters can audit complete AST diffs and replay test suites in &lt;5 seconds.
+                Every skill node in MeritOS is anchored to authentic pull requests, deterministic
+                benchmark runs, and W3C cryptographic signatures. Recruiters can audit complete AST
+                diffs and replay test suites in &lt;5 seconds.
               </p>
             </div>
 
@@ -159,17 +159,15 @@ export default function HomePage() {
           <div className="flex items-center space-x-2">
             <span className="font-bold text-white">MeritOS</span>
             <span>•</span>
-            <span>W3C Verifiable Credentials • Ed25519 Cryptographic Layer • Humane Engineering Standard</span>
+            <span>
+              W3C Verifiable Credentials • Ed25519 Cryptographic Layer • Humane Engineering Standard
+            </span>
           </div>
 
           <div className="flex items-center space-x-4">
-            <span className="text-rose-400 font-semibold">
-              ♥ 100% Blameless & Peer Verified
-            </span>
+            <span className="text-rose-400 font-semibold">♥ 100% Blameless & Peer Verified</span>
             <span>•</span>
-            <span className="text-emerald-400 font-semibold">
-              ● Consensus Valid
-            </span>
+            <span className="text-emerald-400 font-semibold">● Consensus Valid</span>
           </div>
         </div>
       </footer>

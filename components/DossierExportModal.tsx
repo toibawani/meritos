@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, Download, Printer, ShieldCheck, Check, Copy, ExternalLink, Award } from "lucide-react";
+import { X, Download, Printer, ShieldCheck, Check, Copy } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { sound } from "@/lib/sound";
 
@@ -13,7 +13,8 @@ export function DossierExportModal() {
 
   const handleDownloadJson = () => {
     sound.playClick(1000);
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(profile, null, 2));
+    const dataStr =
+      "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(profile, null, 2));
     const downloadAnchor = document.createElement("a");
     downloadAnchor.setAttribute("href", dataStr);
     downloadAnchor.setAttribute("download", `meritos-dossier-${profile.username}.json`);
@@ -41,9 +42,7 @@ export function DossierExportModal() {
         <div className="px-6 py-4 bg-[#12131A] border-b border-white/[0.06] flex items-center justify-between print:hidden">
           <div className="flex items-center space-x-2">
             <ShieldCheck className="w-5 h-5 text-emerald-400" />
-            <h3 className="text-sm font-bold text-white font-sans">
-              Verified Competence Dossier
-            </h3>
+            <h3 className="text-sm font-bold text-white font-sans">Verified Competence Dossier</h3>
           </div>
 
           <div className="flex items-center space-x-2">
@@ -159,7 +158,9 @@ export function DossierExportModal() {
                         {skill.level}
                       </td>
                       <td className="p-3 text-emerald-400 print:text-emerald-700">
-                        {skill.evidence.metrics.throughput || skill.evidence.metrics.latency || "100% Passed"}
+                        {skill.evidence.metrics.throughput ||
+                          skill.evidence.metrics.latency ||
+                          "100% Passed"}
                       </td>
                       <td className="p-3 text-[10px] text-zinc-500 font-mono">
                         {skill.proofReceipt?.credentialSubject.merkleRoot.substring(0, 16)}...
@@ -184,16 +185,45 @@ export function DossierExportModal() {
 
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
               {[
-                { label: "Review Empathy", score: `${profile.humaneScores?.reviewEmpathy || 99}%`, desc: "Compassionate PRs" },
-                { label: "Mentorship Growth", score: `${profile.humaneScores?.mentorshipGrowth || 98}%`, desc: "Junior Leveling" },
-                { label: "Blameless Culture", score: `${profile.humaneScores?.blamelessCulture || 100}%`, desc: "Systemic Retros" },
-                { label: "Async RFC Clarity", score: `${profile.humaneScores?.asyncRfcClarity || 97}%`, desc: "Timezone Friendly" },
-                { label: "Sustainable Cadence", score: `${profile.humaneScores?.sustainableCadence || 96}%`, desc: "Zero Burnout" },
+                {
+                  label: "Review Empathy",
+                  score: `${profile.humaneScores?.reviewEmpathy || 99}%`,
+                  desc: "Compassionate PRs",
+                },
+                {
+                  label: "Mentorship Growth",
+                  score: `${profile.humaneScores?.mentorshipGrowth || 98}%`,
+                  desc: "Junior Leveling",
+                },
+                {
+                  label: "Blameless Culture",
+                  score: `${profile.humaneScores?.blamelessCulture || 100}%`,
+                  desc: "Systemic Retros",
+                },
+                {
+                  label: "Async RFC Clarity",
+                  score: `${profile.humaneScores?.asyncRfcClarity || 97}%`,
+                  desc: "Timezone Friendly",
+                },
+                {
+                  label: "Sustainable Cadence",
+                  score: `${profile.humaneScores?.sustainableCadence || 96}%`,
+                  desc: "Zero Burnout",
+                },
               ].map((item) => (
-                <div key={item.label} className="p-3 rounded-xl bg-[#12131A] border border-white/[0.06] text-center print:bg-gray-50 print:border-gray-300">
-                  <span className="text-[10px] uppercase font-mono text-zinc-400 block print:text-gray-600">{item.label}</span>
-                  <span className="text-lg font-bold font-mono text-rose-400 block mt-0.5 print:text-rose-600">{item.score}</span>
-                  <span className="text-[9px] text-zinc-500 font-mono block print:text-gray-500">{item.desc}</span>
+                <div
+                  key={item.label}
+                  className="p-3 rounded-xl bg-[#12131A] border border-white/[0.06] text-center print:bg-gray-50 print:border-gray-300"
+                >
+                  <span className="text-[10px] uppercase font-mono text-zinc-400 block print:text-gray-600">
+                    {item.label}
+                  </span>
+                  <span className="text-lg font-bold font-mono text-rose-400 block mt-0.5 print:text-rose-600">
+                    {item.score}
+                  </span>
+                  <span className="text-[9px] text-zinc-500 font-mono block print:text-gray-500">
+                    {item.desc}
+                  </span>
                 </div>
               ))}
             </div>
@@ -245,7 +275,9 @@ export function DossierExportModal() {
                 Hiring Committee Recommendation: Skip Take-Home Assignment
               </span>
               <p className="text-[11px] leading-relaxed text-emerald-300/90 print:text-emerald-800">
-                This candidate's cryptographic code diffs, terminal execution traces, and peer mentorship vouchers exceed the assessment depth of an unpaid 10-hour toy take-home project. Immediate progression to peer architectural conversation recommended.
+                This candidate&apos;s cryptographic code diffs, terminal execution traces, and peer
+                mentorship vouchers exceed the assessment depth of an unpaid 10-hour toy take-home
+                project. Immediate progression to peer architectural conversation recommended.
               </p>
             </div>
           </div>
