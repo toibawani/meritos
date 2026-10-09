@@ -19,7 +19,9 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   webServer: {
-    command: `npx next start -p ${PORT}`,
+    // Boot the same self-contained server the Docker image ships, so the smoke
+    // tests validate exactly what runs in production. Requires `npm run build`.
+    command: `node scripts/start-standalone.mjs`,
     url: BASE_URL,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
