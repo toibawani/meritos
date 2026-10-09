@@ -12,7 +12,8 @@ import { TeamFitSimulator } from "@/components/TeamFitSimulator";
 
 export const metadata: Metadata = {
   title: "MeritOS | The Proof-of-Competence Platform",
-  description: "Lifelong, portable identity for verified developer competence. Real work cryptographically verified with Ed25519 signatures and immutable Merkle attestation receipts.",
+  description:
+    "Lifelong, portable identity for verified developer competence. Real work cryptographically verified with Ed25519 signatures and immutable Merkle attestation receipts.",
   keywords: [
     "developer portfolio",
     "proof of competence",
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
     "ed25519 signatures",
     "humane engineering",
     "developer identity",
-    "peer mentorship ledger"
+    "peer mentorship ledger",
   ],
   authors: [{ name: "MeritOS Team" }],
   creator: "MeritOS Core",
@@ -32,26 +33,28 @@ export const metadata: Metadata = {
     url: "https://meritos.dev",
     siteName: "MeritOS",
     title: "MeritOS | The Proof-of-Competence Platform",
-    description: "Cryptographically verified developer competence, humane engineering attestations, and immutable Merkle receipts.",
+    description:
+      "Cryptographically verified developer competence, humane engineering attestations, and immutable Merkle receipts.",
     images: [
       {
         url: "/og-preview.png",
         width: 1200,
         height: 630,
-        alt: "MeritOS - The Proof-of-Competence Platform"
-      }
-    ]
+        alt: "MeritOS - The Proof-of-Competence Platform",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "MeritOS | The Proof-of-Competence Platform",
-    description: "Replace resume spam with cryptographically verified code proofs and humane engineering reviews.",
-    creator: "@meritos_dev"
+    description:
+      "Replace resume spam with cryptographically verified code proofs and humane engineering reviews.",
+    creator: "@meritos_dev",
   },
   robots: {
     index: true,
-    follow: true
-  }
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -68,16 +71,17 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "SoftwareApplication",
-              "name": "MeritOS",
-              "applicationCategory": "DeveloperApplication",
-              "operatingSystem": "Web",
-              "description": "Cryptographically verified proof-of-competence platform for modern software engineers.",
-              "offers": {
+              name: "MeritOS",
+              applicationCategory: "DeveloperApplication",
+              operatingSystem: "Web",
+              description:
+                "Cryptographically verified proof-of-competence platform for modern software engineers.",
+              offers: {
                 "@type": "Offer",
-                "price": "0",
-                "priceCurrency": "USD"
-              }
-            })
+                price: "0",
+                priceCurrency: "USD",
+              },
+            }),
           }}
         />
       </head>
@@ -85,9 +89,7 @@ export default function RootLayout({
         <AppProvider>
           <div className="flex flex-col min-h-screen">
             <Navbar />
-            <main className="flex-1">
-              {children}
-            </main>
+            <main className="flex-1">{children}</main>
             {/* Global Modals & Drawers */}
             <CommandPalette />
             <ShareModal />

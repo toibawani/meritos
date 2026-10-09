@@ -1,6 +1,7 @@
 <div align="center">
 
 # 🛡️ MeritOS
+
 ### The Proof-of-Competence Platform
 
 **Lifelong, portable cryptographic identity for verified developer competence.**
@@ -51,6 +52,7 @@ flowchart LR
 ```
 
 ### 1. 🧩 Interactive Competence DAG (SVG/Canvas)
+
 - Draggable, zoomable fluid node graph with domain lane clustering:
   - **Systems & Low-Level** (AST Compilers, Zero-Copy WASM Allocators, Raft Consensus, eBPF Filters)
   - **Frontend Architecture** (Fiber Concurrent Reconcilers, WebGPU Shaders, High-FPS DAGs)
@@ -59,16 +61,19 @@ flowchart LR
 - Animated Bezier curves with green energy pulse particles streaming across verified prerequisite branches.
 
 ### 2. 🔬 Recruiter Instant-Proof Sandbox (Slide-over Drawer)
+
 - **Commit Diff Viewer:** Full syntax-highlighted unified git diffs.
 - **Interactive Terminal Trace Replay:** Real-time terminal player with animated step-through, speed multipliers (1x, 2x, 5x, Instant), and audio ticks.
 - **Cryptographic Seal Inspector:** Merkle root calculator and live WebCrypto signature validation.
 
 ### 3. 🔐 Cryptographic Attestation Core (`/lib/crypto.ts`)
+
 - Implements the **W3C Verifiable Credentials** standard.
 - Deterministic Merkle tree root computation aggregating diff hashes, repository metadata, terminal logs, and author DIDs.
 - Client-side in-browser validation executed in `<2ms` with zero-knowledge tamper detection.
 
 ### 4. 📊 5-Axis Competence Matrix & Activity Ledger
+
 - Multi-axial radar capability balance:
   - **Code Quality:** Invariants, coverage, and zero lint drift.
   - **Systems Architecture:** Modular compilation, CQRS event sourcing.
@@ -78,22 +83,25 @@ flowchart LR
 - Real-time immutable block activity ledger with freshness decay tracking.
 
 ### 5. 🏷️ Dynamic GitHub Readme Badges (`/api/badge/[username]`)
+
 - Server-rendered, high-resolution SVG badges for profile `README.md` files:
   - `Linear Dark`
   - `Dossier Shield`
   - `Minimalist Inline`
 
 ### 6. 🤝 Cryptographic Peer Vouchers & Mentorship Ledger
+
 - **Peer-Signed Attestations (`did:merit:peer:...`):** Teammates, mentees, and engineering leads sign cryptographic vouchers attesting to human impact across 5 humane pillars:
   - **Mentorship & Growth** (junior leveling, patient pairing)
   - **Empathetic Code Reviews** (constructive PR guidance with zero ego)
   - **Blameless Incident Culture** (calm outage leadership, systemic fixes)
   - **Async RFC Clarity** (respecting time zones with high-context written architecture)
   - **Sustainable Cadence** (anti-burnout boundaries, protected downtime)
-- **Dual-Mode Competence Radar:** Instant toggle between *Systems Architecture* and *Humane Craft & Empathy*.
+- **Dual-Mode Competence Radar:** Instant toggle between _Systems Architecture_ and _Humane Craft & Empathy_.
 - **Humane Code Review Inspector:** Real pull request discussion threads exhibiting psychological safety and blameless retrospectives.
 
 ### 7. 🕊️ "Skip the Take-Home" Recruiter Fast-Track & Zero-Bias Mode
+
 - **Time-Saved Calculator:** Computes candidate life spared (~48 hours of unpaid homework per hiring cycle) and senior engineering grading hours reclaimed.
 - **Blind Evaluation Mode:** 1-click anonymization masking candidate names, photos, and demographic markers to eliminate pedigree bias and focus 100% on verifiable craft.
 - **The Humane Hiring Charter:** A 3-point covenant pledged by ethical engineering orgs (no unpaid multi-day homework, 48h feedback guarantee, peer-to-peer conversations).
@@ -120,25 +128,30 @@ flowchart LR
 ## 🚀 Quickstart & Local Development
 
 ### 1. Clone the repository
+
 ```bash
 git clone https://github.com/toibawani/meritos.git
 cd meritos
 ```
 
 ### 2. Install dependencies
+
 ```bash
 npm install
 ```
 
 ### 3. Run the development server
+
 ```bash
 npm run dev
 ```
 
 ### 4. Run automated cryptographic test suite
+
 ```bash
 npm test
 ```
+
 Executes Node's native test runner against Ed25519 signatures, Merkle root deterministic hashing, and persona data integrity.
 
 Open [http://localhost:3000](http://localhost:3000) to explore your Competence Passport.

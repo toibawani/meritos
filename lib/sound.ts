@@ -225,10 +225,10 @@ class SoundEngine {
       if (!ctx) return;
 
       const harmonics = [
-        { freq: 528, gainVal: 0.06 },   // Fundamental
-        { freq: 792, gainVal: 0.035 },  // Perfect 5th overtone
-        { freq: 1056, gainVal: 0.02 },  // 2nd octave
-        { freq: 1584, gainVal: 0.01 }   // High shimmer
+        { freq: 528, gainVal: 0.06 }, // Fundamental
+        { freq: 792, gainVal: 0.035 }, // Perfect 5th overtone
+        { freq: 1056, gainVal: 0.02 }, // 2nd octave
+        { freq: 1584, gainVal: 0.01 }, // High shimmer
       ];
 
       harmonics.forEach(({ freq, gainVal }) => {

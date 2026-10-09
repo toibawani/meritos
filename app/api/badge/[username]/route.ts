@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { MOCK_USER_PROFILE } from "@/lib/data/seedData";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { username: string } }
-) {
+export async function GET(request: NextRequest, { params }: { params: { username: string } }) {
   const username = params.username || "toibawani";
   const { searchParams } = new URL(request.url);
   const style = searchParams.get("style") || "default";

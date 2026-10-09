@@ -2,12 +2,8 @@ export type DomainType = "systems" | "frontend" | "cloud" | "ai";
 export type SkillLevel = "novice" | "proficient" | "expert" | "master";
 export type NodeStatus = "verified" | "in_progress" | "locked";
 
-export type HumanePillar = 
-  | "mentorship" 
-  | "review_empathy" 
-  | "blameless_culture" 
-  | "async_clarity" 
-  | "sustainable_cadence";
+export type HumanePillar =
+  "mentorship" | "review_empathy" | "blameless_culture" | "async_clarity" | "sustainable_cadence";
 
 export interface TerminalTraceStep {
   type: "cmd" | "stdout" | "stderr" | "success" | "warn" | "info" | "diff";
@@ -138,7 +134,14 @@ export interface SkillNode {
 export interface ActivityEntry {
   id: string;
   timestamp: string;
-  type: "attestation_signed" | "node_unlocked" | "score_updated" | "verification_audited" | "chaos_simulated" | "mastery_claimed" | "peer_voucher_signed";
+  type:
+    | "attestation_signed"
+    | "node_unlocked"
+    | "score_updated"
+    | "verification_audited"
+    | "chaos_simulated"
+    | "mastery_claimed"
+    | "peer_voucher_signed";
   skillId: string;
   skillName: string;
   domain: DomainType;

@@ -8,7 +8,7 @@ import { computeSha256 } from "./crypto";
 
 export interface BlindedLeaf {
   publicHash: string; // The SHA-256 commitment placed in the Merkle tree
-  salt?: string;       // Held privately by candidate until selectively revealed
+  salt?: string; // Held privately by candidate until selectively revealed
   field: string;
   isRedacted: boolean;
 }
@@ -36,7 +36,7 @@ export function generateSalt(): string {
   if (typeof crypto !== "undefined" && crypto.getRandomValues) {
     const arr = new Uint8Array(16);
     crypto.getRandomValues(arr);
-    return Array.from(arr, b => b.toString(16).padStart(2, "0")).join("");
+    return Array.from(arr, (b) => b.toString(16).padStart(2, "0")).join("");
   }
   return Math.random().toString(16).substring(2) + Date.now().toString(16);
 }
@@ -111,7 +111,7 @@ export async function buildSelectiveDisclosureProof(options: {
     commitments["diffContent"],
     rawEvidence.commitHash,
     rawEvidence.metrics.testPassRate,
-    rawEvidence.metrics.coverage
+    rawEvidence.metrics.coverage,
   ].join("|");
 
   const verifiedRoot = await computeSha256(leafComponents);
@@ -124,6 +124,6 @@ export async function buildSelectiveDisclosureProof(options: {
     metrics: rawEvidence.metrics,
     commitments,
     revealedFields,
-    verifiedRoot
+    verifiedRoot,
   };
 }

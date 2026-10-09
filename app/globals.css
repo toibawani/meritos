@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --bg-void: #08090C;
-  --bg-subtle: #0B0D12;
-  --bg-surface-1: #0E1015;
-  --bg-surface-2: #14171F;
-  --bg-surface-3: #1A1E29;
+  --bg-void: #08090c;
+  --bg-subtle: #0b0d12;
+  --bg-surface-1: #0e1015;
+  --bg-surface-2: #14171f;
+  --bg-surface-3: #1a1e29;
   --border-subtle: rgba(255, 255, 255, 0.06);
   --border-specular: rgba(255, 255, 255, 0.12);
   --border-focus: rgba(255, 255, 255, 0.24);
@@ -21,12 +21,13 @@
 
 body {
   background-color: var(--bg-void);
-  color: #E2E8F0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Geist Sans", sans-serif;
+  color: #e2e8f0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Geist Sans", sans-serif;
   letter-spacing: -0.015em;
   min-height: 100vh;
   overflow-x: hidden;
-  background-image: 
+  background-image:
     radial-gradient(circle at 50% -10%, rgba(16, 185, 129, 0.04) 0%, transparent 60%),
     radial-gradient(circle at 90% 90%, rgba(6, 182, 212, 0.03) 0%, transparent 50%);
 }
@@ -38,23 +39,23 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #08090C;
+  background: #08090c;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1C202B;
+  background: #1c202b;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2D3344;
+  background: #2d3344;
 }
 
 /* Linear-Grade Tactile Cards */
 .tactile-card {
-  background: #0E1015;
+  background: #0e1015;
   border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 
+  box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.7),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
   transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
@@ -62,13 +63,13 @@ body {
 
 .tactile-card:hover {
   border-color: rgba(255, 255, 255, 0.12);
-  background: #11141B;
+  background: #11141b;
 }
 
 .tactile-card-interactive {
-  background: #0E1015;
+  background: #0e1015;
   border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 
+  box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.7),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
   cursor: pointer;
@@ -79,26 +80,26 @@ body {
   border-color: rgba(255, 255, 255, 0.16);
   background: #141720;
   transform: translateY(-1.5px);
-  box-shadow: 
+  box-shadow:
     0 6px 16px -4px rgba(0, 0, 0, 0.8),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 /* Tactile Buttons */
 .tactile-btn {
-  background: #14171F;
+  background: #14171f;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 
+  box-shadow:
     0 1px 2px rgba(0, 0, 0, 0.6),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  color: #E2E8F0;
+  color: #e2e8f0;
   transition: all 0.15s ease;
 }
 
 .tactile-btn:hover {
-  background: #1B1F2A;
+  background: #1b1f2a;
   border-color: rgba(255, 255, 255, 0.18);
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .tactile-btn:active {
@@ -107,22 +108,22 @@ body {
 }
 
 .tactile-btn-primary {
-  background: #10B981;
-  border: 1px solid #34D399;
-  box-shadow: 
+  background: #10b981;
+  border: 1px solid #34d399;
+  box-shadow:
     0 1px 4px rgba(0, 0, 0, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.25),
     0 0 20px -5px rgba(16, 185, 129, 0.4);
-  color: #042F2E;
+  color: #042f2e;
   font-weight: 600;
   transition: all 0.15s ease;
 }
 
 .tactile-btn-primary:hover {
-  background: #34D399;
-  border-color: #6EE7B7;
-  color: #02201F;
-  box-shadow: 
+  background: #34d399;
+  border-color: #6ee7b7;
+  color: #02201f;
+  box-shadow:
     0 2px 8px rgba(0, 0, 0, 0.6),
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
     0 0 25px -4px rgba(16, 185, 129, 0.6);
@@ -149,18 +150,18 @@ body {
 /* Diff viewer line styling */
 .diff-added {
   background: rgba(16, 185, 129, 0.12);
-  color: #A7F3D0;
-  border-left: 2px solid #10B981;
+  color: #a7f3d0;
+  border-left: 2px solid #10b981;
 }
 
 .diff-deleted {
   background: rgba(244, 63, 94, 0.12);
-  color: #FECDD3;
-  border-left: 2px solid #F43F5E;
+  color: #fecdd3;
+  border-left: 2px solid #f43f5e;
 }
 
 .diff-normal {
-  color: #94A3B8;
+  color: #94a3b8;
 }
 
 /* CRT Scanline Shader Overlay */
@@ -172,7 +173,10 @@ body {
   content: " ";
   display: block;
   position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
   background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
   background-size: 100% 4px;
   z-index: 10;
@@ -182,8 +186,12 @@ body {
 
 /* Glowing energy conduits */
 @keyframes conduitFlow {
-  0% { stroke-dashoffset: 100; }
-  100% { stroke-dashoffset: 0; }
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
 }
 
 .animate-conduit-flow {
@@ -192,9 +200,18 @@ body {
 
 /* Pulse radar dot */
 @keyframes ping-slow {
-  0% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.6); opacity: 0; }
-  100% { transform: scale(1); opacity: 0; }
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
 }
 
 .animate-ping-slow {
@@ -203,11 +220,11 @@ body {
 
 /* ─── Humane Organic Mode ─────────────────────────────────── */
 :root.humane-mode {
-  --bg-void: #0E0C14;
-  --bg-subtle: #120F1A;
-  --bg-surface-1: #16121F;
-  --bg-surface-2: #1C1628;
-  --bg-surface-3: #231A33;
+  --bg-void: #0e0c14;
+  --bg-subtle: #120f1a;
+  --bg-surface-1: #16121f;
+  --bg-surface-2: #1c1628;
+  --bg-surface-3: #231a33;
   --border-subtle: rgba(244, 63, 94, 0.08);
   --border-specular: rgba(244, 63, 94, 0.15);
   --emerald-glow: rgba(244, 63, 94, 0.18);
@@ -221,7 +238,7 @@ body {
 
 /* Humane mode card warm tint */
 .humane-mode .tactile-card {
-  background: #16121F;
+  background: #16121f;
   border-color: rgba(244, 63, 94, 0.08);
   box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.7),
@@ -230,21 +247,21 @@ body {
 
 /* ─── Gradient text helper ─────────────────────────────────── */
 .gradient-text-emerald {
-  background: linear-gradient(135deg, #10B981, #34D399);
+  background: linear-gradient(135deg, #10b981, #34d399);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .gradient-text-rose {
-  background: linear-gradient(135deg, #F43F5E, #FB923C);
+  background: linear-gradient(135deg, #f43f5e, #fb923c);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .gradient-text-amber {
-  background: linear-gradient(135deg, #F59E0B, #FBBF24);
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -252,8 +269,13 @@ body {
 
 /* ─── Organic glow pulse (humane mode) ─────────────────────── */
 @keyframes humane-glow-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.0); }
-  50%       { box-shadow: 0 0 18px -4px rgba(244, 63, 94, 0.35); }
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(244, 63, 94, 0);
+  }
+  50% {
+    box-shadow: 0 0 18px -4px rgba(244, 63, 94, 0.35);
+  }
 }
 
 .animate-humane-glow {
@@ -262,13 +284,25 @@ body {
 
 /* ─── Slide-in / fade-in ────────────────────────────────────── */
 @keyframes slide-in-up {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slide-in-right {
-  from { opacity: 0; transform: translateX(14px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .animate-slide-in-up {
@@ -284,8 +318,12 @@ body {
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .animate-scale-up {
@@ -293,8 +331,14 @@ body {
 }
 
 @keyframes scale-up {
-  from { opacity: 0; transform: scale(0.94); }
-  to   { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* ─── Neon underline for active nav links ───────────────────── */
@@ -305,18 +349,25 @@ body {
   content: "";
   position: absolute;
   bottom: -2px;
-  left: 0; right: 0;
+  left: 0;
+  right: 0;
   height: 2px;
-  background: linear-gradient(90deg, #10B981, #34D399);
+  background: linear-gradient(90deg, #10b981, #34d399);
   border-radius: 2px;
   box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
 }
 
 /* ─── Number counter shimmer ─────────────────────────────────── */
 @keyframes number-shimmer {
-  0%   { color: #E2E8F0; }
-  40%  { color: #34D399; }
-  100% { color: #E2E8F0; }
+  0% {
+    color: #e2e8f0;
+  }
+  40% {
+    color: #34d399;
+  }
+  100% {
+    color: #e2e8f0;
+  }
 }
 
 .animate-number-update {
@@ -325,7 +376,9 @@ body {
 
 /* ─── Heatmap cell micro-transition ─────────────────────────── */
 .heatmap-cell {
-  transition: transform 0.12s ease, opacity 0.12s ease;
+  transition:
+    transform 0.12s ease,
+    opacity 0.12s ease;
 }
 .heatmap-cell:hover {
   transform: scale(1.25);
@@ -342,14 +395,14 @@ body {
   }
 
   body {
-    background: #FFFFFF !important;
+    background: #ffffff !important;
     color: #111827 !important;
     font-size: 11pt;
   }
 
   .tactile-card {
-    background: #FFFFFF !important;
-    border: 1px solid #E5E7EB !important;
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
     color: #111827 !important;
     box-shadow: none !important;
     page-break-inside: avoid;
@@ -370,5 +423,3 @@ body {
     border: none !important;
   }
 }
-
-
